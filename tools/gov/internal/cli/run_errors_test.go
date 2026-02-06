@@ -305,4 +305,3 @@ sync:
 		t.Fatalf("expected sync failed, got:\n%s", errOut.String())
 	}
 }
-

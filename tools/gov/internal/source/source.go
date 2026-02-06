@@ -52,15 +52,21 @@ func Fetch(ctx context.Context, opts FetchOptions) (ResolvedSource, error) {
 		}
 	}
 
-	// Fetch tags (best-effort) and checkout pinned ref.
+	// Fetch tags (best-effort) and resolve the ref to a commit SHA.
 	_ = runGit(ctx, checkoutDir, "fetch", "--tags", "--prune")
-	if err := runGit(ctx, checkoutDir, "checkout", "--force", opts.Ref); err != nil {
-		return ResolvedSource{}, fmt.Errorf("git checkout %s: %w", opts.Ref, err)
+	commit, err := resolveRemoteRef(ctx, opts.RepoURL, opts.Ref)
+	if err != nil {
+		return ResolvedSource{}, err
+	}
+
+	// Checkout the resolved commit for determinism.
+	if err := runGit(ctx, checkoutDir, "checkout", "--force", commit); err != nil {
+		return ResolvedSource{}, fmt.Errorf("git checkout %s: %w", commit, err)
 	}
 	if err := runGit(ctx, checkoutDir, "reset", "--hard", "HEAD"); err != nil {
 		return ResolvedSource{}, fmt.Errorf("git reset: %w", err)
 	}
-	commit, err := gitOutput(ctx, checkoutDir, "rev-parse", "HEAD")
+	checkedOut, err := gitOutput(ctx, checkoutDir, "rev-parse", "HEAD")
 	if err != nil {
 		return ResolvedSource{}, fmt.Errorf("git rev-parse: %w", err)
 	}
@@ -69,7 +75,7 @@ func Fetch(ctx context.Context, opts FetchOptions) (ResolvedSource, error) {
 		CheckoutDir:  checkoutDir,
 		SourceRepo:   opts.RepoURL,
 		SourceRef:    opts.Ref,
-		SourceCommit: strings.TrimSpace(commit),
+		SourceCommit: strings.TrimSpace(checkedOut),
 	}, nil
 }
 
@@ -92,6 +98,38 @@ func execGit(ctx context.Context, dir string, args ...string) (string, error) {
 		return out, fmt.Errorf("%w: %s", err, strings.TrimSpace(out))
 	}
 	return out, nil
+}
+
+func resolveRemoteRef(ctx context.Context, repoURL, ref string) (string, error) {
+	out, err := execGit(ctx, "", "ls-remote", repoURL, ref, ref+"^{}")
+	if err != nil {
+		return "", fmt.Errorf("git ls-remote %s %s: %w", repoURL, ref, err)
+	}
+	lines := strings.Split(strings.TrimSpace(out), "\n")
+	if len(lines) == 0 || strings.TrimSpace(lines[0]) == "" {
+		return "", fmt.Errorf("ref %q not found in %s", ref, repoURL)
+	}
+	// Prefer peeled annotated tag (ends with ^{}).
+	var commit string
+	for _, line := range lines {
+		fields := strings.Fields(line)
+		if len(fields) < 2 {
+			continue
+		}
+		sha := fields[0]
+		name := fields[1]
+		if strings.HasSuffix(name, "^{}") {
+			commit = sha
+			break
+		}
+		if commit == "" {
+			commit = sha
+		}
+	}
+	if commit == "" {
+		return "", fmt.Errorf("could not resolve ref %q in %s", ref, repoURL)
+	}
+	return commit, nil
 }
 
 func shortHash(s string) string {

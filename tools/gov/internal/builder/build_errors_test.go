@@ -41,4 +41,3 @@ func TestBuild_ErrorsWhenProfileManifestMissing(t *testing.T) {
 		t.Fatalf("expected manifest error, got %v", err)
 	}
 }
-

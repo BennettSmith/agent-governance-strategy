@@ -16,4 +16,3 @@ func TestMainWithExit_PropagatesExitCode(t *testing.T) {
 		t.Fatalf("expected exit code 2, got %d", got)
 	}
 }
-

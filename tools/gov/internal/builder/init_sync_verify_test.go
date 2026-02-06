@@ -53,13 +53,13 @@ documents:
 		t.Fatalf("mkdir target: %v", err)
 	}
 	_, err := Init(ctx, InitOptions{
-		RepoRoot: target,
-		DocsRoot: ".",
-		CacheDir: cache,
-		SourceRepo: srcRepo,
-		SourceRef: "v0.0.1",
-		ProfileID: "backend-go-hex",
-		MarkerPrefix: "GOV",
+		RepoRoot:       target,
+		DocsRoot:       ".",
+		CacheDir:       cache,
+		SourceRepo:     srcRepo,
+		SourceRef:      "v0.0.1",
+		ProfileID:      "backend-go-hex",
+		MarkerPrefix:   "GOV",
 		AddendaHeading: "Local Addenda (project-owned)",
 	})
 	if err != nil {
@@ -85,12 +85,12 @@ documents:
 
 	// sync to v0.0.2 (managed block should update, addenda preserved)
 	_, err = Sync(ctx, SyncOptions{
-		RepoRoot: target,
-		DocsRoot: ".",
-		CacheDir: cache,
-		SourceRepo: srcRepo,
-		SourceRef: "v0.0.2",
-		ProfileID: "backend-go-hex",
+		RepoRoot:     target,
+		DocsRoot:     ".",
+		CacheDir:     cache,
+		SourceRepo:   srcRepo,
+		SourceRef:    "v0.0.2",
+		ProfileID:    "backend-go-hex",
 		MarkerPrefix: "GOV",
 	})
 	if err != nil {
@@ -111,12 +111,12 @@ documents:
 
 	// verify should pass
 	vr, err := Verify(ctx, VerifyOptions{
-		RepoRoot: target,
-		DocsRoot: ".",
-		CacheDir: cache,
-		SourceRepo: srcRepo,
-		SourceRef: "v0.0.2",
-		ProfileID: "backend-go-hex",
+		RepoRoot:     target,
+		DocsRoot:     ".",
+		CacheDir:     cache,
+		SourceRepo:   srcRepo,
+		SourceRef:    "v0.0.2",
+		ProfileID:    "backend-go-hex",
 		MarkerPrefix: "GOV",
 	})
 	if err != nil {
@@ -132,12 +132,12 @@ documents:
 		t.Fatalf("write tampered: %v", err)
 	}
 	vr2, err := Verify(ctx, VerifyOptions{
-		RepoRoot: target,
-		DocsRoot: ".",
-		CacheDir: cache,
-		SourceRepo: srcRepo,
-		SourceRef: "v0.0.2",
-		ProfileID: "backend-go-hex",
+		RepoRoot:     target,
+		DocsRoot:     ".",
+		CacheDir:     cache,
+		SourceRepo:   srcRepo,
+		SourceRef:    "v0.0.2",
+		ProfileID:    "backend-go-hex",
 		MarkerPrefix: "GOV",
 	})
 	if err != nil {
@@ -179,12 +179,12 @@ documents:
 	}
 	// No init; doc is missing.
 	_, err := Sync(ctx, SyncOptions{
-		RepoRoot: target,
-		DocsRoot: ".",
-		CacheDir: cache,
-		SourceRepo: srcRepo,
-		SourceRef: "v0.0.1",
-		ProfileID: "backend-go-hex",
+		RepoRoot:     target,
+		DocsRoot:     ".",
+		CacheDir:     cache,
+		SourceRepo:   srcRepo,
+		SourceRef:    "v0.0.1",
+		ProfileID:    "backend-go-hex",
 		MarkerPrefix: "GOV",
 	})
 	if err == nil {
@@ -233,12 +233,12 @@ documents:
 	}
 
 	vr, err := Verify(ctx, VerifyOptions{
-		RepoRoot: target,
-		DocsRoot: "",
-		CacheDir: cache,
-		SourceRepo: srcRepo,
-		SourceRef: "v0.0.1",
-		ProfileID: "backend-go-hex",
+		RepoRoot:     target,
+		DocsRoot:     "",
+		CacheDir:     cache,
+		SourceRepo:   srcRepo,
+		SourceRef:    "v0.0.1",
+		ProfileID:    "backend-go-hex",
 		MarkerPrefix: "",
 	})
 	if err != nil {
@@ -280,13 +280,13 @@ documents:
 		t.Fatalf("mkdir target: %v", err)
 	}
 	_, err := Init(ctx, InitOptions{
-		RepoRoot: target,
-		DocsRoot: ".",
-		CacheDir: cache,
-		SourceRepo: srcRepo,
-		SourceRef: "v0.0.1",
-		ProfileID: "backend-go-hex",
-		MarkerPrefix: "GOV",
+		RepoRoot:       target,
+		DocsRoot:       ".",
+		CacheDir:       cache,
+		SourceRepo:     srcRepo,
+		SourceRef:      "v0.0.1",
+		ProfileID:      "backend-go-hex",
+		MarkerPrefix:   "GOV",
 		AddendaHeading: "Local Addenda (project-owned)",
 	})
 	if err != nil {
@@ -348,12 +348,12 @@ documents:
 		t.Fatalf("mkdir target: %v", err)
 	}
 	vr, err := Verify(ctx, VerifyOptions{
-		RepoRoot: target,
-		DocsRoot: ".",
-		CacheDir: cache,
-		SourceRepo: srcRepo,
-		SourceRef: "v0.0.1",
-		ProfileID: "backend-go-hex",
+		RepoRoot:     target,
+		DocsRoot:     ".",
+		CacheDir:     cache,
+		SourceRepo:   srcRepo,
+		SourceRef:    "v0.0.1",
+		ProfileID:    "backend-go-hex",
 		MarkerPrefix: "GOV",
 	})
 	if err != nil {
@@ -366,4 +366,3 @@ documents:
 		t.Fatalf("expected issues")
 	}
 }
-

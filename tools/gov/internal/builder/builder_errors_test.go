@@ -11,4 +11,3 @@ func TestBuild_RequiresOutDir(t *testing.T) {
 		t.Fatalf("expected error")
 	}
 }
-
