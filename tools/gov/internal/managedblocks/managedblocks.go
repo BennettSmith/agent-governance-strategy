@@ -190,6 +190,10 @@ func FormatBeginMarker(prefix string, meta map[string]string) string {
 	return "<!-- " + prefix + ":BEGIN " + strings.Join(fields, " ") + " -->"
 }
 
+func FormatEndMarker(prefix, blockID string) string {
+	return "<!-- " + prefix + ":END id=" + blockID + " -->"
+}
+
 func canonicalizeMeta(meta map[string]string) []string {
 	// Stable ordering: id first, then commonly-used fields, then the rest sorted.
 	orderedKeys := []string{"id", "version", "sha256", "sourceRepo", "sourceRef", "sourceCommit"}

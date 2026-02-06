@@ -1,10 +1,14 @@
 package cli
 
 import (
+	"context"
 	"flag"
 	"fmt"
 	"io"
 	"strings"
+
+	"agent-governance-strategy/tools/gov/internal/builder"
+	"agent-governance-strategy/tools/gov/internal/config"
 )
 
 const defaultConfigPath = ".governance/config.yaml"
@@ -47,7 +51,31 @@ func runSubcommand(cmd string, subArgs []string, stdout, stderr io.Writer) int {
 			fmt.Fprintln(stderr, "--out is required for build")
 			return 2
 		}
-		fmt.Fprintf(stdout, "TODO: build (config=%s out=%s)\n", *configPath, *outDir)
+		cfg, err := config.Load(*configPath)
+		if err != nil {
+			fmt.Fprintf(stderr, "config error: %v\n", err)
+			return 2
+		}
+		cacheDir, err := cfg.CacheDir()
+		if err != nil {
+			fmt.Fprintf(stderr, "cache dir error: %v\n", err)
+			return 2
+		}
+		res, err := builder.Build(context.Background(), builder.BuildOptions{
+			OutDir:         *outDir,
+			DocsRoot:       cfg.Paths.DocsRoot,
+			CacheDir:       cacheDir,
+			SourceRepo:     cfg.Source.Repo,
+			SourceRef:      cfg.Source.Ref,
+			ProfileID:      cfg.Source.Profile,
+			MarkerPrefix:   cfg.Sync.ManagedBlockPrefix,
+			AddendaHeading: cfg.Sync.LocalAddendaHeading,
+		})
+		if err != nil {
+			fmt.Fprintf(stderr, "build failed: %v\n", err)
+			return 1
+		}
+		fmt.Fprintf(stdout, "built %d doc(s) and %d file(s) (sourceCommit=%s)\n", res.DocsWritten, res.ExtraFilesWritten, res.SourceCommit)
 		return 0
 	case "init":
 		fmt.Fprintf(stdout, "TODO: init (config=%s)\n", *configPath)
