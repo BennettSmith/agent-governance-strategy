@@ -1,3 +1,8 @@
+---
+branch: "type/area-short-slug"
+status: active
+---
+
 # Plan Template
 
 Use this template to create a plan for a feature branch.
@@ -8,9 +13,9 @@ Use this template to create a plan for a feature branch.
 > Naming: the plan filename must match the feature branch name. If the branch contains `/`,
 > mirror it as subfolders under `Docs/Plans/` (e.g. `feat/identity-add-foo` → `Docs/Plans/feat/identity-add-foo.md`).
 >
-> Branch names follow `<type>/<area>-<short-slug>`.
-> `<area>` is usually a bounded context slug (e.g., `identity`). If the change is not related to a bounded context
-> (e.g., composition root / app wiring / routing), use `app` as the `<area>` segment (e.g. `refactor/app-rework-root-router`).
+> Branch names follow `type/area-short-slug`.
+> `area` is usually a bounded context slug (e.g., `identity`). If the change is not related to a bounded context
+> (e.g., composition root / app wiring / routing), use `app` as the `area` segment (e.g. `refactor/app-rework-root-router`).
 
 ## Summary
 
