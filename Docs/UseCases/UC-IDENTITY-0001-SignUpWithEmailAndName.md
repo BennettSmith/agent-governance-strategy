@@ -19,10 +19,9 @@ email ownership verification via an emailed sign-in challenge.
 ## Ownership (Bounded Context)
 
 This use case is owned by exactly one bounded context and is defined within that
-bounded context’s Swift Package.
+bounded context’s domain.
 
 - Bounded context: `Identity`
-- Swift Package: `Identity`
 - Domain language: terms used here must align to this bounded context’s ubiquitous
 language.
 

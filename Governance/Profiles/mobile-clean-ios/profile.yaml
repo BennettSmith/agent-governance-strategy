@@ -1,0 +1,10 @@
+schemaVersion: 1
+id: mobile-clean-ios
+extends:
+  - ../mobile-clean/profile.yaml
+description: Mobile app governance for iOS (Clean Architecture), with iOS-specific playbooks.
+
+playbooks:
+  - source: ./Playbooks/iOS-Packaging.md
+    output: Docs/Playbooks/iOS-Packaging.md
+

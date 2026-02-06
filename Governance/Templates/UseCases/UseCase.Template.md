@@ -52,8 +52,6 @@ The concrete event that causes execution.
 
 ## Inputs (boundary types only)
 
-List the input boundary types accepted by the use case.
-
 Rules:
 
 - Inputs must be explicit boundary types (DTOs / Commands / Queries), not domain entities.
@@ -65,8 +63,6 @@ Inputs:
 - `<InputBoundaryType>` — purpose, validation expectations
 
 ## Outputs (boundary types only)
-
-List the output boundary type(s) produced by the use case.
 
 Rules:
 
@@ -102,12 +98,6 @@ For each step, specify:
 List meaningful variations from the main flow. Use the same step-level specificity.
 
 Alternate flow A: `<Name>`
-
-- Condition:
-- Steps that differ:
-- Output:
-
-Alternate flow B: `<Name>`
 
 - Condition:
 - Steps that differ:
@@ -176,8 +166,6 @@ Define how execution can be understood in production and during testing.
   - Retry/queue depth where applicable
 - Tracing:
   - Trace/span boundaries (start/end, external calls)
-- Auditing (if applicable):
-  - What must be recorded for compliance or debugging
 
 ## Test scenarios (Given / When / Then)
 
@@ -199,24 +187,3 @@ List scenarios that fully specify observable behavior. Avoid implementation deta
   - Then `<typed failure at boundary>`
   - And `<no side effects>`
 
-### Offline-first cases
-
-- Given `<offline connectivity state and local data>`
-  - When `<trigger>`
-  - Then `<local outcome>`
-  - And `<queued work (if any)>`
-
-### Concurrency & idempotency
-
-- Given `<duplicate trigger or concurrent execution>`
-  - When `<trigger>`
-  - Then `<deterministic outcome>`
-  - And `<no duplicate side effects>`
-
-### Failure & recovery
-
-- Given `<downstream failure via a port>`
-  - When `<trigger>`
-  - Then `<boundary failure shape>`
-  - And `<compensation/rollback or queued retry behavior>`
-  
