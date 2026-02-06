@@ -1,0 +1,22 @@
+---
+description: Always read governance docs (with precedence) before work
+alwaysApply: true
+---
+
+# Read governance docs first
+
+Before starting any task (including planning, editing, or answering questions about this repo), **read** these files from the repository root:
+
+- `Non-Negotiables.md`
+- `Architecture.md`
+- `Constitution.md`
+
+Treat these as **binding constraints** for all work.
+
+## Precedence (conflicts)
+
+- `Non-Negotiables.md` overrides all other documents
+- `Architecture.md` overrides `Constitution.md` on matters of system shape
+- `Constitution.md` guides behavior when other documents are silent
+
+If you cannot read them for some reason, **stop** and ask the user to provide them.
