@@ -87,4 +87,3 @@ func TestWalkPlanFiles_SkipsTemplatesAndNonMarkdown(t *testing.T) {
 		t.Fatalf("expected only %q, got %v", plan, paths)
 	}
 }
-

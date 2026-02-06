@@ -242,4 +242,3 @@ func readPlanFrontmatter(planPath string) (branch string, status string, ok bool
 	}
 	return meta.Branch, meta.Status, true, nil
 }
-
