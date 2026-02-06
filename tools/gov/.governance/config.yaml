@@ -2,12 +2,13 @@ schemaVersion: 1
 
 source:
   # NOTE: repo path is resolved relative to this config file directory.
-  # Since this file lives at `.governance/config.yaml`, `..` points at the repo root.
-  repo: ".."
+  # This config lives at `tools/gov/.governance/config.yaml`, so `../../..` is the repo root.
+  repo: "../../.."
   ref: "HEAD"
-  profile: "docs-only"
+  profile: "backend-go-hex"
 
 paths:
+  # Emit docs into the embedded repo root (`tools/gov/`).
   docsRoot: "."
 
 sync:

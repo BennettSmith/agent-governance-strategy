@@ -14,6 +14,7 @@ This folder is the **authoritative source** for governance content that will be 
 
 ## v1 profiles
 
+- `docs-only` (builder-repo governance; no product/runtime architecture assumptions)
 - `mobile-clean-ios`
 - `backend-go-hex`
 

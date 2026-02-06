@@ -28,4 +28,6 @@ playbooks:
     output: Docs/Playbooks/Go-Packaging.md
   - source: ./Playbooks/Hexagonal-Ports-And-Adapters.md
     output: Docs/Playbooks/Hexagonal-Ports-And-Adapters.md
+  - source: ./Playbooks/Go-CLI-Structure.md
+    output: Docs/Playbooks/Go-CLI-Structure.md
 

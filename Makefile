@@ -1,11 +1,25 @@
 .DEFAULT_GOAL := help
 
-.PHONY: help ci fmt test coverage gov-smoke
+.PHONY: help ci fmt test coverage gov-smoke preflight gov-preflight gov-preflight-gocli
 
 GOV_MIN_COVERAGE ?= 85
 
 help: ## Show available make targets
 	@awk 'BEGIN {FS = ":.*##"} /^[a-zA-Z0-9_.-]+:.*##/ {printf "  %-16s %s\n", $$1, $$2}' $(MAKEFILE_LIST)
+
+preflight: gov-preflight ## Sanity check branch + baseline
+
+gov-preflight: ## Run agent-gov preflight (root scope)
+	@cd tools/gov && go run ./cmd/agent-gov preflight \
+	  --require "Makefile" \
+	  --require "Governance/Profiles/backend-go-hex/profile.yaml" \
+	  --require "Governance/Profiles/mobile-clean/profile.yaml" \
+	  --require "tools/gov/go.mod"
+
+gov-preflight-gocli: ## Run agent-gov preflight (embedded tools/gov scope)
+	@cd tools/gov && go run ./cmd/agent-gov preflight \
+	  --require "go.mod" \
+	  --require "cmd/agent-gov/main.go"
 
 ci: fmt test coverage gov-smoke ## Run all CI checks
 
