@@ -47,7 +47,7 @@ func Fetch(ctx context.Context, opts FetchOptions) (ResolvedSource, error) {
 
 	if _, err := os.Stat(filepath.Join(checkoutDir, ".git")); err != nil {
 		// Clone.
-		if err := runGit(ctx, "", "clone", opts.RepoURL, checkoutDir); err != nil {
+		if err := runGit(ctx, "", "clone", "--no-checkout", opts.RepoURL, checkoutDir); err != nil {
 			return ResolvedSource{}, fmt.Errorf("git clone: %w", err)
 		}
 	}
@@ -103,7 +103,8 @@ var refSanitizeRe = regexp.MustCompile(`[^a-zA-Z0-9._-]+`)
 
 func sanitizeRef(ref string) string {
 	ref = strings.TrimSpace(ref)
-	ref = strings.ReplaceAll(ref, string(filepath.Separator), "_")
+	ref = strings.ReplaceAll(ref, "/", "_")
+	ref = strings.ReplaceAll(ref, "\\", "_")
 	ref = refSanitizeRe.ReplaceAllString(ref, "_")
 	ref = strings.Trim(ref, "._-")
 	if ref == "" {
