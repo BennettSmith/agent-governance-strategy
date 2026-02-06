@@ -1,7 +1,7 @@
 ---
 id: "UC--"
 title: "" # use case title/name
-bounded_context: "<BoundedContextName (Swift Package)>"
+bounded_context: "<BoundedContextName>"
 status: draft # draft | implemented | deprecated
 slices:
   - ""
@@ -18,10 +18,9 @@ sentences. This must be business-meaningful and testable.
 ## Ownership (Bounded Context)
 
 This use case is owned by exactly one bounded context and is defined within that
-bounded context’s Swift Package.
+bounded context’s domain.
 
 - Bounded context: `<BoundedContextName>`
-- Swift Package: `<PackageName>`
 - Domain language: terms used here must align to this bounded context’s ubiquitous
 language.
 
@@ -125,7 +124,7 @@ Examples (list only those that apply):
 - Background task scheduling
 - Notifications/analytics events
 - File system changes
-- Crypto/keychain access
+- Secure storage access
 
 For each side effect:
 

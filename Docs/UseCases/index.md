@@ -9,6 +9,7 @@ use case, owned by exactly one bounded context.
 A use case is a bounded, testable unit of application behavior that:
 
 - Lives in exactly one **bounded context** (implemented as a Swift Package)
+- Lives in exactly one **bounded context** (implemented as its own module/package; platform specifics are documented in playbooks)
 - Accepts explicit **input boundary types** (no domain entities)
 - Produces explicit **output boundary types** (no domain entities)
 - Enforces domain invariants owned by its bounded context
