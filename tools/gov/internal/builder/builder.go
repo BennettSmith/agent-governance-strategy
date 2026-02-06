@@ -68,7 +68,7 @@ func Build(ctx context.Context, opts BuildOptions) (BuildResult, error) {
 
 	var res BuildResult
 	for _, doc := range m.Documents {
-		content, err := assembleFragments(doc.Fragments, filepath.Dir(manifestPath))
+		content, err := assembleFragments(doc.Fragments)
 		if err != nil {
 			return BuildResult{}, fmt.Errorf("assemble %s: %w", doc.Output, err)
 		}
@@ -109,10 +109,9 @@ func Build(ctx context.Context, opts BuildOptions) (BuildResult, error) {
 
 	// Templates and playbooks are extra files.
 	for _, t := range append(m.Templates, m.Playbooks...) {
-		srcPath := filepath.Join(filepath.Dir(manifestPath), t.Source)
-		b, err := os.ReadFile(srcPath)
+		b, err := os.ReadFile(t.Source)
 		if err != nil {
-			return BuildResult{}, fmt.Errorf("read %s: %w", srcPath, err)
+			return BuildResult{}, fmt.Errorf("read %s: %w", t.Source, err)
 		}
 		outPath := filepath.Join(baseOut, t.Output)
 		if err := os.MkdirAll(filepath.Dir(outPath), 0o755); err != nil {
@@ -128,10 +127,9 @@ func Build(ctx context.Context, opts BuildOptions) (BuildResult, error) {
 	return res, nil
 }
 
-func assembleFragments(fragmentPaths []string, baseDir string) (string, error) {
+func assembleFragments(fragmentPaths []string) (string, error) {
 	var parts []string
-	for _, rel := range fragmentPaths {
-		p := filepath.Clean(filepath.Join(baseDir, rel))
+	for _, p := range fragmentPaths {
 		b, err := os.ReadFile(p)
 		if err != nil {
 			return "", err

@@ -49,13 +49,17 @@ func LoadManifest(path string) (Manifest, error) {
 
 	// Merge any base manifests first.
 	for _, ext := range m.Extends {
-		extPath := filepath.Clean(filepath.Join(baseDir, ext))
+		extPath := ext
+		if !filepath.IsAbs(extPath) {
+			extPath = filepath.Clean(filepath.Join(baseDir, extPath))
+		}
 		base, err := LoadManifest(extPath)
 		if err != nil {
 			return Manifest{}, err
 		}
 		m = merge(base, m)
 	}
+	m = normalizePaths(m, baseDir)
 	return m, nil
 }
 
@@ -75,5 +79,36 @@ func merge(base, overlay Manifest) Manifest {
 	out.Playbooks = append(out.Playbooks, overlay.Playbooks...)
 
 	return out
+}
+
+func normalizePaths(m Manifest, baseDir string) Manifest {
+	for di := range m.Documents {
+		for fi, frag := range m.Documents[di].Fragments {
+			if strings.TrimSpace(frag) == "" {
+				continue
+			}
+			if filepath.IsAbs(frag) {
+				continue
+			}
+			m.Documents[di].Fragments[fi] = filepath.Clean(filepath.Join(baseDir, frag))
+		}
+	}
+	for i := range m.Templates {
+		if strings.TrimSpace(m.Templates[i].Source) == "" {
+			continue
+		}
+		if !filepath.IsAbs(m.Templates[i].Source) {
+			m.Templates[i].Source = filepath.Clean(filepath.Join(baseDir, m.Templates[i].Source))
+		}
+	}
+	for i := range m.Playbooks {
+		if strings.TrimSpace(m.Playbooks[i].Source) == "" {
+			continue
+		}
+		if !filepath.IsAbs(m.Playbooks[i].Source) {
+			m.Playbooks[i].Source = filepath.Clean(filepath.Join(baseDir, m.Playbooks[i].Source))
+		}
+	}
+	return m
 }
 

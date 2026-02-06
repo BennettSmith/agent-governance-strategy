@@ -5,6 +5,8 @@ import (
 	"flag"
 	"fmt"
 	"io"
+	"os"
+	"path/filepath"
 	"strings"
 
 	"agent-governance-strategy/tools/gov/internal/builder"
@@ -61,11 +63,12 @@ func runSubcommand(cmd string, subArgs []string, stdout, stderr io.Writer) int {
 			fmt.Fprintf(stderr, "cache dir error: %v\n", err)
 			return 2
 		}
+		sourceRepo := resolveRepoPathIfLocal(*configPath, cfg.Source.Repo)
 		res, err := builder.Build(context.Background(), builder.BuildOptions{
 			OutDir:         *outDir,
 			DocsRoot:       cfg.Paths.DocsRoot,
 			CacheDir:       cacheDir,
-			SourceRepo:     cfg.Source.Repo,
+			SourceRepo:     sourceRepo,
 			SourceRef:      cfg.Source.Ref,
 			ProfileID:      cfg.Source.Profile,
 			MarkerPrefix:   cfg.Sync.ManagedBlockPrefix,
@@ -90,6 +93,39 @@ func runSubcommand(cmd string, subArgs []string, stdout, stderr io.Writer) int {
 		fmt.Fprintf(stderr, "internal error: unhandled command %s\n", cmd)
 		return 1
 	}
+}
+
+// If the configured repo looks like a local path (relative) and exists on disk
+// relative to the config file directory, resolve it to an absolute path.
+// Remote URLs will be left unchanged.
+func resolveRepoPathIfLocal(configPath, repo string) string {
+	repo = strings.TrimSpace(repo)
+	if repo == "" {
+		return repo
+	}
+	// Try resolving relative to the config file directory.
+	base := filepath.Dir(configPath)
+	if !filepath.IsAbs(repo) {
+		candidate := filepath.Clean(filepath.Join(base, repo))
+		if _, err := os.Stat(candidate); err == nil {
+			if abs, err := filepath.Abs(candidate); err == nil {
+				return abs
+			}
+			return candidate
+		}
+	} else {
+		if _, err := os.Stat(repo); err == nil {
+			return repo
+		}
+	}
+	// Fallback: if it exists as-is (relative to current working directory), accept it.
+	if _, err := os.Stat(repo); err == nil {
+		if abs, err := filepath.Abs(repo); err == nil {
+			return abs
+		}
+		return repo
+	}
+	return repo
 }
 
 func printUsage(w io.Writer) {

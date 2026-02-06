@@ -1,0 +1,14 @@
+schemaVersion: 1
+
+source:
+  repo: "." # local path to this repo root for development
+  ref: "HEAD"
+  profile: "mobile-clean-ios"
+
+paths:
+  docsRoot: "."
+
+sync:
+  managedBlockPrefix: "GOV"
+  localAddendaHeading: "Local Addenda (project-owned)"
+
