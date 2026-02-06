@@ -13,7 +13,7 @@ Two organizing principles are used:
 - Persist, query, and mutate domain data locally.
 - Coordinate domain behavior through asynchronous use cases.
 - Synchronize local state with a backend REST API when connectivity is available.
-- Present formatted results through a platform UI layer (e.g., SwiftUI/Compose) in accordance with profile playbooks.
+- Present formatted results through a platform UI layer in accordance with profile playbooks.
 
 ## Explicit non-responsibilities (mobile-clean)
 
