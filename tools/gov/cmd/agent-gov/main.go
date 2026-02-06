@@ -1,17 +1,19 @@
 package main
 
 import (
-	"fmt"
 	"os"
 
 	"agent-governance-strategy/tools/gov/internal/cli"
 )
 
 func main() {
-	exitCode := cli.Run(os.Args, os.Stdout, os.Stderr)
-	if exitCode != 0 {
-		os.Exit(exitCode)
-	}
-	fmt.Fprintln(os.Stdout)
+	mainWithExit(os.Exit, os.Args)
 }
 
+func run(args []string) int {
+	return cli.Run(args, os.Stdout, os.Stderr)
+}
+
+func mainWithExit(exit func(int), args []string) {
+	exit(run(args))
+}

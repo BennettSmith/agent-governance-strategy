@@ -114,4 +114,3 @@ func mustRun(t *testing.T, dir string, exe string, args ...string) {
 		t.Fatalf("%s %v failed: %v\n%s", exe, args, err, string(out))
 	}
 }
-

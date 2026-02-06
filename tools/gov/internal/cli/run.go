@@ -93,13 +93,13 @@ func runSubcommand(cmd string, subArgs []string, stdout, stderr io.Writer) int {
 		}
 		sourceRepo := resolveRepoPathIfLocal(*configPath, cfg.Source.Repo)
 		res, err := builder.Init(context.Background(), builder.InitOptions{
-			RepoRoot: ".",
-			DocsRoot: cfg.Paths.DocsRoot,
-			CacheDir: cacheDir,
-			SourceRepo: sourceRepo,
-			SourceRef: cfg.Source.Ref,
-			ProfileID: cfg.Source.Profile,
-			MarkerPrefix: cfg.Sync.ManagedBlockPrefix,
+			RepoRoot:       ".",
+			DocsRoot:       cfg.Paths.DocsRoot,
+			CacheDir:       cacheDir,
+			SourceRepo:     sourceRepo,
+			SourceRef:      cfg.Source.Ref,
+			ProfileID:      cfg.Source.Profile,
+			MarkerPrefix:   cfg.Sync.ManagedBlockPrefix,
 			AddendaHeading: cfg.Sync.LocalAddendaHeading,
 		})
 		if err != nil {
@@ -121,12 +121,12 @@ func runSubcommand(cmd string, subArgs []string, stdout, stderr io.Writer) int {
 		}
 		sourceRepo := resolveRepoPathIfLocal(*configPath, cfg.Source.Repo)
 		res, err := builder.Sync(context.Background(), builder.SyncOptions{
-			RepoRoot: ".",
-			DocsRoot: cfg.Paths.DocsRoot,
-			CacheDir: cacheDir,
-			SourceRepo: sourceRepo,
-			SourceRef: cfg.Source.Ref,
-			ProfileID: cfg.Source.Profile,
+			RepoRoot:     ".",
+			DocsRoot:     cfg.Paths.DocsRoot,
+			CacheDir:     cacheDir,
+			SourceRepo:   sourceRepo,
+			SourceRef:    cfg.Source.Ref,
+			ProfileID:    cfg.Source.Profile,
 			MarkerPrefix: cfg.Sync.ManagedBlockPrefix,
 		})
 		if err != nil {
@@ -148,12 +148,12 @@ func runSubcommand(cmd string, subArgs []string, stdout, stderr io.Writer) int {
 		}
 		sourceRepo := resolveRepoPathIfLocal(*configPath, cfg.Source.Repo)
 		res, err := builder.Verify(context.Background(), builder.VerifyOptions{
-			RepoRoot: ".",
-			DocsRoot: cfg.Paths.DocsRoot,
-			CacheDir: cacheDir,
-			SourceRepo: sourceRepo,
-			SourceRef: cfg.Source.Ref,
-			ProfileID: cfg.Source.Profile,
+			RepoRoot:     ".",
+			DocsRoot:     cfg.Paths.DocsRoot,
+			CacheDir:     cacheDir,
+			SourceRepo:   sourceRepo,
+			SourceRef:    cfg.Source.Ref,
+			ProfileID:    cfg.Source.Profile,
 			MarkerPrefix: cfg.Sync.ManagedBlockPrefix,
 		})
 		if err != nil {
@@ -223,4 +223,3 @@ func printUsage(w io.Writer) {
 	fmt.Fprintln(w, "Build options:")
 	fmt.Fprintln(w, "  --out DIR       Output directory (required)")
 }
-

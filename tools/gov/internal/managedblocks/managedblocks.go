@@ -31,9 +31,6 @@ type ReplaceOptions struct {
 	// MetaUpdates are applied to the BEGIN marker (merged over existing meta).
 	// The "id" field is always preserved as BlockID.
 	MetaUpdates map[string]string
-	// ComputeSHA256 controls whether sha256 is recomputed from NewContent
-	// and written into the BEGIN marker. Defaults to true.
-	ComputeSHA256 bool
 }
 
 // ReplaceBlock replaces a managed block's content and updates its BEGIN marker.
@@ -45,17 +42,8 @@ func ReplaceBlock(doc string, opts ReplaceOptions) (string, error) {
 	if strings.TrimSpace(opts.BlockID) == "" {
 		return "", errors.New("block id is required")
 	}
-	computeHash := opts.ComputeSHA256
 	if opts.MetaUpdates == nil {
 		opts.MetaUpdates = map[string]string{}
-	}
-	if opts.ComputeSHA256 == false && opts.MetaUpdates["sha256"] == "" {
-		// Caller explicitly disabled hashing and didn't provide sha256; allow.
-	} else if opts.ComputeSHA256 == false {
-		// Caller supplied sha256; ok.
-	} else {
-		// Default: compute.
-		computeHash = true
 	}
 
 	lines, trailingNewline := splitLines(doc)
@@ -92,14 +80,13 @@ func ReplaceBlock(doc string, opts ReplaceOptions) (string, error) {
 		}
 		meta[k] = v
 	}
-	if computeHash {
-		meta["sha256"] = SHA256Hex(opts.NewContent)
-	}
+	newContentLines, _ := splitLines(opts.NewContent)
+	canonicalContent := strings.Join(newContentLines, "\n")
+	meta["sha256"] = SHA256Hex(canonicalContent)
 
 	beginLine := FormatBeginMarker(opts.Prefix, meta)
 	lines[b.BeginLineIdx] = beginLine
 
-	newContentLines, _ := splitLines(opts.NewContent)
 	// Replace between begin+1 and end (exclusive).
 	lines = splice(lines, b.BeginLineIdx+1, b.EndLineIdx, newContentLines)
 
@@ -282,4 +269,3 @@ func splice(lines []string, start, end int, replacement []string) []string {
 	out = append(out, lines[end:]...)
 	return out
 }
-

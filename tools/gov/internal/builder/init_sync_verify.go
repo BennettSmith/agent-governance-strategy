@@ -16,7 +16,7 @@ type InitOptions struct {
 	RepoRoot string
 	DocsRoot string
 
-	CacheDir string
+	CacheDir   string
 	SourceRepo string
 	SourceRef  string
 	ProfileID  string
@@ -49,7 +49,7 @@ type SyncOptions struct {
 	RepoRoot string
 	DocsRoot string
 
-	CacheDir string
+	CacheDir   string
 	SourceRepo string
 	SourceRef  string
 	ProfileID  string
@@ -126,7 +126,7 @@ type VerifyOptions struct {
 	RepoRoot string
 	DocsRoot string
 
-	CacheDir string
+	CacheDir   string
 	SourceRepo string
 	SourceRef  string
 	ProfileID  string
@@ -180,4 +180,3 @@ func Verify(ctx context.Context, opts VerifyOptions) (VerifyResult, error) {
 	}
 	return VerifyResult{OK: len(issues) == 0, Issues: issues}, nil
 }
-

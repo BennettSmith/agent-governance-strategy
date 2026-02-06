@@ -115,3 +115,74 @@ func TestVerifyBlockSHA256_PassesWhenCorrect(t *testing.T) {
 	}
 }
 
+func TestReplaceBlock_ErrorsWhenBlockNotFound(t *testing.T) {
+	_, err := ReplaceBlock("no blocks here\n", ReplaceOptions{
+		Prefix:     "GOV",
+		BlockID:    "missing",
+		NewContent: "x",
+	})
+	if err == nil {
+		t.Fatalf("expected error")
+	}
+}
+
+func TestFindBlocks_ErrorsOnEndWithoutBegin(t *testing.T) {
+	lines, _ := splitLines(FormatEndMarker("GOV", "x") + "\n")
+	_, err := FindBlocks(lines, "GOV")
+	if err == nil {
+		t.Fatalf("expected error")
+	}
+}
+
+func TestReplaceBlock_ErrorsOnMissingPrefix(t *testing.T) {
+	_, err := ReplaceBlock("x", ReplaceOptions{Prefix: "", BlockID: "a", NewContent: "b"})
+	if err == nil {
+		t.Fatalf("expected error")
+	}
+}
+
+func TestFindBlocks_ErrorsOnBeginMissingID(t *testing.T) {
+	lines, _ := splitLines("<!-- GOV:BEGIN version=v1 -->\nX\n<!-- GOV:END id=x -->\n")
+	_, err := FindBlocks(lines, "GOV")
+	if err == nil {
+		t.Fatalf("expected error")
+	}
+}
+
+func TestFindBlocks_ErrorsOnDuplicateBeginWithoutClose(t *testing.T) {
+	lines, _ := splitLines("<!-- GOV:BEGIN id=x -->\n<!-- GOV:BEGIN id=x -->\n")
+	_, err := FindBlocks(lines, "GOV")
+	if err == nil {
+		t.Fatalf("expected error")
+	}
+}
+
+func TestReplaceBlock_ErrorsOnMultipleBlocksSameID(t *testing.T) {
+	doc := strings.Join([]string{
+		FormatBeginMarker("GOV", map[string]string{"id": "x", "sha256": "0"}),
+		"a",
+		FormatEndMarker("GOV", "x"),
+		FormatBeginMarker("GOV", map[string]string{"id": "x", "sha256": "0"}),
+		"b",
+		FormatEndMarker("GOV", "x"),
+	}, "\n")
+	_, err := ReplaceBlock(doc, ReplaceOptions{
+		Prefix:     "GOV",
+		BlockID:    "x",
+		NewContent: "c",
+	})
+	if err == nil {
+		t.Fatalf("expected error")
+	}
+}
+
+func TestVerifyBlockSHA256_ErrorsWhenMissingSha(t *testing.T) {
+	doc := strings.Join([]string{
+		"<!-- GOV:BEGIN id=core -->",
+		"content",
+		"<!-- GOV:END id=core -->",
+	}, "\n")
+	if err := VerifyBlockSHA256(doc, "GOV", "core"); err == nil {
+		t.Fatalf("expected error")
+	}
+}

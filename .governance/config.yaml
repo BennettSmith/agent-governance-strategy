@@ -1,7 +1,9 @@
 schemaVersion: 1
 
 source:
-  repo: "." # local path to this repo root for development
+  # NOTE: repo path is resolved relative to this config file directory.
+  # Since this file lives at `.governance/config.yaml`, `..` points at the repo root.
+  repo: ".."
   ref: "HEAD"
   profile: "mobile-clean-ios"
 

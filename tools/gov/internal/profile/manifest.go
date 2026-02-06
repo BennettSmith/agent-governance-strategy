@@ -111,4 +111,3 @@ func normalizePaths(m Manifest, baseDir string) Manifest {
 	}
 	return m
 }
-

@@ -74,12 +74,12 @@ func Build(ctx context.Context, opts BuildOptions) (BuildResult, error) {
 		}
 		blockID := managedBlockIDForDoc(doc.Output)
 		meta := map[string]string{
-			"id":          blockID,
-			"version":     opts.SourceRef,
-			"sourceRepo":  src.SourceRepo,
-			"sourceRef":   src.SourceRef,
+			"id":           blockID,
+			"version":      opts.SourceRef,
+			"sourceRepo":   src.SourceRepo,
+			"sourceRef":    src.SourceRef,
 			"sourceCommit": src.SourceCommit,
-			"sha256":      managedblocks.SHA256Hex(content),
+			"sha256":       managedblocks.SHA256Hex(content),
 		}
 
 		outDoc := strings.Join([]string{
@@ -162,4 +162,3 @@ func managedBlockIDForDoc(output string) string {
 	}
 	return "doc-" + id
 }
-

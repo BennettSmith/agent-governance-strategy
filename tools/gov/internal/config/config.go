@@ -30,7 +30,7 @@ type PathsConfig struct {
 }
 
 type SyncConfig struct {
-	ManagedBlockPrefix string `yaml:"managedBlockPrefix"`
+	ManagedBlockPrefix  string `yaml:"managedBlockPrefix"`
 	LocalAddendaHeading string `yaml:"localAddendaHeading"`
 }
 
@@ -108,4 +108,3 @@ func expandHome(p string) string {
 	}
 	return p
 }
-

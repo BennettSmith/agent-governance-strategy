@@ -14,10 +14,10 @@ import (
 )
 
 type ResolvedSource struct {
-	CheckoutDir   string
-	SourceRepo    string
-	SourceRef     string
-	SourceCommit  string
+	CheckoutDir  string
+	SourceRepo   string
+	SourceRef    string
+	SourceCommit string
 }
 
 type FetchOptions struct {
@@ -112,4 +112,3 @@ func sanitizeRef(ref string) string {
 	}
 	return ref
 }
-
