@@ -219,4 +219,4 @@ List scenarios that fully specify observable behavior. Avoid implementation deta
   - When `<trigger>`
   - Then `<boundary failure shape>`
   - And `<compensation/rollback or queued retry behavior>`
-  
+

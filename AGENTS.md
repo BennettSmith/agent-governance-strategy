@@ -61,13 +61,13 @@ Examples:
 ## Where things live
 
 - **Architecture overview**: `Architecture.md`
-- **Bounded contexts**: `Docs/Domains/`
-- **Use cases**: `Docs/UseCases/` (index: `Docs/UseCases/index.md`)
 - **Decision records (MADR)**: `Docs/Decisions/` (template: `Docs/Decisions/MADR.Template.md`)
 - **Plans**: `Docs/Plans/` (template: `Docs/Plans/Plan.Template.md`)
+- **Governance source of truth**: `Governance/` (core fragments, profiles, templates, and playbooks)
+- **Archived examples (builder repo only)**: `Docs/Archive/`
 
 ## When to create new docs
 
 - If a change affects system shape or long-term constraints, capture a decision record in `Docs/Decisions/`.
-- If adding/changing behavior, ensure there is a documented use case in `Docs/UseCases/` and it belongs to exactly one bounded context.
+- If adding/changing governance behavior in this repo, prefer updating the appropriate `Governance/` source (fragments, profiles, templates, playbooks) and capture decisions in `Docs/Decisions/` when they affect long-term constraints.
 

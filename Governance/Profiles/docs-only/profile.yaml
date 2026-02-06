@@ -16,6 +16,10 @@ documents:
     fragments:
       - ./Architecture.Profile.md
 
+  - output: Docs/Refactoring/Legacy-Refactoring-Playbook.md
+    fragments:
+      - ./Playbooks/Legacy-Refactoring-Playbook.md
+
 templates:
   - source: ../../Templates/Decisions/MADR.Template.md
     output: Docs/Decisions/MADR.Template.md

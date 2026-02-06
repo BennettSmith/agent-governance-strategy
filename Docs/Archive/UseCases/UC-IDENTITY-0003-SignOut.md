@@ -197,3 +197,4 @@ Offline-first is the default. Explicitly specify behavior in each connectivity s
   - Then `SignOutCompletedResult`
   - And local authentication material is cleared
   - And the revoke failure is observable (metrics/logs)
+
