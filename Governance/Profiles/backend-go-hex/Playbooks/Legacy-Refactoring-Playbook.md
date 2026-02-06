@@ -1,0 +1,94 @@
+# Legacy refactoring playbook (backend-go-hex)
+
+This playbook defines how we refactor legacy Go code toward a **hexagonal (ports-and-adapters)** architecture in a way that is **orderly**, **small-step**, and **reversible**, while preserving externally observable behavior.
+
+## What counts as “externally observable behavior”
+
+At minimum, treat the following as externally observable boundaries:
+
+- **API contracts**: HTTP request/response shape, status codes, error mapping, pagination/ordering, idempotency guarantees.
+- **Persistence contracts**: schema/serialization formats, query semantics, uniqueness rules, migration behavior.
+- **Message contracts** (if any): topics/queues, message schema, delivery guarantees, deduplication/idempotency rules.
+- **CLI behavior** (if applicable): flags, exit codes, output, and error semantics.
+- **Operational behavior**: timeouts, retries/backoff, and observable logging/metrics fields relied on by ops.
+
+If any of the above changes, the work is a **behavior change** (feature/fix), not a refactor.
+
+## Safety net (required)
+
+Before changing internals, lock behavior at a stable boundary:
+
+- **Contract tests** at the HTTP boundary (or handler layer) when possible.
+- **Golden-master tests** for tricky mapping/serialization behaviors.
+- **Characterization tests** around the current behavior when the expected behavior is unclear.
+
+Guideline: put the safety net at the **highest stable boundary** you can (HTTP handlers, ports, use-case entrypoints), not deep inside legacy internals.
+
+## Seams in a Go hex architecture
+
+Common seams that make refactoring safe:
+
+- **Ports (interfaces)** in the application/core layer for persistence, clocks, UUIDs, external APIs, queues, etc.
+- **Adapters** in the infrastructure layer that implement those ports.
+- **Use-case services** that orchestrate business rules and depend only on ports.
+
+Introduce seams before trying to “clean up” internals.
+
+## Required workflow (the loop)
+
+Use this loop for each refactor step:
+
+1. **Define the preserved boundary** (API/persistence/port contract).
+2. **Add the safety net** that fails if the boundary behavior changes.
+3. **Introduce or strengthen a seam** (port/interface, facade, adapter).
+4. **Refactor behind the seam** in the smallest valuable step.
+5. **Run quality gates** and keep the diff trivially revertible.
+6. **Checkpoint** progress in the branch plan.
+
+## Approved patterns
+
+### Strangler Fig (recommended for large legacy surfaces)
+
+Use when: you can route requests through a boundary and migrate endpoints/paths incrementally.
+
+- Wrap legacy behavior behind a handler/use-case boundary.
+- Implement a small “new path” behind the same boundary.
+- Route a small subset of calls to the new path.
+- Expand slice-by-slice until legacy is unused, then remove.
+
+Rollback: route back to the legacy path.
+
+### Branch by Abstraction
+
+Use when: you need to replace an implementation but can’t update all callers at once.
+
+- Introduce a port interface at the boundary.
+- Provide two implementations: legacy adapter and new adapter.
+- Move callers to the interface (no behavior change).
+- Switch implementations (optionally guarded by config/flag).
+
+Rollback: switch back to legacy adapter.
+
+### Parallel Change / Expand–Contract
+
+Use when: you must change a contract (schema, API field, message shape) safely.
+
+- Expand: support both old and new shapes (write both, read old with fallback).
+- Migrate producers/consumers.
+- Contract: remove old shape after stabilization.
+
+Rollback: keep old path working; delay contract.
+
+## Go-specific guidance (practical)
+
+- Prefer **small interfaces** (one purpose) for ports; avoid “god” interfaces.
+- Use **table-driven tests** for boundary behavior; keep fixtures readable.
+- Avoid leaking infrastructure types into core; map explicitly at adapter boundaries.
+- If you need to change package structure, do it behind a seam and keep commits small.
+
+## Related playbooks
+
+- `Docs/Playbooks/Hexagonal-Ports-And-Adapters.md`
+- `Docs/Playbooks/Go-CLI-Structure.md` (for CLI apps)
+- `Docs/Playbooks/Go-Packaging.md`
+

@@ -1,0 +1,61 @@
+# Legacy refactoring playbook (docs-only)
+
+This playbook defines how we refactor **governance documents** and the **`agent-gov` toolchain** in this repository in a way that is **orderly**, **small-step**, and **reversible**.
+
+It intentionally does **not** assume any product/runtime architecture (mobile Clean Architecture, hexagonal services, etc.). Target repositories should follow the refactoring playbook emitted by their selected governance profile.
+
+## What counts as “externally observable behavior” here
+
+For refactors in this builder repo, treat the following as externally observable boundaries:
+
+- **CLI behavior**: command names, flags, exit codes, stdout/stderr semantics, and error messages that are relied on by CI or humans.
+- **Config schema & interpretation**: `.governance/config.yaml` fields, defaults, and path resolution behavior.
+- **Generated doc shape**: managed block markers, metadata fields, local addenda heading, and deterministic assembly rules.
+- **File outputs**: which docs/templates/playbooks are emitted by a profile and their output paths.
+
+If any of these change, the work is a **behavior change** (feature/fix), not a refactor.
+
+## Safety net (required)
+
+Before refactoring internals, lock behavior at the boundary:
+
+- Add/extend **unit tests** around the boundary you are preserving.
+- Use **golden/fixture tests** for document assembly and managed-block replacement when helpful.
+- Run the repo quality gates frequently:
+  - `make ci` (tests, coverage gate, and smoke test)
+
+Guideline: put the safety net at the **highest stable boundary** you can (CLI surface, generated doc content, profile/manifest behavior), not deep inside helper functions.
+
+## Seams (how to keep refactors small)
+
+Prefer to introduce/strengthen seams before changing internals:
+
+- **Package boundaries** in `tools/gov/internal/...` (e.g. `managedblocks`, `profile`, `builder`, `source`)
+- **Pure functions** for parsing/normalization/assembly logic
+- **Test fixtures** that make behavior explicit and reproducible
+
+“Seam first” is often the difference between a safe refactor and a rewrite.
+
+## Required workflow (the loop)
+
+Use this loop for each refactor step:
+
+1. **Define the boundary** you promise not to change.
+2. **Add the safety net** that will fail if behavior changes at that boundary.
+3. **Introduce or strengthen a seam** so changes remain localized.
+4. **Refactor behind the seam** in the smallest step that provides value.
+5. **Run quality gates** and ensure the diff is trivially revertible.
+6. **Checkpoint**: record what changed, what remained stable, and what’s next in the branch plan.
+
+If you cannot name your rollback plan for the current step, the step is too large.
+
+## Approved patterns (builder repo)
+
+- **Parallel change / expand–contract**: for schema or file output changes; emit both shapes temporarily, migrate consumers/tests, then remove old.
+- **Branch by abstraction**: introduce a small interface (or function seam) so implementations can be swapped safely.
+- **Golden-master testing**: snapshot generated outputs for representative profiles/configs and compare.
+
+## Notes for target repositories
+
+Target repositories should follow the playbook emitted by their chosen governance profile (e.g. mobile Clean Architecture or Go hexagonal). This docs-only playbook exists to keep the builder repo and its toolchain changes safe.
+

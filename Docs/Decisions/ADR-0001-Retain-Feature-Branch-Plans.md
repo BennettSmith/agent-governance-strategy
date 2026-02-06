@@ -120,8 +120,8 @@ and preserves useful context without requiring every change to produce an ADR.
 
 ## Links
 
-- Related Use Case(s): `Docs/UseCases/index.md`
-- Related Domain doc(s): `Docs/Domains/`
+- Related Use Case(s): <!-- n/a in this builder repo; templates (if any) are profile-emitted from `Governance/Templates/` -->
+- Related Domain doc(s): <!-- n/a in this builder repo; templates (if any) are profile-emitted from `Governance/Templates/` -->
 - Related ADR(s): `Docs/Decisions/`
 - External references: <!-- -->
 
