@@ -1,0 +1,30 @@
+schemaVersion: 1
+id: mobile-clean
+description: Clean Architecture + use-case-driven governance core for mobile apps (platform-neutral).
+
+# This base profile is extended by platform variants (e.g., mobile-clean-ios).
+
+documents:
+  - output: Non-Negotiables.md
+    fragments:
+      - ../../Core/NonNegotiables.Core.md
+      - ./NonNegotiables.Profile.md
+
+  - output: Constitution.md
+    fragments:
+      - ../../Core/Constitution.Core.md
+      - ./Constitution.Profile.md
+
+  - output: Architecture.md
+    fragments:
+      - ./Architecture.Profile.md
+
+templates:
+  # Emitted into target repos (templates-only, no sample content).
+  - source: ../../Templates/UseCases/UseCase.Template.md
+    output: Docs/UseCases/UseCase.Template.md
+  - source: ../../Templates/Domains/BoundedContext.Template.md
+    output: Docs/Domains/BoundedContext.Template.md
+  - source: ../../Templates/Decisions/MADR.Template.md
+    output: Docs/Decisions/MADR.Template.md
+
