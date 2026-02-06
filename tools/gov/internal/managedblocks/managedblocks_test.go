@@ -48,7 +48,7 @@ func TestReplaceBlock_ReplacesOnlyManagedRegionAndUpdatesSHA(t *testing.T) {
 		"top",
 		"<!-- GOV:BEGIN id=core version=v1 sha256=oldhash -->",
 		"OLD",
-		"<!-- GOV:END id=core -->",
+		FormatEndMarker("GOV", "core"),
 		"",
 		"## Local Addenda (project-owned)",
 		"",

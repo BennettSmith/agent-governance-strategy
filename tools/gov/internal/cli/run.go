@@ -81,14 +81,94 @@ func runSubcommand(cmd string, subArgs []string, stdout, stderr io.Writer) int {
 		fmt.Fprintf(stdout, "built %d doc(s) and %d file(s) (sourceCommit=%s)\n", res.DocsWritten, res.ExtraFilesWritten, res.SourceCommit)
 		return 0
 	case "init":
-		fmt.Fprintf(stdout, "TODO: init (config=%s)\n", *configPath)
+		cfg, err := config.Load(*configPath)
+		if err != nil {
+			fmt.Fprintf(stderr, "config error: %v\n", err)
+			return 2
+		}
+		cacheDir, err := cfg.CacheDir()
+		if err != nil {
+			fmt.Fprintf(stderr, "cache dir error: %v\n", err)
+			return 2
+		}
+		sourceRepo := resolveRepoPathIfLocal(*configPath, cfg.Source.Repo)
+		res, err := builder.Init(context.Background(), builder.InitOptions{
+			RepoRoot: ".",
+			DocsRoot: cfg.Paths.DocsRoot,
+			CacheDir: cacheDir,
+			SourceRepo: sourceRepo,
+			SourceRef: cfg.Source.Ref,
+			ProfileID: cfg.Source.Profile,
+			MarkerPrefix: cfg.Sync.ManagedBlockPrefix,
+			AddendaHeading: cfg.Sync.LocalAddendaHeading,
+		})
+		if err != nil {
+			fmt.Fprintf(stderr, "init failed: %v\n", err)
+			return 1
+		}
+		fmt.Fprintf(stdout, "initialized %d doc(s) and %d file(s)\n", res.DocsWritten, res.ExtraFilesWritten)
 		return 0
 	case "sync":
-		fmt.Fprintf(stdout, "TODO: sync (config=%s)\n", *configPath)
+		cfg, err := config.Load(*configPath)
+		if err != nil {
+			fmt.Fprintf(stderr, "config error: %v\n", err)
+			return 2
+		}
+		cacheDir, err := cfg.CacheDir()
+		if err != nil {
+			fmt.Fprintf(stderr, "cache dir error: %v\n", err)
+			return 2
+		}
+		sourceRepo := resolveRepoPathIfLocal(*configPath, cfg.Source.Repo)
+		res, err := builder.Sync(context.Background(), builder.SyncOptions{
+			RepoRoot: ".",
+			DocsRoot: cfg.Paths.DocsRoot,
+			CacheDir: cacheDir,
+			SourceRepo: sourceRepo,
+			SourceRef: cfg.Source.Ref,
+			ProfileID: cfg.Source.Profile,
+			MarkerPrefix: cfg.Sync.ManagedBlockPrefix,
+		})
+		if err != nil {
+			fmt.Fprintf(stderr, "sync failed: %v\n", err)
+			return 1
+		}
+		fmt.Fprintf(stdout, "synced %d doc(s)\n", res.DocsUpdated)
 		return 0
 	case "verify":
-		fmt.Fprintf(stdout, "TODO: verify (config=%s)\n", *configPath)
-		return 0
+		cfg, err := config.Load(*configPath)
+		if err != nil {
+			fmt.Fprintf(stderr, "config error: %v\n", err)
+			return 2
+		}
+		cacheDir, err := cfg.CacheDir()
+		if err != nil {
+			fmt.Fprintf(stderr, "cache dir error: %v\n", err)
+			return 2
+		}
+		sourceRepo := resolveRepoPathIfLocal(*configPath, cfg.Source.Repo)
+		res, err := builder.Verify(context.Background(), builder.VerifyOptions{
+			RepoRoot: ".",
+			DocsRoot: cfg.Paths.DocsRoot,
+			CacheDir: cacheDir,
+			SourceRepo: sourceRepo,
+			SourceRef: cfg.Source.Ref,
+			ProfileID: cfg.Source.Profile,
+			MarkerPrefix: cfg.Sync.ManagedBlockPrefix,
+		})
+		if err != nil {
+			fmt.Fprintf(stderr, "verify failed: %v\n", err)
+			return 1
+		}
+		if res.OK {
+			fmt.Fprintln(stdout, "ok")
+			return 0
+		}
+		fmt.Fprintf(stderr, "verification failed: %d issue(s)\n", len(res.Issues))
+		for _, issue := range res.Issues {
+			fmt.Fprintf(stderr, "- %s\n", issue)
+		}
+		return 1
 	default:
 		fmt.Fprintf(stderr, "internal error: unhandled command %s\n", cmd)
 		return 1
