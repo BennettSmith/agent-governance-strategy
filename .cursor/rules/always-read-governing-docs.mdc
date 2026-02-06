@@ -5,7 +5,12 @@ alwaysApply: true
 
 # Read governance docs first
 
-Before starting any task (including planning, editing, or answering questions about this repo), **read** these files from the repository root:
+Before starting any task (including planning, editing, or answering questions about this repo), **read** the governing docs for the scope you are working in.
+
+## Scope selection (embedded repos)
+
+- **Default**: read the repository root key-three.
+- **Embedded scope**: if you are working under a subtree that contains a nearer `AGENTS.md` (for example `tools/gov/AGENTS.md`), follow that scope’s instructions and read that scope’s key-three first.
 
 - `Non-Negotiables.md`
 - `Architecture.md`

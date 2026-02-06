@@ -4,7 +4,15 @@ This repository is governed by the documents below. Agents must follow them when
 
 ## Read-first (governing docs)
 
-Read these files from the repository root before starting work:
+Read governing docs before starting work.
+
+### Scope selection (embedded repos)
+
+- **Default**: Use the repository root key-three.
+- **Embedded scope**: If you are working under a subtree that contains a nearer `AGENTS.md` (for example `tools/gov/AGENTS.md`), follow that scope’s instructions, including reading that scope’s key-three first.
+- If anything is ambiguous, stop and ask for human direction.
+
+### Root key-three
 
 1. `Non-Negotiables.md`
 2. `Architecture.md`

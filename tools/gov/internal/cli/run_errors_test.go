@@ -30,6 +30,157 @@ func TestRun_BuildConfigError(t *testing.T) {
 	}
 }
 
+func TestFindNearestConfig_FindsUpward(t *testing.T) {
+	tmp := t.TempDir()
+	root := filepath.Join(tmp, "root")
+	child := filepath.Join(root, "a", "b")
+	if err := os.MkdirAll(filepath.Join(root, ".governance"), 0o755); err != nil {
+		t.Fatalf("mkdir: %v", err)
+	}
+	if err := os.MkdirAll(child, 0o755); err != nil {
+		t.Fatalf("mkdir child: %v", err)
+	}
+	cfgPath := filepath.Join(root, ".governance", "config.yaml")
+	if err := os.WriteFile(cfgPath, []byte("schemaVersion: 1\n"), 0o644); err != nil {
+		t.Fatalf("write config: %v", err)
+	}
+
+	oldCwd, _ := os.Getwd()
+	defer func() { _ = os.Chdir(oldCwd) }()
+	if err := os.Chdir(child); err != nil {
+		t.Fatalf("chdir: %v", err)
+	}
+
+	found, ok, err := findNearestConfig(".")
+	if err != nil {
+		t.Fatalf("findNearestConfig error: %v", err)
+	}
+	if !ok {
+		t.Fatalf("expected config found")
+	}
+	wantInfo, err := os.Stat(cfgPath)
+	if err != nil {
+		t.Fatalf("stat want: %v", err)
+	}
+	gotInfo, err := os.Stat(found)
+	if err != nil {
+		t.Fatalf("stat got: %v", err)
+	}
+	if !os.SameFile(wantInfo, gotInfo) {
+		t.Fatalf("expected same file %q got %q", cfgPath, found)
+	}
+}
+
+func TestRepoRootForConfig_UsesParentOfDotGovernance(t *testing.T) {
+	tmp := t.TempDir()
+	cfg := filepath.Join(tmp, ".governance", "config.yaml")
+	got := repoRootForConfig(cfg)
+	if filepath.Clean(got) != filepath.Clean(tmp) {
+		t.Fatalf("expected %q got %q", tmp, got)
+	}
+}
+
+func TestRepoRootForConfig_UsesConfigDirWhenNotDotGovernance(t *testing.T) {
+	tmp := t.TempDir()
+	cfg := filepath.Join(tmp, "somewhere", "config.yaml")
+	got := repoRootForConfig(cfg)
+	if !strings.Contains(filepath.Clean(got), filepath.Clean(filepath.Join(tmp, "somewhere"))) {
+		t.Fatalf("expected config dir as root, got %q", got)
+	}
+}
+
+func TestConfigFlagProvided_DetectsForms(t *testing.T) {
+	cases := []struct {
+		args []string
+		want bool
+	}{
+		{args: []string{"--config", "x"}, want: true},
+		{args: []string{"-config", "x"}, want: true},
+		{args: []string{"--config=x"}, want: true},
+		{args: []string{"-config=x"}, want: true},
+		{args: []string{"--out", "y"}, want: false},
+	}
+	for _, tc := range cases {
+		if got := configFlagProvided(tc.args); got != tc.want {
+			t.Fatalf("args=%v expected %v got %v", tc.args, tc.want, got)
+		}
+	}
+}
+
+func TestResolveConfigPath_NoFlag_FindsLocalWithoutLogging(t *testing.T) {
+	tmp := t.TempDir()
+	if err := os.MkdirAll(filepath.Join(tmp, ".governance"), 0o755); err != nil {
+		t.Fatalf("mkdir: %v", err)
+	}
+	cfg := filepath.Join(tmp, ".governance", "config.yaml")
+	if err := os.WriteFile(cfg, []byte("schemaVersion: 1\n"), 0o644); err != nil {
+		t.Fatalf("write: %v", err)
+	}
+
+	oldCwd, _ := os.Getwd()
+	defer func() { _ = os.Chdir(oldCwd) }()
+	if err := os.Chdir(tmp); err != nil {
+		t.Fatalf("chdir: %v", err)
+	}
+
+	got, auto, err := resolveConfigPath(defaultConfigPath, []string{})
+	if err != nil {
+		t.Fatalf("resolve: %v", err)
+	}
+	if auto {
+		t.Fatalf("expected auto=false when config is local default, got true")
+	}
+	if !strings.Contains(got, ".governance/config.yaml") {
+		t.Fatalf("expected discovered config path, got %q", got)
+	}
+}
+
+func TestResolveConfigPath_NoFlag_FindsUpwardWithLogging(t *testing.T) {
+	tmp := t.TempDir()
+	root := filepath.Join(tmp, "root")
+	child := filepath.Join(root, "a", "b")
+	if err := os.MkdirAll(filepath.Join(root, ".governance"), 0o755); err != nil {
+		t.Fatalf("mkdir: %v", err)
+	}
+	if err := os.MkdirAll(child, 0o755); err != nil {
+		t.Fatalf("mkdir child: %v", err)
+	}
+	cfg := filepath.Join(root, ".governance", "config.yaml")
+	if err := os.WriteFile(cfg, []byte("schemaVersion: 1\n"), 0o644); err != nil {
+		t.Fatalf("write: %v", err)
+	}
+
+	oldCwd, _ := os.Getwd()
+	defer func() { _ = os.Chdir(oldCwd) }()
+	if err := os.Chdir(child); err != nil {
+		t.Fatalf("chdir: %v", err)
+	}
+
+	got, auto, err := resolveConfigPath(defaultConfigPath, []string{})
+	if err != nil {
+		t.Fatalf("resolve: %v", err)
+	}
+	if !auto {
+		t.Fatalf("expected auto=true when config found above cwd, got false")
+	}
+	if !strings.Contains(got, ".governance/config.yaml") {
+		t.Fatalf("expected discovered config path, got %q", got)
+	}
+}
+
+func TestResolveConfigPath_WithConfigFlag_DoesNotDiscover(t *testing.T) {
+	got, auto, err := resolveConfigPath("/tmp/specified.yaml", []string{"--config", "/tmp/specified.yaml"})
+	if err != nil {
+		t.Fatalf("resolve: %v", err)
+	}
+	if auto {
+		t.Fatalf("expected auto=false when --config provided")
+	}
+	if got != "/tmp/specified.yaml" {
+		t.Fatalf("expected provided path, got %q", got)
+	}
+}
+
 func TestRun_VerifyReportsIssuesWhenDocsMissing(t *testing.T) {
 	tmp := t.TempDir()
 	srcRepo := filepath.Join(tmp, "govsrc")

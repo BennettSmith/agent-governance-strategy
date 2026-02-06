@@ -1,12 +1,11 @@
 schemaVersion: 1
-id: backend-go-hex
-description: Go microservice governance using hexagonal architecture (ports and adapters).
+id: docs-only
+description: Governance for this governance builder repo (no product/runtime architecture assumptions).
 
 documents:
   - output: Non-Negotiables.md
     fragments:
       - ../../Core/NonNegotiables.Core.md
-      - ./NonNegotiables.Profile.md
 
   - output: Constitution.md
     fragments:
@@ -22,12 +21,4 @@ templates:
     output: Docs/Decisions/MADR.Template.md
   - source: ../../Templates/Plans/Plan.Template.md
     output: Docs/Plans/Plan.Template.md
-
-playbooks:
-  - source: ./Playbooks/Go-Packaging.md
-    output: Docs/Playbooks/Go-Packaging.md
-  - source: ./Playbooks/Hexagonal-Ports-And-Adapters.md
-    output: Docs/Playbooks/Hexagonal-Ports-And-Adapters.md
-  - source: ./Playbooks/Go-CLI-Structure.md
-    output: Docs/Playbooks/Go-CLI-Structure.md
 
