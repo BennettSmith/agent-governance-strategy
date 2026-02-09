@@ -43,9 +43,14 @@ Add CI automation that builds and publishes `agent-gov` binaries when a tool tag
 
 ## Checkpoints
 
-- [ ] Checkpoint 1 — Add plan + decide exact tag trigger and asset naming.
-- [ ] Checkpoint 2 — Add CI workflow for building multi-platform binaries on `agent-gov/v*` tags.
+- [x] Checkpoint 1 — Add plan + decide exact tag trigger and asset naming.
+- [x] Checkpoint 2 — Add CI workflow for building multi-platform binaries on `agent-gov/v*` tags.
 - [ ] Checkpoint 3 — Validate with a dry-run tag in a fork/test repo; document the release procedure.
+
+## Progress log (no approval yet)
+
+- Implemented tag trigger `agent-gov/v*` and asset naming `agent-gov_<os>_<arch>` via GitHub Actions workflow.
+- Added a short maintainer section to `README.md` describing how to cut an `agent-gov` release tag and expected assets.
 
 ## Completion checklist
 
@@ -55,7 +60,7 @@ Add CI automation that builds and publishes `agent-gov` binaries when a tool tag
 
 ## Quality gates / test plan
 
-- [ ] `make ci`
+- [x] `make ci`
 - [ ] Tag-triggered workflow produces release assets for all supported OS/arch
 
 ## Notes / open questions

@@ -1,0 +1,68 @@
+name: Release agent-gov
+
+on:
+  push:
+    tags:
+      - "agent-gov/v*"
+
+permissions:
+  contents: write
+
+jobs:
+  create_release:
+    name: Create GitHub Release
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Create release (no assets yet)
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          generate_release_notes: true
+
+  build_and_upload:
+    name: Build and upload (${{ matrix.goos }}/${{ matrix.goarch }})
+    needs: create_release
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - runner: ubuntu-22.04
+            goos: linux
+            goarch: amd64
+          - runner: macos-13
+            goos: darwin
+            goarch: amd64
+          - runner: macos-14
+            goos: darwin
+            goarch: arm64
+    runs-on: ${{ matrix.runner }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: "1.22"
+          cache: true
+          cache-dependency-path: tools/gov/go.sum
+
+      - name: Build
+        working-directory: tools/gov
+        env:
+          GOOS: ${{ matrix.goos }}
+          GOARCH: ${{ matrix.goarch }}
+          CGO_ENABLED: "0"
+        run: |
+          set -eu
+          mkdir -p dist
+          asset="agent-gov_${GOOS}_${GOARCH}"
+          go build -trimpath -ldflags "-s -w" -o "dist/${asset}" ./cmd/agent-gov
+
+      - name: Upload release asset
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          fail_on_unmatched_files: true
+          files: |
+            tools/gov/dist/agent-gov_${{ matrix.goos }}_${{ matrix.goarch }}
