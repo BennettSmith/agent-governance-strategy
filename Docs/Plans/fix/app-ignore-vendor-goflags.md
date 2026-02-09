@@ -1,6 +1,6 @@
 ---
 branch: "fix/app-ignore-vendor-goflags"
-status: active
+status: completed
 ---
 
 ## Summary
@@ -32,11 +32,13 @@ Ensure `make ci` succeeds even when a developer machine has `GOFLAGS=-mod=vendor
 
 ## Checkpoints
 
-- [ ] Checkpoint 1 — Add plan + Makefile override and verify `make ci` under `GOFLAGS=-mod=vendor`.
+- [x] Checkpoint 1 — Add plan + Makefile override and verify `make ci` under `GOFLAGS=-mod=vendor`.
+  - PR: `https://github.com/BennettSmith/agent-governance-strategy/pull/4`
+  - Commits: `b30a460`, `ff392b3`
 
 ## Quality gates / test plan
 
-- [ ] `GOFLAGS=-mod=vendor make ci`
+- [x] `GOFLAGS=-mod=vendor make ci`
 
 ## Notes / open questions
 
