@@ -50,6 +50,16 @@ Include links, commit SHAs, or references as useful.
 - [ ] Checkpoint 2 — <!-- description -->
 - [ ] Checkpoint 3 — <!-- description -->
 
+## Completion checklist
+
+<!--
+Before declaring the branch “done” (especially after approval), update the plan to reflect reality.
+-->
+
+- [ ] Set frontmatter `status: completed`
+- [ ] Check off completed checkpoint(s) above and add PR/commit references as needed
+- [ ] Check off all quality gates below (or document any exceptions)
+
 ## Quality gates / test plan
 
 <!--

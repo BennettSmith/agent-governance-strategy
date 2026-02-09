@@ -25,4 +25,5 @@
 - All changes must be made in feature branches.
 - Agents must request human acceptance before checkpoint commits.
 - Agents must not mark plan tasks complete without approval.
+- After an approved task is complete, agents must update the branch plan to reflect completion (e.g., set `status: completed`, check off completed checkpoints and quality gates, and add PR/commit references) before declaring the work “done” or pushing final updates.
 - Agents must not merge branches under any circumstances.
