@@ -63,3 +63,4 @@ Add a root `README.md` that explains how to use this repository as a governance 
   - CLI tool tag: `agent-gov/vX.Y.Z` (SemVer)
   - Governance content tag: `gov/vYYYY.MM.DD` (date-based)
 - Follow-up work: CI/release automation plan in `Docs/Plans/chore/app-agent-gov-release-pipeline.md`
+- Follow-up work: clarify PR wrap-up + final approval gate in `Docs/Plans/docs/app-pr-wrapup-approval-gate.md`
