@@ -3,6 +3,10 @@
 .PHONY: help ci fmt test coverage gov-smoke preflight gov-preflight gov-preflight-gocli
 
 GOV_MIN_COVERAGE ?= 85
+# Many Go environments set `GOFLAGS=-mod=vendor` globally to enforce vendoring.
+# This repo's `tools/gov` module does not commit a vendor tree, so we force module
+# mode for Go commands invoked by this Makefile to keep `make ci` reliable.
+TOOLS_GOV_GOFLAGS ?= -mod=mod
 
 help: ## Show available make targets
 	@awk 'BEGIN {FS = ":.*##"} /^[a-zA-Z0-9_.-]+:.*##/ {printf "  %-16s %s\n", $$1, $$2}' $(MAKEFILE_LIST)
@@ -10,14 +14,14 @@ help: ## Show available make targets
 preflight: gov-preflight ## Sanity check branch + baseline
 
 gov-preflight: ## Run agent-gov preflight (root scope)
-	@cd tools/gov && go run ./cmd/agent-gov preflight \
+	@cd tools/gov && GOFLAGS="$(TOOLS_GOV_GOFLAGS)" go run ./cmd/agent-gov preflight \
 	  --require "Makefile" \
 	  --require "Governance/Profiles/backend-go-hex/profile.yaml" \
 	  --require "Governance/Profiles/mobile-clean/profile.yaml" \
 	  --require "tools/gov/go.mod"
 
 gov-preflight-gocli: ## Run agent-gov preflight (embedded tools/gov scope)
-	@cd tools/gov && go run ./cmd/agent-gov preflight \
+	@cd tools/gov && GOFLAGS="$(TOOLS_GOV_GOFLAGS)" go run ./cmd/agent-gov preflight \
 	  --require "go.mod" \
 	  --require "cmd/agent-gov/main.go"
 
@@ -29,13 +33,13 @@ fmt: ## Format Go sources
 
 test: ## Run Go tests
 	@echo "Running Go tests"
-	@cd tools/gov && go test ./...
+	@cd tools/gov && GOFLAGS="$(TOOLS_GOV_GOFLAGS)" go test ./...
 
 coverage: ## Enforce minimum CLI test coverage
 	@echo "Checking tools/gov coverage >= $(GOV_MIN_COVERAGE)%"
 	@cd tools/gov && rm -f coverage.out coverage.txt
-	@cd tools/gov && go test ./... -coverprofile=coverage.out >/dev/null
-	@cd tools/gov && go tool cover -func=coverage.out | tee coverage.txt >/dev/null
+	@cd tools/gov && GOFLAGS="$(TOOLS_GOV_GOFLAGS)" go test ./... -coverprofile=coverage.out >/dev/null
+	@cd tools/gov && GOFLAGS="$(TOOLS_GOV_GOFLAGS)" go tool cover -func=coverage.out | tee coverage.txt >/dev/null
 	@cd tools/gov && awk '/^total:/ {gsub(/%/,"",$$3); pct=$$3} END { if (pct+0 < $(GOV_MIN_COVERAGE)) { printf "coverage %.1f%% is below %d%%\\n", pct, $(GOV_MIN_COVERAGE); exit 1 } else { printf "coverage %.1f%%\\n", pct; } }' coverage.txt
 
 gov-smoke: ## Smoke test agent-gov init/verify
@@ -43,7 +47,7 @@ gov-smoke: ## Smoke test agent-gov init/verify
 	@set -eu; \
 	tmp="$$(mktemp -d)"; \
 	repo_root="$$(pwd)"; \
-	( cd tools/gov && go build -o "$$tmp/agent-gov" ./cmd/agent-gov ); \
+	( cd tools/gov && GOFLAGS="$(TOOLS_GOV_GOFLAGS)" go build -o "$$tmp/agent-gov" ./cmd/agent-gov ); \
 	mkdir -p "$$tmp/target/.governance"; \
 	printf '%s\n' \
 	  'schemaVersion: 1' \
