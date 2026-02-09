@@ -1,6 +1,6 @@
 ---
 branch: "docs/app-plan-completion-gate"
-status: active
+status: completed
 ---
 
 ## Summary
@@ -35,11 +35,13 @@ Reduce missed “plan completion” updates by making plan completion an explici
 
 ## Checkpoints
 
-- [ ] Checkpoint 1 — Update governance sources, sync generated docs, and open PR.
+- [x] Checkpoint 1 — Update governance sources, sync generated docs, and open PR.
+  - PR: `https://github.com/BennettSmith/agent-governance-strategy/pull/5`
+  - Commits: `1053be6`, `d8b0cf8`, `32b2205`
 
 ## Quality gates / test plan
 
-- [ ] `make ci`
+- [x] `make ci`
 
 ## Notes / open questions
 
