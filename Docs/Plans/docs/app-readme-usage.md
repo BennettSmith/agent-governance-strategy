@@ -1,6 +1,6 @@
 ---
 branch: "docs/app-readme-usage"
-status: active
+status: completed
 ---
 
 # Plan: Update README with local usage instructions
@@ -49,9 +49,9 @@ Add a root `README.md` that explains how to use this repository as a governance 
 
 ## Completion checklist
 
-- [ ] Set frontmatter `status: completed`
-- [ ] Check off completed checkpoint(s) above and add PR/commit references as needed
-- [ ] Check off all quality gates below (or document any exceptions)
+- [x] Set frontmatter `status: completed`
+- [x] Check off completed checkpoint(s) above and add PR/commit references as needed (PR: https://github.com/BennettSmith/agent-governance-strategy/pull/6)
+- [x] Check off all quality gates below (or document any exceptions)
 
 ## Quality gates / test plan
 
