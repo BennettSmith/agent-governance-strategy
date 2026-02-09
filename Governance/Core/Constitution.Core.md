@@ -26,7 +26,7 @@ Legacy code may not yet follow the target architecture. Refactoring legacy code 
 ### Separation rules
 
 - Refactors and behavior changes must not be mixed in the same branch or pull request.
-- Refactor branches should use the `refactor/` prefix; behavior-change branches use `feat/` or `fix/`.
+- Refactor branches should use the `refactor/` prefix; behavior-change branches use `feat/` or `fix/`; documentation branches should use `docs/`.
 
 ### Required workflow (repeat for each step)
 
@@ -51,12 +51,13 @@ See `Docs/Refactoring/Legacy-Refactoring-Playbook.md` for the approved patterns 
 - All work is performed in feature branches.
 - Work proceeds in small, incremental steps aligned to a written plan.
 - Plans must be stored in-repo at `Docs/Plans/<branch-name>.md` and kept up to date during development.
-- Test-Driven Development is the default mode of work.
+- Test-Driven Development is the default mode of work. This means tests come first; before code changes.
 - Quality gates define completion, not code presence.
 - Agents must stop after completing each planned task and request manual acceptance.
-- Agents may only mark a task complete and create a checkpoint commit after:
+- Agents may only mark a task complete in the plan and create a checkpoint commit after:
   - explicit human approval
   - all quality gates passing
+- Agents must mark tasks completed in the plan once approved.
 - Agents must never merge changes.
 - Humans are responsible for acceptance, direction, and merge decisions.
 
