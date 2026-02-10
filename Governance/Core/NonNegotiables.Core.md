@@ -23,8 +23,11 @@
 
 - Agents must follow the architecture for the target profile.
 - All changes must be made in feature branches.
+- Agents must execute work as small, reviewable checkpoints aligned to the branch plan; agents must request explicit human approval at each checkpoint before creating a checkpoint commit.
 - Agents must request human acceptance before checkpoint commits.
 - Agents must not mark plan tasks complete without approval.
+- Agents must keep the branch plan up to date throughout execution; after each approved checkpoint, agents must immediately update the plan to reflect progress (e.g., check off the checkpoint and record relevant commit/PR references) before proceeding.
 - After an approved task is complete, agents must update the branch plan to reflect completion (e.g., set `status: completed`, check off completed checkpoints and quality gates, and add PR/commit references) before declaring the work “done” or pushing final updates.
+- As part of the final checkpoint (before the final PR wrap-up commit), agents must ensure the pull/merge request has a meaningful markdown description and must set/update it, then verify it was applied correctly.
 - Before creating the final PR wrap-up commit, agents must re-run quality gates, update the branch plan to `status: completed` (with checkpoint/quality-gate checkmarks and PR/commit references), then request explicit human approval using: `APPROVAL REQUEST (final wrap-up): Please approve the final PR wrap-up commit.`
 - Agents must not merge branches under any circumstances.
