@@ -1,6 +1,6 @@
 ---
 branch: "chore/app-ci-make-ci-gates"
-status: active
+status: completed
 ---
 
 # Plan: Require `make ci` for PRs and releases
@@ -38,17 +38,17 @@ Ensure GitHub runs `make ci` for every PR update and requires it to pass before 
 - [x] Checkpoint 1 — Add PR CI workflow to run `make ci` on PR updates. (commit: `25554f2`)
 - [x] Checkpoint 2 — Gate tag release workflow on a successful `make ci` job. (commit: `859c821`)
 - [x] Checkpoint 3 — Run `make ci`, push branch, and open PR. (make ci: ✅, PR: `#11`, CI fix: `b3f9544`)
-- [ ] Checkpoint 4 — PR wrap-up (final approval gate): update completion checklist + set `status: completed`, then create the final wrap-up commit.
+- [x] Checkpoint 4 — PR wrap-up (final approval gate): update completion checklist + set `status: completed`, then create the final wrap-up commit.
 
 ## Completion checklist
 
-- [ ] Set frontmatter `status: completed`
-- [ ] Check off completed checkpoint(s) above and add PR/commit references as needed
-- [ ] Check off all quality gates below (or document any exceptions)
+- [x] Set frontmatter `status: completed`
+- [x] Check off completed checkpoint(s) above and add PR/commit references as needed
+- [x] Check off all quality gates below (or document any exceptions)
 
 ## Quality gates / test plan
 
-- [ ] `make ci`
+- [x] `make ci`
 
 ## Notes / open questions
 
