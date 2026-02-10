@@ -13,6 +13,9 @@ func TestPreflight_FailsOnMain(t *testing.T) {
 	tmp := t.TempDir()
 	repo := filepath.Join(tmp, "repo")
 	mustRun(t, tmp, "git", "init", repo)
+	// Ensure we are on `main` regardless of the system git default branch name.
+	// (e.g. some environments still default to `master` unless configured.)
+	mustRun(t, repo, "git", "branch", "-m", "main")
 	mustRun(t, repo, "git", "config", "user.email", "test@example.com")
 	mustRun(t, repo, "git", "config", "user.name", "Test")
 	writeFile(t, filepath.Join(repo, ".governance", "config.yaml"), "schemaVersion: 1\nsource:\n  repo: .\n  ref: \"HEAD\"\n  profile: \"backend-go-hex\"\npaths:\n  docsRoot: \".\"\n")
@@ -20,7 +23,7 @@ func TestPreflight_FailsOnMain(t *testing.T) {
 	mustRun(t, repo, "git", "add", ".")
 	mustRun(t, repo, "git", "commit", "-m", "init")
 
-	// Ensure we are on main (default for modern git).
+	// Ensure we are on main.
 	var out, errOut bytes.Buffer
 	oldCwd, _ := os.Getwd()
 	defer func() { _ = os.Chdir(oldCwd) }()
