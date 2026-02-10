@@ -27,7 +27,7 @@ To avoid “every repo has a different tool snapshot”, we recommend shipping `
 
 Recommended tag format for the tool:
 
-- `agent-gov/v0.4.0` (SemVer)
+- `agent-gov/v0.1.0` (SemVer)
 
 In a target repo, store the downloaded binary at a repo-local path (and gitignore it), for example:
 
@@ -38,14 +38,17 @@ The target repo then provides a small wrapper (Makefile/script) that:
 - downloads the pinned version for the current OS/arch if missing
 - runs `tools/bin/agent-gov ...`
 
-#### Copy/paste bootstrap (GitHub Releases)
+#### Copy/paste bootstrap (GitLab Releases)
 
 This one-liner downloads the pinned tool into `tools/bin/agent-gov`:
 
 ```bash
-AGENT_GOV_TAG="agent-gov/v0.4.0" AGENT_GOV_GITHUB_ORG="bsmith.quanata" bash -c 'set -euo pipefail; bin="tools/bin/agent-gov"; mkdir -p "$(dirname "$bin")"; os="$(uname -s | tr "[:upper:]" "[:lower:]")"; arch="$(uname -m)"; [ "$arch" = "x86_64" ] && arch="amd64"; [ "$arch" = "aarch64" ] && arch="arm64"; asset="agent-gov_${os}_${arch}"; url="https://github.com/${AGENT_GOV_GITHUB_ORG}/agent-governance-strategy/releases/download/${AGENT_GOV_TAG}/${asset}"; echo "downloading ${url}"; curl -fsSL "${url}" -o "${bin}"; chmod +x "${bin}"; "${bin}" --version'
+AGENT_GOV_TAG="agent-gov/v0.1.0" AGENT_GOV_GITLAB_REPO="bsmith.quanata/agent-governance-strategy" bash -c 'set -euo pipefail; bin="tools/bin/agent-gov"; dir="$(dirname "$bin")"; mkdir -p "${dir}"; os="$(uname -s | tr "[:upper:]" "[:lower:]")"; arch="$(uname -m)"; [ "$arch" = "x86_64" ] && arch="amd64"; [ "$arch" = "aarch64" ] && arch="arm64"; asset="agent-gov_${os}_${arch}"; echo "downloading ${asset} from ${AGENT_GOV_GITLAB_REPO}@${AGENT_GOV_TAG}"; glab release download "${AGENT_GOV_TAG}" -R "${AGENT_GOV_GITLAB_REPO}" --asset-name "${asset}" -D "${dir}"; mv -f "${dir}/${asset}" "${bin}"; chmod +x "${bin}"; "${bin}" --version'
 ```
 
+Notes:
+
+- Requires GitLab CLI (`glab`) and authentication (recommended: `glab auth login`). This works cleanly for private repos.
 After downloading:
 
 - Add `tools/bin/agent-gov` to `.gitignore`
@@ -122,8 +125,8 @@ In a target repo, your top-level `Makefile` can be as small as:
 # Optional include (present after you run `agent-gov init/sync`, or if you vendor it yourself).
 -include tools/make/agent-gov.mk
 
-# Pin the tool tag (SemVer tag in this repo, e.g. agent-gov/v0.4.0)
-AGENT_GOV_TAG ?= agent-gov/v0.4.0
+# Pin the tool tag (SemVer tag in this repo, e.g. agent-gov/v0.1.0)
+AGENT_GOV_TAG ?= agent-gov/v0.1.0
 
 # Where to place the downloaded binary
 AGENT_GOV_BIN ?= tools/bin/agent-gov
