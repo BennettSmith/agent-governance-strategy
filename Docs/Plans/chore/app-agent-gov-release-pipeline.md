@@ -1,6 +1,6 @@
 ---
 branch: "chore/app-agent-gov-release-pipeline"
-status: active
+status: completed
 ---
 
 # Plan: Build and publish `agent-gov` release binaries on tag
@@ -57,9 +57,9 @@ Add CI automation that builds and publishes `agent-gov` binaries when a tool tag
 
 ## Completion checklist
 
-- [ ] Set frontmatter `status: completed`
-- [ ] Check off completed checkpoint(s) above and add PR/commit references as needed
-- [ ] Check off all quality gates below (or document any exceptions)
+- [x] Set frontmatter `status: completed`
+- [x] Check off completed checkpoint(s) above and add PR/commit references as needed (PR: #8)
+- [x] Check off all quality gates below (or document any exceptions)
 
 ## Quality gates / test plan
 
