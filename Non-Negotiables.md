@@ -37,4 +37,8 @@ Local addenda below is project-owned and will not be overwritten.
 
 ## Local Addenda (project-owned)
 
-<!-- Project-owned notes, exceptions, and platform-specific adaptations go here. -->
+### Agents (core) addenda
+
+- Agents must execute work as small, reviewable checkpoints aligned to the branch plan; agents must request explicit human approval at each checkpoint before creating a checkpoint commit.
+- Agents must keep the branch plan up to date throughout execution; after each approved checkpoint, agents must immediately update the plan to reflect progress (e.g., check off the checkpoint and record relevant commit/PR references) before proceeding.
+- As part of the final checkpoint (before the final PR wrap-up commit), agents must ensure the merge request has a meaningful markdown description and must set/update it using the GitLab CLI (`glab`) (e.g., `glab mr update ... -d "<markdown>"`), then verify it was applied correctly.
