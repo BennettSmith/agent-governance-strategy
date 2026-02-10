@@ -104,4 +104,3 @@ templates:
 		t.Fatalf("expected error")
 	}
 }
-

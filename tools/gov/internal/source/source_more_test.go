@@ -45,4 +45,3 @@ func TestSanitizeRef_EmptyBecomesRef(t *testing.T) {
 		t.Fatalf("expected ref, got %q", got)
 	}
 }
-

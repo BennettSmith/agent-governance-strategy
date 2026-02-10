@@ -78,4 +78,3 @@ sync:
 
 // Anchor unused import in older Go toolchains (keeps file consistent with other tests).
 var _ = context.Background
-

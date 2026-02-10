@@ -312,4 +312,3 @@ func promptBootstrapValues(stdin io.Reader, stdout, stderr io.Writer, cacheDir s
 	}
 	return nil
 }
-

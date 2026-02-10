@@ -113,4 +113,3 @@ func TestListProfilesFromCheckout_SkipsNonDirs(t *testing.T) {
 		t.Fatalf("unexpected infos: %+v", infos)
 	}
 }
-
