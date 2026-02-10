@@ -28,6 +28,10 @@ templates:
     output: Docs/Plans/Plan.Template.md
 
 playbooks:
+  - source: ../../Core/Playbooks/GitLab-MR-Workflow.md
+    output: Docs/Playbooks/GitLab-MR-Workflow.md
+  - source: ../../Core/Playbooks/GitHub-PR-Workflow.md
+    output: Docs/Playbooks/GitHub-PR-Workflow.md
   - source: ./Playbooks/Go-Packaging.md
     output: Docs/Playbooks/Go-Packaging.md
   - source: ./Playbooks/Hexagonal-Ports-And-Adapters.md
