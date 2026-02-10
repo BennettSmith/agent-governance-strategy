@@ -136,6 +136,8 @@ gov-verify: agent-gov
 
 Pushing a tag matching `agent-gov/v*` triggers CI to build and publish release assets for a small OS/arch set.
 
+For **safe in-repo testing**, you can push a tag matching `agent-gov/test/v*`. Test-tag releases are created as **draft prereleases**.
+
 ### 1) Cut a tag
 
 From a clean commit on `main`:
@@ -143,6 +145,13 @@ From a clean commit on `main`:
 ```bash
 git tag agent-gov/vX.Y.Z
 git push origin agent-gov/vX.Y.Z
+```
+
+Safe test example:
+
+```bash
+git tag agent-gov/test/v0.0.0-test1
+git push origin agent-gov/test/v0.0.0-test1
 ```
 
 ### 2) Confirm assets

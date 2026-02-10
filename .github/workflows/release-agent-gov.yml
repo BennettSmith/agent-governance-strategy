@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - "agent-gov/v*"
+      - "agent-gov/test/v*"
 
 permissions:
   contents: write
@@ -17,7 +18,9 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ github.ref_name }}
-          generate_release_notes: true
+          draft: ${{ startsWith(github.ref_name, 'agent-gov/test/') }}
+          prerelease: ${{ startsWith(github.ref_name, 'agent-gov/test/') }}
+          generate_release_notes: ${{ !startsWith(github.ref_name, 'agent-gov/test/') }}
 
   build_and_upload:
     name: Build and upload (${{ matrix.goos }}/${{ matrix.goarch }})

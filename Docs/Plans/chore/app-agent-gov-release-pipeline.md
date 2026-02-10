@@ -50,6 +50,7 @@ Add CI automation that builds and publishes `agent-gov` binaries when a tool tag
 ## Progress log (no approval yet)
 
 - Implemented tag trigger `agent-gov/v*` and asset naming `agent-gov_<os>_<arch>` via GitHub Actions workflow.
+- Added a safe test tag pattern `agent-gov/test/v*` that creates draft prereleases for in-repo validation.
 - Added a short maintainer section to `README.md` describing how to cut an `agent-gov` release tag and expected assets.
 
 ## Completion checklist
