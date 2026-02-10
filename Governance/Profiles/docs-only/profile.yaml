@@ -25,6 +25,8 @@ templates:
     output: Docs/Decisions/MADR.Template.md
   - source: ../../Templates/Plans/Plan.Template.md
     output: Docs/Plans/Plan.Template.md
+  - source: ../../Templates/Make/agent-gov.mk
+    output: tools/make/agent-gov.mk
 
 playbooks:
   - source: ../../Core/Playbooks/GitLab-MR-Workflow.md
