@@ -1,0 +1,152 @@
+workflow:
+  rules:
+    # Mirror GitHub: CI runs for PRs/MRs, and release runs for matching tags.
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_TAG =~ /^agent-gov\/(test\/)?v.+$/
+    - when: never
+
+stages:
+  - ci
+  - build
+  - release
+
+make_ci:
+  stage: ci
+  image: golang:1.22-bookworm
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+  before_script:
+    - apt-get update
+    - apt-get install -y --no-install-recommends ca-certificates git make
+    - update-ca-certificates
+  variables:
+    # Keep Go cache inside the project workspace so GitLab cache can persist it.
+    GOPATH: "$CI_PROJECT_DIR/.cache/go"
+    GOMODCACHE: "$CI_PROJECT_DIR/.cache/go/pkg/mod"
+    GOCACHE: "$CI_PROJECT_DIR/.cache/go/build"
+  cache:
+    key:
+      files:
+        - tools/gov/go.sum
+    paths:
+      - .cache/go/pkg/mod
+      - .cache/go/build
+  script:
+    - make ci
+  artifacts:
+    when: always
+    paths:
+      - tools/gov/coverage.txt
+      - tools/gov/coverage.out
+
+tag_ci:
+  stage: ci
+  image: golang:1.22-bookworm
+  rules:
+    - if: $CI_COMMIT_TAG =~ /^agent-gov\/(test\/)?v.+$/
+  before_script:
+    - apt-get update
+    - apt-get install -y --no-install-recommends ca-certificates git make
+    - update-ca-certificates
+  variables:
+    GOPATH: "$CI_PROJECT_DIR/.cache/go"
+    GOMODCACHE: "$CI_PROJECT_DIR/.cache/go/pkg/mod"
+    GOCACHE: "$CI_PROJECT_DIR/.cache/go/build"
+  cache:
+    key:
+      files:
+        - tools/gov/go.sum
+    paths:
+      - .cache/go/pkg/mod
+      - .cache/go/build
+  script:
+    - make ci
+
+build_and_upload:
+  stage: build
+  image: golang:1.22-bookworm
+  needs: ["tag_ci"]
+  rules:
+    - if: $CI_COMMIT_TAG =~ /^agent-gov\/(test\/)?v.+$/
+  parallel:
+    matrix:
+      - GOOS: linux
+        GOARCH: amd64
+      - GOOS: darwin
+        GOARCH: amd64
+      - GOOS: darwin
+        GOARCH: arm64
+  before_script:
+    - apt-get update
+    - apt-get install -y --no-install-recommends ca-certificates curl git make
+    - update-ca-certificates
+  variables:
+    GOPATH: "$CI_PROJECT_DIR/.cache/go"
+    GOMODCACHE: "$CI_PROJECT_DIR/.cache/go/pkg/mod"
+    GOCACHE: "$CI_PROJECT_DIR/.cache/go/build"
+  cache:
+    key:
+      files:
+        - tools/gov/go.sum
+    paths:
+      - .cache/go/pkg/mod
+      - .cache/go/build
+  script:
+    - |
+      set -eu
+
+      PKG_VERSION="${CI_COMMIT_TAG##*/}"
+      PKG_NAME="agent-gov"
+      case "$CI_COMMIT_TAG" in
+        agent-gov/test/*) PKG_NAME="agent-gov-test" ;;
+      esac
+
+      asset="agent-gov_${GOOS}_${GOARCH}"
+
+      (
+        cd tools/gov
+        mkdir -p dist
+        GOFLAGS="-mod=mod" GOOS="${GOOS}" GOARCH="${GOARCH}" CGO_ENABLED=0 \
+          go build -trimpath -ldflags "-s -w" -o "dist/${asset}" ./cmd/agent-gov
+      )
+
+      upload_url="${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${PKG_NAME}/${PKG_VERSION}/${asset}"
+      echo "Uploading ${asset} to ${upload_url}"
+      curl --fail --location \
+        --header "JOB-TOKEN: ${CI_JOB_TOKEN}" \
+        --upload-file "tools/gov/dist/${asset}" \
+        "${upload_url}"
+
+create_release:
+  stage: release
+  image: registry.gitlab.com/gitlab-org/release-cli:latest
+  needs: ["build_and_upload"]
+  rules:
+    - if: $CI_COMMIT_TAG =~ /^agent-gov\/(test\/)?v.+$/
+  script:
+    - |
+      set -eu
+
+      PKG_VERSION="${CI_COMMIT_TAG##*/}"
+      PKG_NAME="agent-gov"
+      RELEASE_NOTE=""
+      case "$CI_COMMIT_TAG" in
+        agent-gov/test/*)
+          PKG_NAME="agent-gov-test"
+          RELEASE_NOTE="(test release)"
+          ;;
+      esac
+
+      base_url="${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${PKG_NAME}/${PKG_VERSION}"
+
+      desc="$(printf "Automated release for \\`%s\\` %s\\n\\nAssets are stored as Generic Packages (persistent).\\n" "${CI_COMMIT_TAG}" "${RELEASE_NOTE}")"
+
+      echo "Creating GitLab release for ${CI_COMMIT_TAG}"
+      release-cli create \
+        --name "${CI_COMMIT_TAG}" \
+        --tag-name "${CI_COMMIT_TAG}" \
+        --description "${desc}" \
+        --assets-link "{\"name\":\"agent-gov_linux_amd64\",\"url\":\"${base_url}/agent-gov_linux_amd64\"}" \
+        --assets-link "{\"name\":\"agent-gov_darwin_amd64\",\"url\":\"${base_url}/agent-gov_darwin_amd64\"}" \
+        --assets-link "{\"name\":\"agent-gov_darwin_arm64\",\"url\":\"${base_url}/agent-gov_darwin_arm64\"}"
+

@@ -132,6 +132,64 @@ gov-verify: agent-gov
 	@$(AGENT_GOV_BIN) verify --config .governance/config.yaml
 ```
 
+### GitLab alternative (private projects: authenticated download)
+
+If you are consuming `agent-gov` from a **private/internal GitLab project**, downloads must be authenticated. A team-safe approach is to create a **deploy token** with `read_package_registry` scope and store it as masked CI/CD variables in the consuming repo.
+
+This repo’s GitLab release flow publishes binaries to the **Generic Package Registry** under package name:
+
+- `agent-gov` for tags `agent-gov/v*`
+- `agent-gov-test` for tags `agent-gov/test/v*`
+
+Minimal Makefile pattern for consumers:
+
+```make
+AGENT_GOV_TAG ?= agent-gov/v0.4.0
+# Generic Package Registry versions are a single path segment, so we use just `vX.Y.Z`.
+AGENT_GOV_VERSION ?= $(notdir $(AGENT_GOV_TAG))
+
+AGENT_GOV_BIN ?= tools/bin/agent-gov
+
+GITLAB_HOST ?= gitlab.com
+# Project ID or URL-encoded path. Numeric project ID is simplest.
+GITLAB_PROJECT_ID ?= 12345678
+
+# Published by this repo’s release pipeline:
+# - agent-gov for agent-gov/v*
+# - agent-gov-test for agent-gov/test/v*
+AGENT_GOV_PKG ?= agent-gov
+
+# Prefer a deploy token (read_package_registry). For curl basic auth, username is required.
+GITLAB_PKG_USERNAME ?= token
+GITLAB_PKG_TOKEN ?=
+
+.PHONY: agent-gov gov-init gov-sync gov-verify
+
+agent-gov:
+	@mkdir -p $$(dirname "$(AGENT_GOV_BIN)")
+	@if [ ! -x "$(AGENT_GOV_BIN)" ]; then \
+	  if [ -z "$(GITLAB_PKG_TOKEN)" ]; then echo "GITLAB_PKG_TOKEN is required"; exit 1; fi; \
+	  os="$$(uname -s | tr '[:upper:]' '[:lower:]')"; \
+	  arch="$$(uname -m)"; \
+	  if [ "$$arch" = "x86_64" ]; then arch="amd64"; fi; \
+	  if [ "$$arch" = "aarch64" ]; then arch="arm64"; fi; \
+	  asset="agent-gov_$${os}_$${arch}"; \
+	  url="https://$(GITLAB_HOST)/api/v4/projects/$(GITLAB_PROJECT_ID)/packages/generic/$(AGENT_GOV_PKG)/$(AGENT_GOV_VERSION)/$${asset}"; \
+	  echo "downloading $${url}"; \
+	  curl -fsSL --user "$(GITLAB_PKG_USERNAME):$(GITLAB_PKG_TOKEN)" "$${url}" -o "$(AGENT_GOV_BIN)"; \
+	  chmod +x "$(AGENT_GOV_BIN)"; \
+	fi
+
+gov-init: agent-gov
+	@$(AGENT_GOV_BIN) init --config .governance/config.yaml
+
+gov-sync: agent-gov
+	@$(AGENT_GOV_BIN) sync --config .governance/config.yaml
+
+gov-verify: agent-gov
+	@$(AGENT_GOV_BIN) verify --config .governance/config.yaml
+```
+
 ## Releasing `agent-gov` (maintainers)
 
 Pushing a tag matching `agent-gov/v*` triggers CI to build and publish release assets for a small OS/arch set.
