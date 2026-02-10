@@ -32,3 +32,9 @@ templates:
   - source: ../../Templates/Decisions/MADR.Template.md
     output: Docs/Decisions/MADR.Template.md
 
+playbooks:
+  - source: ../../Core/Playbooks/GitLab-MR-Workflow.md
+    output: Docs/Playbooks/GitLab-MR-Workflow.md
+  - source: ../../Core/Playbooks/GitHub-PR-Workflow.md
+    output: Docs/Playbooks/GitHub-PR-Workflow.md
+
