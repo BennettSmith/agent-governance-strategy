@@ -54,6 +54,7 @@ See `Docs/Refactoring/Legacy-Refactoring-Playbook.md` for the approved patterns 
 - Test-Driven Development is the default mode of work. This means tests come first; before code changes.
 - Quality gates define completion, not code presence.
 - Agents must stop after completing each planned task and request manual acceptance.
+- Manual acceptance includes an explicit final approval request before the final PR wrap-up commit (recommended phrase: `APPROVAL REQUEST (final wrap-up): Please approve the final PR wrap-up commit.`).
 - Agents may only mark a task complete in the plan and create a checkpoint commit after:
   - explicit human approval
   - all quality gates passing
