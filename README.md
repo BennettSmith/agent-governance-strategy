@@ -132,6 +132,36 @@ gov-verify: agent-gov
 	@$(AGENT_GOV_BIN) verify --config .governance/config.yaml
 ```
 
+## Releasing `agent-gov` (maintainers)
+
+Pushing a tag matching `agent-gov/v*` triggers CI to build and publish release assets for a small OS/arch set.
+
+For **safe in-repo testing**, you can push a tag matching `agent-gov/test/v*`. Test-tag releases are created as **draft prereleases**.
+
+### 1) Cut a tag
+
+From a clean commit on `main`:
+
+```bash
+git tag agent-gov/vX.Y.Z
+git push origin agent-gov/vX.Y.Z
+```
+
+Safe test example:
+
+```bash
+git tag agent-gov/test/v0.0.0-test1
+git push origin agent-gov/test/v0.0.0-test1
+```
+
+### 2) Confirm assets
+
+The GitHub Release for the tag should contain assets named:
+
+- `agent-gov_darwin_amd64`
+- `agent-gov_darwin_arm64`
+- `agent-gov_linux_amd64`
+
 ## Local development workflow (optional override)
 
 When authoring governance changes locally, you may want to run a target repo against a local checkout of this governance source.

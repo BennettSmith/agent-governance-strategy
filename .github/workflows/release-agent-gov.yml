@@ -1,0 +1,71 @@
+name: Release agent-gov
+
+on:
+  push:
+    tags:
+      - "agent-gov/v*"
+      - "agent-gov/test/v*"
+
+permissions:
+  contents: write
+
+jobs:
+  create_release:
+    name: Create GitHub Release
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Create release (no assets yet)
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          draft: ${{ startsWith(github.ref_name, 'agent-gov/test/') }}
+          prerelease: ${{ startsWith(github.ref_name, 'agent-gov/test/') }}
+          generate_release_notes: ${{ !startsWith(github.ref_name, 'agent-gov/test/') }}
+
+  build_and_upload:
+    name: Build and upload (${{ matrix.goos }}/${{ matrix.goarch }})
+    needs: create_release
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - goos: linux
+            goarch: amd64
+          - goos: darwin
+            goarch: amd64
+          - goos: darwin
+            goarch: arm64
+    # Build all targets on Linux via Go cross-compilation (no CGO).
+    # This avoids reliance on hosted macOS runner availability/labels.
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: "1.22"
+          cache: true
+          cache-dependency-path: tools/gov/go.sum
+
+      - name: Build
+        working-directory: tools/gov
+        env:
+          GOFLAGS: "-mod=mod"
+          GOOS: ${{ matrix.goos }}
+          GOARCH: ${{ matrix.goarch }}
+          CGO_ENABLED: "0"
+        run: |
+          set -eu
+          mkdir -p dist
+          asset="agent-gov_${GOOS}_${GOARCH}"
+          go build -trimpath -ldflags "-s -w" -o "dist/${asset}" ./cmd/agent-gov
+
+      - name: Upload release asset
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          fail_on_unmatched_files: true
+          files: |
+            tools/gov/dist/agent-gov_${{ matrix.goos }}_${{ matrix.goarch }}

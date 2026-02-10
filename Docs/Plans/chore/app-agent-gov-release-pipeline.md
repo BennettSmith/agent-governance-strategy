@@ -1,6 +1,6 @@
 ---
 branch: "chore/app-agent-gov-release-pipeline"
-status: active
+status: completed
 ---
 
 # Plan: Build and publish `agent-gov` release binaries on tag
@@ -43,20 +43,28 @@ Add CI automation that builds and publishes `agent-gov` binaries when a tool tag
 
 ## Checkpoints
 
-- [ ] Checkpoint 1 — Add plan + decide exact tag trigger and asset naming.
-- [ ] Checkpoint 2 — Add CI workflow for building multi-platform binaries on `agent-gov/v*` tags.
-- [ ] Checkpoint 3 — Validate with a dry-run tag in a fork/test repo; document the release procedure.
+- [x] Checkpoint 1 — Add plan + decide exact tag trigger and asset naming.
+- [x] Checkpoint 2 — Add CI workflow for building multi-platform binaries on `agent-gov/v*` tags.
+- [x] Checkpoint 3 — Validate with a dry-run tag in a fork/test repo; document the release procedure.
+
+## Progress log
+
+- Implemented tag trigger `agent-gov/v*` and asset naming `agent-gov_<os>_<arch>` via GitHub Actions workflow.
+- Added a safe test tag pattern `agent-gov/test/v*` that creates draft prereleases for in-repo validation.
+- Added a short maintainer section to `README.md` describing how to cut an `agent-gov` release tag and expected assets.
+- Updated the workflow to build all target OS/arch on `ubuntu-22.04` via Go cross-compilation (avoids reliance on hosted `macos-13` runner availability).
+- Validated end-to-end with `agent-gov/test/v0.0.0-test2` (Release contains `agent-gov_darwin_amd64`, `agent-gov_darwin_arm64`, `agent-gov_linux_amd64`).
 
 ## Completion checklist
 
-- [ ] Set frontmatter `status: completed`
-- [ ] Check off completed checkpoint(s) above and add PR/commit references as needed
-- [ ] Check off all quality gates below (or document any exceptions)
+- [x] Set frontmatter `status: completed`
+- [x] Check off completed checkpoint(s) above and add PR/commit references as needed (PR: #8)
+- [x] Check off all quality gates below (or document any exceptions)
 
 ## Quality gates / test plan
 
-- [ ] `make ci`
-- [ ] Tag-triggered workflow produces release assets for all supported OS/arch
+- [x] `make ci`
+- [x] Tag-triggered workflow produces release assets for all supported OS/arch
 
 ## Notes / open questions
 
