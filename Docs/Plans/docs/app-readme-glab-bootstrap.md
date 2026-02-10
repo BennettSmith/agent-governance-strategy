@@ -42,7 +42,7 @@ Update the `README.md` “Copy/paste bootstrap (GitLab Releases)” snippet to u
 ## Quality gates / test plan
 
 - [x] `make ci` (passed)
-- [ ] Manual: copy/paste the README one-liner and confirm it downloads and runs `agent-gov --version` when authenticated via `glab`
+- [x] Manual: copy/paste the README one-liner and confirm it downloads and runs `agent-gov --version` when authenticated via `glab` (confirmed 2026-02-10)
 
 ## Notes / open questions
 
