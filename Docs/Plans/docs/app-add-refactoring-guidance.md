@@ -1,3 +1,8 @@
+---
+branch: "docs/app-add-refactoring-guidance"
+status: completed
+---
+
 # Summary
 This change adds explicit guidance for refactoring legacy code in an orderly, reversible, small-step way, without weakening the target architecture constraints.
 
@@ -31,9 +36,9 @@ It introduces a refactoring playbook and tightens the governing documents to cle
 
 ## Checkpoints
 
-- [ ] Checkpoint 1 — Add plan + playbook scaffold and cross-links
-- [ ] Checkpoint 2 — Update `Non‑Negotiables.md` with enforceable refactor rules
-- [ ] Checkpoint 3 — Update `Constitution.md` and `Architecture.md` with protocol + references
+- [x] Checkpoint 1 — Add plan + playbook scaffold and cross-links
+- [x] Checkpoint 2 — Update `Non‑Negotiables.md` with enforceable refactor rules
+- [x] Checkpoint 3 — Update `Constitution.md` and `Architecture.md` with protocol + references
 
 ## Quality gates / test plan
 
@@ -42,5 +47,11 @@ It introduces a refactoring playbook and tightens the governing documents to cle
 
 ## Notes / open questions
 
-- This repository is not currently a git repo; in a normal workflow, this plan would be committed on branch `docs/app-add-refactoring-guidance`.
+- None.
+
+## Progress log
+
+- Enforceable refactoring constraints exist in `Non-Negotiables.md` under `Legacy & refactoring (core)`.
+- Refactoring protocol guidance exists in `Constitution.md` under `Legacy refactoring protocol (core)`.
+- Playbook exists at `Docs/Refactoring/Legacy-Refactoring-Playbook.md` and is emitted as a managed document via profile playbooks (stable path).
 

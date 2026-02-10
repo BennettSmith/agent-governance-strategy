@@ -1,3 +1,8 @@
+---
+branch: "feat/app-governance-profiles-builder"
+status: completed
+---
+
 # Plan: Governance via profiles builder (`agent-gov`)
 
 ## Summary
@@ -37,13 +42,13 @@ Refactor this repo into a **governance builder** that generates profile-specific
 
 ## Checkpoints
 
-- [ ] Checkpoint 1 — Add decision record (MADR) for governance-by-profiles + managed block sync
-- [ ] Checkpoint 2 — Create `Governance/` fragment layout + migrate existing docs into fragments
-- [ ] Checkpoint 3 — Implement `agent-gov` CLI skeleton + managed-block sync logic + tests
-- [ ] Checkpoint 4 — Add remote fetch + cache + config parsing + integration tests
-- [ ] Checkpoint 5 — Add v1 profiles (`mobile-clean-ios`, `backend-go-hex`) outputs + templates selection
-- [ ] Checkpoint 6 — Add root `Makefile` with `make ci` and coverage enforcement
-- [ ] Checkpoint 7 — Update `AGENTS.md` and template docs to align with profiles strategy
+- [x] Checkpoint 1 — Add decision record (MADR) for governance-by-profiles + managed block sync
+- [x] Checkpoint 2 — Create `Governance/` fragment layout + migrate existing docs into fragments
+- [x] Checkpoint 3 — Implement `agent-gov` CLI skeleton + managed-block sync logic + tests
+- [x] Checkpoint 4 — Add remote fetch + cache + config parsing + integration tests
+- [x] Checkpoint 5 — Add v1 profiles (`mobile-clean-ios`, `backend-go-hex`) outputs + templates selection
+- [x] Checkpoint 6 — Add root `Makefile` with `make ci` and coverage enforcement
+- [x] Checkpoint 7 — Update `AGENTS.md` and template docs to align with profiles strategy
 
 ## Quality gates / test plan
 
@@ -52,4 +57,11 @@ Refactor this repo into a **governance builder** that generates profile-specific
 ## Notes / open questions
 
 - None (key decisions already captured for v1).
+
+## Progress log
+
+- Decision record captured at `Docs/Decisions/ADR-0002-Governance-Via-Profiles-Builder.md`.
+- Governance source-of-truth lives under `Governance/` with core fragments, templates, and profiles.
+- v1 profiles exist under `Governance/Profiles/` including `backend-go-hex` and `mobile-clean-ios` (and `mobile-clean` as a shared base).
+- `agent-gov` CLI exists under `tools/gov/` and supports `init`, `sync`, `verify`, and `build`.
 

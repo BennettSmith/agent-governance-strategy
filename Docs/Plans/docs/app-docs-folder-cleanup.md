@@ -1,3 +1,8 @@
+---
+branch: "docs/app-docs-folder-cleanup"
+status: completed
+---
+
 # Summary
 
 Clean up stale documentation in this governance builder repository’s `Docs/` folder, while preserving required governance artifacts and aligning refactoring playbooks with the `Governance/` source-of-truth model.
@@ -32,9 +37,9 @@ Clean up stale documentation in this governance builder repository’s `Docs/` f
 
 ## Checkpoints
 
-- [ ] Checkpoint 1 — Create branch + plan; archive stale docs and update broken links.
-- [ ] Checkpoint 2 — Add profile-specific managed refactoring playbooks and update manifests.
-- [ ] Checkpoint 3 — Regenerate docs (`agent-gov init`) and run `make ci`.
+- [x] Checkpoint 1 — Create branch + plan; archive stale docs and update broken links.
+- [x] Checkpoint 2 — Add profile-specific managed refactoring playbooks and update manifests.
+- [x] Checkpoint 3 — Regenerate docs (`agent-gov init`) and run `make ci`.
 
 ## Quality gates / test plan
 
@@ -43,4 +48,10 @@ Clean up stale documentation in this governance builder repository’s `Docs/` f
 ## Notes / open questions
 
 - None
+
+## Progress log
+
+- Stale example docs were moved under `Docs/Archive/` (keeping them for reference while removing them from the “live” docs surface).
+- Profile playbooks exist under `Governance/Profiles/*/Playbooks/`, including per-profile `Legacy-Refactoring-Playbook.md`.
+- The stable path `Docs/Refactoring/Legacy-Refactoring-Playbook.md` exists in the repo.
 
