@@ -38,6 +38,19 @@ The target repo then provides a small wrapper (Makefile/script) that:
 - downloads the pinned version for the current OS/arch if missing
 - runs `tools/bin/agent-gov ...`
 
+#### Copy/paste bootstrap (GitHub Releases)
+
+This one-liner downloads the pinned tool into `tools/bin/agent-gov`:
+
+```bash
+AGENT_GOV_TAG="agent-gov/v0.4.0" AGENT_GOV_GITHUB_ORG="<org>" bash -c 'set -euo pipefail; bin="tools/bin/agent-gov"; mkdir -p "$(dirname "$bin")"; os="$(uname -s | tr "[:upper:]" "[:lower:]")"; arch="$(uname -m)"; [ "$arch" = "x86_64" ] && arch="amd64"; [ "$arch" = "aarch64" ] && arch="arm64"; asset="agent-gov_${os}_${arch}"; url="https://github.com/${AGENT_GOV_GITHUB_ORG}/agent-governance-strategy/releases/download/${AGENT_GOV_TAG}/${asset}"; echo "downloading ${url}"; curl -fsSL "${url}" -o "${bin}"; chmod +x "${bin}"; "${bin}" --version'
+```
+
+After downloading:
+
+- Add `tools/bin/agent-gov` to `.gitignore`
+- Run `tools/bin/agent-gov init --config .governance/config.yaml`
+
 ### 2) Add `.governance/config.yaml` to the target repo (team-safe default)
 
 In the target repo, create `.governance/config.yaml`:
@@ -96,99 +109,56 @@ Notes:
 - If you omit `--config`, `agent-gov` **auto-discovers** the nearest `.governance/config.yaml` by walking upward from the current working directory.
 - You can always be explicit with `--config .governance/config.yaml`.
 
-### Example Makefile snippet for target repos (pinned binary)
+### Makefile integration for target repos (shared include)
 
-Below is a minimal pattern target repos can adopt. It downloads a pinned `agent-gov` binary into `tools/bin/agent-gov` and then uses it.
+Instead of copy/pasting Make targets into every repo, we provide a shared Makefile include:
 
-You will need to replace `<org>` with your GitHub org/user (and ensure releases publish assets with the expected names).
+- Governance source: `Governance/Templates/Make/agent-gov.mk`
+- Emitted into target repos by profiles as: `tools/make/agent-gov.mk`
+
+In a target repo, your top-level `Makefile` can be as small as:
 
 ```make
-AGENT_GOV_VERSION ?= agent-gov/v0.4.0
+# Optional include (present after you run `agent-gov init/sync`, or if you vendor it yourself).
+-include tools/make/agent-gov.mk
+
+# Pin the tool tag (SemVer tag in this repo, e.g. agent-gov/v0.4.0)
+AGENT_GOV_TAG ?= agent-gov/v0.4.0
+
+# Where to place the downloaded binary
 AGENT_GOV_BIN ?= tools/bin/agent-gov
 
-.PHONY: agent-gov gov-init gov-sync gov-verify
+# Optional (recommended) explicit config path; omit to rely on auto-discovery
+GOV_CONFIG ?= .governance/config.yaml
 
-agent-gov:
-	@mkdir -p $$(dirname "$(AGENT_GOV_BIN)")
-	@if [ ! -x "$(AGENT_GOV_BIN)" ]; then \
-	  os="$$(uname -s | tr '[:upper:]' '[:lower:]')"; \
-	  arch="$$(uname -m)"; \
-	  if [ "$$arch" = "x86_64" ]; then arch="amd64"; fi; \
-	  if [ "$$arch" = "aarch64" ]; then arch="arm64"; fi; \
-	  asset="agent-gov_$${os}_$${arch}"; \
-	  url="https://github.com/<org>/agent-governance-strategy/releases/download/$(AGENT_GOV_VERSION)/$${asset}"; \
-	  echo "downloading $${url}"; \
-	  curl -fsSL "$${url}" -o "$(AGENT_GOV_BIN)"; \
-	  chmod +x "$(AGENT_GOV_BIN)"; \
-	fi
+# Choose download source: github (default) or gitlab
+AGENT_GOV_SOURCE ?= github
 
-gov-init: agent-gov
-	@$(AGENT_GOV_BIN) init --config .governance/config.yaml
+# GitHub Releases settings (required when AGENT_GOV_SOURCE=github)
+AGENT_GOV_GITHUB_ORG ?= <org>
+# AGENT_GOV_GITHUB_REPO ?= agent-governance-strategy
 
-gov-sync: agent-gov
-	@$(AGENT_GOV_BIN) sync --config .governance/config.yaml
-
-gov-verify: agent-gov
-	@$(AGENT_GOV_BIN) verify --config .governance/config.yaml
+# For GitLab Generic Package Registry (when AGENT_GOV_SOURCE=gitlab), set:
+# GITLAB_HOST ?= gitlab.com
+# GITLAB_PROJECT_ID ?= 12345678
+# AGENT_GOV_PKG ?= agent-gov
+# GITLAB_PKG_USERNAME ?= token
+# GITLAB_PKG_TOKEN ?= <deploy-token>
 ```
 
-### GitLab alternative (private projects: authenticated download)
+Once included, you get standard targets:
 
-If you are consuming `agent-gov` from a **private/internal GitLab project**, downloads must be authenticated. A team-safe approach is to create a **deploy token** with `read_package_registry` scope and store it as masked CI/CD variables in the consuming repo.
+- `make gov-init`
+- `make gov-sync`
+- `make gov-verify`
+- `make gov-build`
 
-This repo’s GitLab release flow publishes binaries to the **Generic Package Registry** under package name:
+GitLab note (private projects): downloads must be authenticated. A team-safe approach is a **deploy token** with `read_package_registry` stored as masked CI/CD variables in the consuming repo. This repo’s GitLab release flow publishes binaries to the **Generic Package Registry** under package name:
 
 - `agent-gov` for tags `agent-gov/v*`
 - `agent-gov-test` for tags `agent-gov/test/v*`
 
-Minimal Makefile pattern for consumers:
-
-```make
-AGENT_GOV_TAG ?= agent-gov/v0.4.0
-# Generic Package Registry versions are a single path segment, so we use just `vX.Y.Z`.
-AGENT_GOV_VERSION ?= $(notdir $(AGENT_GOV_TAG))
-
-AGENT_GOV_BIN ?= tools/bin/agent-gov
-
-GITLAB_HOST ?= gitlab.com
-# Project ID or URL-encoded path. Numeric project ID is simplest.
-GITLAB_PROJECT_ID ?= 12345678
-
-# Published by this repo’s release pipeline:
-# - agent-gov for agent-gov/v*
-# - agent-gov-test for agent-gov/test/v*
-AGENT_GOV_PKG ?= agent-gov
-
-# Prefer a deploy token (read_package_registry). For curl basic auth, username is required.
-GITLAB_PKG_USERNAME ?= token
-GITLAB_PKG_TOKEN ?=
-
-.PHONY: agent-gov gov-init gov-sync gov-verify
-
-agent-gov:
-	@mkdir -p $$(dirname "$(AGENT_GOV_BIN)")
-	@if [ ! -x "$(AGENT_GOV_BIN)" ]; then \
-	  if [ -z "$(GITLAB_PKG_TOKEN)" ]; then echo "GITLAB_PKG_TOKEN is required"; exit 1; fi; \
-	  os="$$(uname -s | tr '[:upper:]' '[:lower:]')"; \
-	  arch="$$(uname -m)"; \
-	  if [ "$$arch" = "x86_64" ]; then arch="amd64"; fi; \
-	  if [ "$$arch" = "aarch64" ]; then arch="arm64"; fi; \
-	  asset="agent-gov_$${os}_$${arch}"; \
-	  url="https://$(GITLAB_HOST)/api/v4/projects/$(GITLAB_PROJECT_ID)/packages/generic/$(AGENT_GOV_PKG)/$(AGENT_GOV_VERSION)/$${asset}"; \
-	  echo "downloading $${url}"; \
-	  curl -fsSL --user "$(GITLAB_PKG_USERNAME):$(GITLAB_PKG_TOKEN)" "$${url}" -o "$(AGENT_GOV_BIN)"; \
-	  chmod +x "$(AGENT_GOV_BIN)"; \
-	fi
-
-gov-init: agent-gov
-	@$(AGENT_GOV_BIN) init --config .governance/config.yaml
-
-gov-sync: agent-gov
-	@$(AGENT_GOV_BIN) sync --config .governance/config.yaml
-
-gov-verify: agent-gov
-	@$(AGENT_GOV_BIN) verify --config .governance/config.yaml
-```
+If you need to bootstrap the include file initially, you can vendor/copy it from this repo’s `Governance/Templates/Make/agent-gov.mk` (pinned to the same ref as your `.governance/config.yaml`).
 
 ## Releasing `agent-gov` (maintainers)
 

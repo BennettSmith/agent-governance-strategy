@@ -10,6 +10,48 @@ stages:
   - build
   - release
 
+plan_status_completed:
+  stage: ci
+  image: alpine:3.20
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+  script:
+    - |
+      set -eu
+
+      branch="${CI_MERGE_REQUEST_SOURCE_BRANCH_NAME:-${CI_COMMIT_REF_NAME}}"
+      if [ "$branch" = "main" ]; then
+        echo "plan_status_completed: skipping on main"
+        exit 0
+      fi
+
+      plan="Docs/Plans/${branch}.md"
+      if [ ! -f "$plan" ]; then
+        echo "plan_status_completed: expected plan file not found: ${plan}"
+        echo "plan_status_completed: create it from Docs/Plans/Plan.Template.md and set frontmatter status: completed before merge"
+        exit 1
+      fi
+
+      status="$(
+        awk '
+          NR==1 && $0=="---" {fm=1; next}
+          fm && $0=="---" {exit}
+          fm && $1=="status:" {print $2; exit}
+        ' "$plan" | tr -d "\"'"
+      )"
+
+      if [ -z "$status" ]; then
+        echo "plan_status_completed: missing frontmatter status in ${plan}"
+        exit 1
+      fi
+
+      if [ "$status" != "completed" ]; then
+        echo "plan_status_completed: ${plan} frontmatter status must be 'completed' (got: '${status}')"
+        exit 1
+      fi
+
+      echo "plan_status_completed: OK (${plan} status: completed)"
+
 make_ci:
   stage: ci
   image: golang:1.22-bookworm
