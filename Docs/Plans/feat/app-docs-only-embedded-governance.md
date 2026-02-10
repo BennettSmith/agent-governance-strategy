@@ -1,6 +1,6 @@
 ---
 branch: feat/app-docs-only-embedded-governance
-status: active
+status: completed
 ---
 
 # Summary
@@ -52,15 +52,23 @@ This change introduces a `docs-only` governance profile so this repository’s r
 
 ## Checkpoints
 
-- [ ] Checkpoint 1 — Add in-repo plan; scaffold docs-only + embedded-governance configs and docs layout
-- [ ] Checkpoint 2 — Implement config auto-discovery + `preflight` command with tests; add `make preflight` and CI wiring
-- [ ] Checkpoint 3 — Generate root and embedded key-three; add agent scoping docs/rules; add Go CLI playbook and update governance README
+- [x] Checkpoint 1 — Add in-repo plan; scaffold docs-only + embedded-governance configs and docs layout
+- [x] Checkpoint 2 — Implement config auto-discovery + `preflight` command with tests; add `make preflight` and CI wiring
+- [x] Checkpoint 3 — Generate root and embedded key-three; add agent scoping docs/rules; add Go CLI playbook and update governance README
 
 ## Quality gates / test plan
 
 - [ ] `make ci` passes
 - [ ] `agent-gov verify` passes for root (`docs-only`) and embedded `tools/gov` configs
 - [ ] New CLI behavior is covered by unit tests (including error paths)
+
+## Progress log
+
+- `Governance/Profiles/docs-only/` exists and is used by the repo root `.governance/config.yaml` (`profile: docs-only`).
+- `tools/gov/.governance/config.yaml` exists and governs the embedded repo using `profile: backend-go-hex`, emitting the embedded key-three into `tools/gov/`.
+- Embedded scope agent guidance exists at `tools/gov/AGENTS.md`, and root scoping guidance references embedded `AGENTS.md` where present.
+- CLI config upward auto-discovery is implemented (find nearest `.governance/config.yaml` when `--config` omitted).
+- `agent-gov preflight` is implemented with tests and is wired into the root `Makefile` via `make preflight`.
 
 ## Notes / open questions
 
