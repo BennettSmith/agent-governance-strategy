@@ -45,7 +45,7 @@ Add CI automation that builds and publishes `agent-gov` binaries when a tool tag
 
 - [x] Checkpoint 1 — Add plan + decide exact tag trigger and asset naming.
 - [x] Checkpoint 2 — Add CI workflow for building multi-platform binaries on `agent-gov/v*` tags.
-- [ ] Checkpoint 3 — Validate with a dry-run tag in a fork/test repo; document the release procedure.
+- [x] Checkpoint 3 — Validate with a dry-run tag in a fork/test repo; document the release procedure.
 
 ## Progress log
 
@@ -53,6 +53,7 @@ Add CI automation that builds and publishes `agent-gov` binaries when a tool tag
 - Added a safe test tag pattern `agent-gov/test/v*` that creates draft prereleases for in-repo validation.
 - Added a short maintainer section to `README.md` describing how to cut an `agent-gov` release tag and expected assets.
 - Updated the workflow to build all target OS/arch on `ubuntu-22.04` via Go cross-compilation (avoids reliance on hosted `macos-13` runner availability).
+- Validated end-to-end with `agent-gov/test/v0.0.0-test2` (Release contains `agent-gov_darwin_amd64`, `agent-gov_darwin_arm64`, `agent-gov_linux_amd64`).
 
 ## Completion checklist
 
@@ -63,7 +64,7 @@ Add CI automation that builds and publishes `agent-gov` binaries when a tool tag
 ## Quality gates / test plan
 
 - [x] `make ci`
-- [ ] Tag-triggered workflow produces release assets for all supported OS/arch
+- [x] Tag-triggered workflow produces release assets for all supported OS/arch
 
 ## Notes / open questions
 
