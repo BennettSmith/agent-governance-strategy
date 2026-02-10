@@ -44,11 +44,13 @@ Use this template to create a plan for a feature branch.
 <!--
 Checkpoints are small, reviewable steps. Update this list as work progresses.
 Include links, commit SHAs, or references as useful.
+Reserve a final checkpoint for PR wrap-up: update the plan to `status: completed`, re-run quality gates,
+request explicit final approval, then create the final wrap-up commit.
 -->
 
 - [ ] Checkpoint 1 — <!-- description -->
-- [ ] Checkpoint 2 — <!-- description -->
-- [ ] Checkpoint 3 — <!-- description -->
+- [ ] Checkpoint 2+ — <!-- add/remove checkpoints as needed -->
+- [ ] Checkpoint N — PR wrap-up (final approval gate)
 
 ## Completion checklist
 

@@ -26,4 +26,5 @@
 - Agents must request human acceptance before checkpoint commits.
 - Agents must not mark plan tasks complete without approval.
 - After an approved task is complete, agents must update the branch plan to reflect completion (e.g., set `status: completed`, check off completed checkpoints and quality gates, and add PR/commit references) before declaring the work “done” or pushing final updates.
+- Before creating the final PR wrap-up commit, agents must re-run quality gates, update the branch plan to `status: completed` (with checkpoint/quality-gate checkmarks and PR/commit references), then request explicit human approval using: `APPROVAL REQUEST (final wrap-up): Please approve the final PR wrap-up commit.`
 - Agents must not merge branches under any circumstances.
