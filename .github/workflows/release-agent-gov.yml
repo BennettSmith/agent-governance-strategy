@@ -10,8 +10,26 @@ permissions:
   contents: write
 
 jobs:
+  ci:
+    name: make ci
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: "1.22"
+          cache: true
+          cache-dependency-path: tools/gov/go.sum
+
+      - name: Run make ci
+        run: make ci
+
   create_release:
     name: Create GitHub Release
+    needs: ci
     runs-on: ubuntu-22.04
     steps:
       - name: Create release (no assets yet)
