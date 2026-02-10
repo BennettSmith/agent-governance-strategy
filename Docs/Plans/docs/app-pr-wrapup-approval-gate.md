@@ -1,6 +1,6 @@
 ---
 branch: "docs/app-pr-wrapup-approval-gate"
-status: active
+status: completed
 ---
 
 # Plan: Make PR wrap-up + final approval gate explicit
@@ -45,19 +45,19 @@ Refine governance guidance so that “PR wrap-up” is an explicit, repeatable f
 
 ## Checkpoints
 
-- [ ] Checkpoint 1 — Update governance sources (template + core rules) to describe PR wrap-up and final approval gate.
-- [ ] Checkpoint 2 — Run governance sync for root + embedded scopes so generated docs reflect the changes.
-- [ ] Checkpoint 3 — Run `make ci`, update this plan with references, and prepare PR.
+- [x] Checkpoint 1 — Update governance sources (template + core rules) to describe PR wrap-up and final approval gate. (commit: `f902736`)
+- [x] Checkpoint 2 — Run governance sync for root + embedded scopes so generated docs reflect the changes. (commit: `1c44cf5`)
+- [x] Checkpoint 3 — Run `make ci`, update this plan with references, and prepare PR. (make ci: ✅, PR: `#10`)
 
 ## Completion checklist
 
-- [ ] Set frontmatter `status: completed`
-- [ ] Check off completed checkpoint(s) above and add PR/commit references as needed
-- [ ] Check off all quality gates below (or document any exceptions)
+- [x] Set frontmatter `status: completed`
+- [x] Check off completed checkpoint(s) above and add PR/commit references as needed
+- [x] Check off all quality gates below (or document any exceptions)
 
 ## Quality gates / test plan
 
-- [ ] `make ci`
+- [x] `make ci`
 
 ## Notes / open questions
 
