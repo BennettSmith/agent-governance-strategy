@@ -35,9 +35,9 @@ Ensure GitHub runs `make ci` for every PR update and requires it to pass before 
 
 ## Checkpoints
 
-- [ ] Checkpoint 1 — Add PR CI workflow to run `make ci` on PR updates.
-- [ ] Checkpoint 2 — Gate tag release workflow on a successful `make ci` job.
-- [ ] Checkpoint 3 — Run `make ci`, push branch, and open PR.
+- [x] Checkpoint 1 — Add PR CI workflow to run `make ci` on PR updates. (commit: `25554f2`)
+- [x] Checkpoint 2 — Gate tag release workflow on a successful `make ci` job. (commit: `859c821`)
+- [x] Checkpoint 3 — Run `make ci`, push branch, and open PR. (make ci: ✅, PR: `#11`, CI fix: `b3f9544`)
 - [ ] Checkpoint 4 — PR wrap-up (final approval gate): update completion checklist + set `status: completed`, then create the final wrap-up commit.
 
 ## Completion checklist
