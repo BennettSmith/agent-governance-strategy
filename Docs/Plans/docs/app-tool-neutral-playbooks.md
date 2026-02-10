@@ -40,7 +40,7 @@ Move local governance addenda into upstream governance sources, keep core rules 
 ## Checkpoints
 
 - [x] Checkpoint 1 — Add ADR + update core fragment(s) (commit: `b93c30d`)
-- [ ] Checkpoint 2 — Add playbooks + emit via profiles (awaiting approval)
+- [x] Checkpoint 2 — Add playbooks + emit via profiles (commit: `e560baa`)
 - [ ] Checkpoint 3 — Sync outputs + clean up local addenda
 - [ ] Final checkpoint — PR wrap-up (final approval gate)
 
@@ -52,7 +52,7 @@ Move local governance addenda into upstream governance sources, keep core rules 
 
 ## Quality gates / test plan
 
-- [ ] `make ci`
+- [x] `make ci`
 
 ## Notes / open questions
 
