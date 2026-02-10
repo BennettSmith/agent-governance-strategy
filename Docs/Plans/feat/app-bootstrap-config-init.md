@@ -1,6 +1,6 @@
 ---
 branch: "feat/app-bootstrap-config-init"
-status: active
+status: completed
 ---
 
 ## Summary
@@ -54,25 +54,27 @@ Add a new `agent-gov bootstrap` command that helps users generate an initial `.g
 - [x] Checkpoint 4 — Add optional `--run-init` path and end-to-end test covering config write + init output (commit `a68baab`)
 - [x] Checkpoint 5 — (Optional) Add interactive selection + (best-effort) tag listing for “governance versions” (commit `a68baab`)
 - [x] Checkpoint 6 — Update `README.md` bootstrap docs and add examples (`bootstrap` and `bootstrap --run-init`) (commit `a68baab`)
-- [ ] Final checkpoint — PR wrap-up (final approval gate)
+- [x] Final checkpoint — PR wrap-up (final approval gate)
 
 ## Completion checklist
 
-- [ ] Set frontmatter `status: completed`
-- [ ] Check off completed checkpoint(s) above and add PR/commit references as needed
-- [ ] Check off all quality gates below (or document any exceptions)
+- [x] Set frontmatter `status: completed`
+- [x] Check off completed checkpoint(s) above and add PR/commit references as needed
+- [x] Check off all quality gates below (or document any exceptions)
 
 ## Quality gates / test plan
 
 - [x] `make ci` (passed, 2026-02-10)
 - [x] Unit/CLI tests for `bootstrap` (non-interactive) passing
-- [ ] Manual: run `agent-gov bootstrap --run-init` against a sample target repo and confirm:
+- [ ] Manual: run `agent-gov bootstrap --run-init` against a sample target repo and confirm (not run; deferred):
   - `.governance/config.yaml` is created in the expected location
   - `init` emits docs/templates for the chosen profile
   - `verify` succeeds using the generated config
 
 ## Notes / open questions
 
+- Merge request: `https://gitlab.com/bsmith.quanata/agent-governance-strategy/-/merge_requests/6`
+- Checkpoint commits: `a68baab` (bootstrap feature), `bd41980` (plan update), `0a6634e` (CI plan gate for Draft/WIP)
 - Should `bootstrap` default to writing `.governance/config.yaml` relative to current working directory, or should it attempt to detect git repo root? (Plan assumes “repo root” is current working directory unless `--repo-root` is provided.)
 - Tag listing: do we filter by a prefix convention (e.g. `gov/`), or show all tags and let the user choose?
 - Interactive mode: if we add it, prefer minimal prompts and keep a strict `--non-interactive` mode for CI.
