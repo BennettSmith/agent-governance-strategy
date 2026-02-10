@@ -43,7 +43,7 @@ The target repo then provides a small wrapper (Makefile/script) that:
 This one-liner downloads the pinned tool into `tools/bin/agent-gov`:
 
 ```bash
-AGENT_GOV_TAG="agent-gov/v0.4.0" AGENT_GOV_GITHUB_ORG="<org>" bash -c 'set -euo pipefail; bin="tools/bin/agent-gov"; mkdir -p "$(dirname "$bin")"; os="$(uname -s | tr "[:upper:]" "[:lower:]")"; arch="$(uname -m)"; [ "$arch" = "x86_64" ] && arch="amd64"; [ "$arch" = "aarch64" ] && arch="arm64"; asset="agent-gov_${os}_${arch}"; url="https://github.com/${AGENT_GOV_GITHUB_ORG}/agent-governance-strategy/releases/download/${AGENT_GOV_TAG}/${asset}"; echo "downloading ${url}"; curl -fsSL "${url}" -o "${bin}"; chmod +x "${bin}"; "${bin}" --version'
+AGENT_GOV_TAG="agent-gov/v0.4.0" AGENT_GOV_GITHUB_ORG="bsmith.quanata" bash -c 'set -euo pipefail; bin="tools/bin/agent-gov"; mkdir -p "$(dirname "$bin")"; os="$(uname -s | tr "[:upper:]" "[:lower:]")"; arch="$(uname -m)"; [ "$arch" = "x86_64" ] && arch="amd64"; [ "$arch" = "aarch64" ] && arch="arm64"; asset="agent-gov_${os}_${arch}"; url="https://github.com/${AGENT_GOV_GITHUB_ORG}/agent-governance-strategy/releases/download/${AGENT_GOV_TAG}/${asset}"; echo "downloading ${url}"; curl -fsSL "${url}" -o "${bin}"; chmod +x "${bin}"; "${bin}" --version'
 ```
 
 After downloading:
