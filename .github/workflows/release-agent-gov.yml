@@ -29,16 +29,15 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - runner: ubuntu-22.04
-            goos: linux
+          - goos: linux
             goarch: amd64
-          - runner: macos-13
-            goos: darwin
+          - goos: darwin
             goarch: amd64
-          - runner: macos-14
-            goos: darwin
+          - goos: darwin
             goarch: arm64
-    runs-on: ${{ matrix.runner }}
+    # Build all targets on Linux via Go cross-compilation (no CGO).
+    # This avoids reliance on hosted macOS runner availability/labels.
+    runs-on: ubuntu-22.04
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -53,6 +52,7 @@ jobs:
       - name: Build
         working-directory: tools/gov
         env:
+          GOFLAGS: "-mod=mod"
           GOOS: ${{ matrix.goos }}
           GOARCH: ${{ matrix.goarch }}
           CGO_ENABLED: "0"
