@@ -48,12 +48,12 @@ Add a new `agent-gov bootstrap` command that helps users generate an initial `.g
 
 ## Checkpoints
 
-- [ ] Checkpoint 1 — Define bootstrap behavior + tests (non-interactive config generation/write + overwrite rules)
-- [ ] Checkpoint 2 — Implement `bootstrap` command (non-interactive) and wire into CLI usage text
-- [ ] Checkpoint 3 — Add profile discovery/listing (fetch + enumerate manifests) and validate selected profile exists
-- [ ] Checkpoint 4 — Add optional `--run-init` path and end-to-end test covering config write + init output
-- [ ] Checkpoint 5 — (Optional) Add interactive selection + (best-effort) tag listing for “governance versions”
-- [ ] Checkpoint 6 — Update `README.md` bootstrap docs and add examples (`bootstrap` and `bootstrap --run-init`)
+- [x] Checkpoint 1 — Define bootstrap behavior + tests (non-interactive config generation/write + overwrite rules) (commit `a68baab`)
+- [x] Checkpoint 2 — Implement `bootstrap` command (non-interactive) and wire into CLI usage text (commit `a68baab`)
+- [x] Checkpoint 3 — Add profile discovery/listing (fetch + enumerate manifests) and validate selected profile exists (commit `a68baab`)
+- [x] Checkpoint 4 — Add optional `--run-init` path and end-to-end test covering config write + init output (commit `a68baab`)
+- [x] Checkpoint 5 — (Optional) Add interactive selection + (best-effort) tag listing for “governance versions” (commit `a68baab`)
+- [x] Checkpoint 6 — Update `README.md` bootstrap docs and add examples (`bootstrap` and `bootstrap --run-init`) (commit `a68baab`)
 - [ ] Final checkpoint — PR wrap-up (final approval gate)
 
 ## Completion checklist
@@ -64,8 +64,8 @@ Add a new `agent-gov bootstrap` command that helps users generate an initial `.g
 
 ## Quality gates / test plan
 
-- [ ] `make ci` (passed)
-- [ ] Unit/CLI tests for `bootstrap` (non-interactive) passing
+- [x] `make ci` (passed, 2026-02-10)
+- [x] Unit/CLI tests for `bootstrap` (non-interactive) passing
 - [ ] Manual: run `agent-gov bootstrap --run-init` against a sample target repo and confirm:
   - `.governance/config.yaml` is created in the expected location
   - `init` emits docs/templates for the chosen profile
