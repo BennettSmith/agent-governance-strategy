@@ -45,8 +45,22 @@ plan_status_completed:
         exit 1
       fi
 
+      # Allow plan status != completed while the MR is Draft/WIP.
+      # This keeps pipelines green during active development, while still enforcing
+      # `status: completed` as a pre-merge gate for non-draft merge requests.
+      is_draft="${CI_MERGE_REQUEST_DRAFT:-}"
+      title="${CI_MERGE_REQUEST_TITLE:-}"
+      case "$title" in
+        [Dd][Rr][Aa][Ff][Tt]*:*|[Ww][Ii][Pp]*:*) is_draft="true" ;;
+      esac
+
+      if [ "$is_draft" = "true" ]; then
+        echo "plan_status_completed: OK (${plan} status: ${status}; MR is Draft/WIP)"
+        exit 0
+      fi
+
       if [ "$status" != "completed" ]; then
-        echo "plan_status_completed: ${plan} frontmatter status must be 'completed' (got: '${status}')"
+        echo "plan_status_completed: ${plan} frontmatter status must be 'completed' for non-draft MRs (got: '${status}')"
         exit 1
       fi
 

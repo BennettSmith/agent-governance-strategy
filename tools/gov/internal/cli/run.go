@@ -28,6 +28,8 @@ func Run(args []string, stdout, stderr io.Writer) int {
 		return 0
 	case "preflight":
 		return runPreflight(args[2:], stdout, stderr)
+	case "bootstrap":
+		return runBootstrap(args[2:], stdout, stderr)
 	case "init", "sync", "verify", "build":
 		return runSubcommand(cmd, args[2:], stdout, stderr)
 	default:
@@ -296,6 +298,7 @@ func printUsage(w io.Writer) {
 	fmt.Fprintln(w)
 	fmt.Fprintln(w, "Commands:")
 	fmt.Fprintln(w, "  preflight Run branch/baseline sanity checks")
+	fmt.Fprintln(w, "  bootstrap Create .governance/config.yaml (optionally run init)")
 	fmt.Fprintln(w, "  init     Initialize governance docs in this repo")
 	fmt.Fprintln(w, "  sync     Update managed governance blocks in-place")
 	fmt.Fprintln(w, "  verify   Verify managed governance blocks match expected content")

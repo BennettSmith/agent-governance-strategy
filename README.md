@@ -52,11 +52,46 @@ Notes:
 After downloading:
 
 - Add `tools/bin/agent-gov` to `.gitignore`
-- Run `tools/bin/agent-gov init --config .governance/config.yaml`
+- Create `.governance/config.yaml` (see below), then run `tools/bin/agent-gov init --config .governance/config.yaml`
 
 ### 2) Add `.governance/config.yaml` to the target repo (team-safe default)
 
-In the target repo, create `.governance/config.yaml`:
+In the target repo, you can generate `.governance/config.yaml` using the CLI:
+
+```bash
+tools/bin/agent-gov bootstrap \
+  --config .governance/config.yaml \
+  --source-repo "git@github.com:<org>/agent-governance-strategy.git" \
+  --source-ref "gov/v2026.02.09" \
+  --profile "docs-only" \
+  --non-interactive
+```
+
+Helpful discovery commands:
+
+- List profiles at a given repo/ref:
+
+```bash
+tools/bin/agent-gov bootstrap \
+  --source-repo "git@github.com:<org>/agent-governance-strategy.git" \
+  --source-ref "gov/v2026.02.09" \
+  --profile "docs-only" \
+  --list-profiles
+```
+
+- One-shot: write config and immediately run `init`:
+
+```bash
+tools/bin/agent-gov bootstrap \
+  --config .governance/config.yaml \
+  --source-repo "git@github.com:<org>/agent-governance-strategy.git" \
+  --source-ref "gov/v2026.02.09" \
+  --profile "docs-only" \
+  --non-interactive \
+  --run-init
+```
+
+Or create `.governance/config.yaml` by hand:
 
 ```yaml
 schemaVersion: 1
