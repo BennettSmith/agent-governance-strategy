@@ -26,3 +26,9 @@ templates:
   - source: ../../Templates/Plans/Plan.Template.md
     output: Docs/Plans/Plan.Template.md
 
+playbooks:
+  - source: ../../Core/Playbooks/GitLab-MR-Workflow.md
+    output: Docs/Playbooks/GitLab-MR-Workflow.md
+  - source: ../../Core/Playbooks/GitHub-PR-Workflow.md
+    output: Docs/Playbooks/GitHub-PR-Workflow.md
+
