@@ -1,6 +1,6 @@
 ---
 branch: "docs/app-playbooks-core-profile-split"
-status: active
+status: completed
 ---
 
 ## Summary
@@ -153,21 +153,21 @@ Initial split notes for `Target-Repo-Quality-Gates.md` (to execute in later chec
 - [x] Checkpoint 7 — Run quality gates (`make ci`) and ensure no docs/link regressions
   - Notes:
     - `make ci` (pass)
-- [ ] Final checkpoint — PR wrap-up (final approval gate)
+- [x] Final checkpoint — PR wrap-up (final approval gate)
 
 ## Completion checklist
 
-- [ ] Set frontmatter `status: completed`
-- [ ] Check off completed checkpoint(s) above and add PR/commit references as needed
-- [ ] Check off all quality gates below (or document any exceptions)
+- [x] Set frontmatter `status: completed`
+- [x] Check off completed checkpoint(s) above and add PR/commit references as needed
+- [x] Check off all quality gates below (or document any exceptions)
 
 ## Quality gates / test plan
 
-- [ ] `make ci`
-- [ ] Manual spot-check: each playbook has a single source-of-truth and is emitted only where intended
-- [ ] Manual spot-check: core governance remains tool-neutral; tool-specific steps live only in playbooks
-- [ ] Links check (spot-check moved playbooks + README references)
-- [ ] Migration sanity: a target repo running `sync` receives the expected playbook set and `Docs/Playbooks/Local/` remains project-owned
+- [x] `make ci`
+- [x] Manual spot-check: each playbook has a single source-of-truth and is emitted only where intended
+- [x] Manual spot-check: core governance remains tool-neutral; tool-specific steps live only in playbooks
+- [x] Links check (spot-check moved playbooks + README references)
+- [x] Migration sanity: a target repo running `sync` receives the expected playbook set and `Docs/Playbooks/Local/` remains project-owned
 
 ## Notes / open questions
 

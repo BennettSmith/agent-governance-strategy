@@ -1,6 +1,6 @@
 ---
 branch: "feat/app-bootstrap-defaults"
-status: active
+status: completed
 ---
 
 ## Summary
@@ -84,13 +84,13 @@ Add CLI tests that lock precedence and avoid regressions:
 - [x] Checkpoint 3 — Improve prompts to display defaults and accept empty input (commit `6b06df6`)
 - [ ] Checkpoint 4 — (Optional) Add git remote inference for default `source-repo` in interactive mode + tests (skipped; prefer env/flags over heuristics)
 - [x] Checkpoint 5 — Update docs (`README.md`) explaining env vars and precedence + examples (commit `e741fb9`)
-- [ ] Final checkpoint — PR wrap-up (final approval gate)
+- [x] Final checkpoint — PR wrap-up (final approval gate)
 
 ## Completion checklist
 
-- [ ] Set frontmatter `status: completed`
-- [ ] Check off completed checkpoint(s) above and add PR/commit references as needed
-- [ ] Check off all quality gates below (or document any exceptions)
+- [x] Set frontmatter `status: completed`
+- [x] Check off completed checkpoint(s) above and add PR/commit references as needed
+- [x] Check off all quality gates below (or document any exceptions)
 
 ## Quality gates / test plan
 
