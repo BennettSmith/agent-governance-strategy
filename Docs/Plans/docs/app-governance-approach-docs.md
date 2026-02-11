@@ -95,7 +95,7 @@ Improve and clarify the documentation for the multi-repo governance approach in 
 - [x] Checkpoint 2 — Clarify README pinning/versioning story and introduce “golden commands” guidance for target repos
 - [x] Checkpoint 3 — Add playbook: `Docs/Playbooks/Governance-Upgrades.md`
 - [x] Checkpoint 4 — Add playbook: `Docs/Playbooks/Governance-Exceptions.md`
-- [ ] Checkpoint 5 — Add playbook: `Docs/Playbooks/Target-Repo-Quality-Gates.md` (tool-enforced architecture/quality checks; SwiftLint example)
+- [x] Checkpoint 5 — Add playbook: `Docs/Playbooks/Target-Repo-Quality-Gates.md` (tool-enforced architecture/quality checks; SwiftLint example)
 - [ ] Checkpoint 6 — Add decision record (MADR) for governance content SemVer tagging policy (`gov/vX.Y.Z`)
 - [ ] Checkpoint 7 — Extract/adopt best ideas from scratch notes (`multi-repo-governance-strategy.md`) into tracked docs; then delete the scratch file (must remain untracked)
 - [ ] Checkpoint 8 — Implement golden commands for this repo (add markdown fmt/lint; wire into `make ci`)
