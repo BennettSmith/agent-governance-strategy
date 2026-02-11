@@ -97,9 +97,15 @@ Initial split notes for `Target-Repo-Quality-Gates.md` (to execute in later chec
   - Go (`depguard` / `golangci-lint`) → `backend-go-hex`
   - iOS (SwiftLint examples) → `mobile-clean-ios`
   - Kotlin/JVM examples → **requires a JVM/Android-oriented profile** (none exists today); treat as “future profile playbook” and avoid leaving Kotlin-only examples in core.
-- [ ] Checkpoint 2 — Move core playbooks into `Governance/Core/Playbooks/`
+- [x] Checkpoint 2 — Move core playbooks into `Governance/Core/Playbooks/`
   - Ensure no duplication remains in `Docs/Playbooks/`
   - Update links that pointed at old locations
+  - Pending approval notes:
+    - Moved:
+      - `Docs/Playbooks/Governance-Upgrades.md` → `Governance/Core/Playbooks/Governance-Upgrades.md`
+      - `Docs/Playbooks/Governance-Exceptions.md` → `Governance/Core/Playbooks/Governance-Exceptions.md`
+      - `Docs/Playbooks/Target-Repo-Quality-Gates.md` → `Governance/Core/Playbooks/Target-Repo-Quality-Gates.md`
+    - Updated `README.md` playbook links to point at the new governance source paths (while noting the emitted target paths).
 - [ ] Checkpoint 3 — Move profile-specific playbooks into `Governance/Profiles/<id>/Playbooks/`
   - Confirm ownership boundaries and avoid cross-profile drift
 - [ ] Checkpoint 4 — Update `profile.yaml` manifests to emit correct playbooks into target repos
