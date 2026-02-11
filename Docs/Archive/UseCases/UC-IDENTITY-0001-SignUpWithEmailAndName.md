@@ -23,7 +23,7 @@ bounded context’s domain.
 
 - Bounded context: `Identity`
 - Domain language: terms used here must align to this bounded context’s ubiquitous
-language.
+  language.
 
 ## Primary actor
 
@@ -194,4 +194,3 @@ Offline-first is the default. Explicitly specify behavior in each connectivity s
   - When sign-up is triggered
   - Then `SignUpRejectedError(EmailDeliveryUnavailable)`
   - And no authenticated session is created
-

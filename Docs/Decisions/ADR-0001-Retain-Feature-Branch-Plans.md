@@ -128,4 +128,3 @@ and preserves useful context without requiring every change to produce an ADR.
 ## Change log
 
 - 2026-02-05 — Proposed
-

@@ -16,6 +16,7 @@ related:
 ---
 
 ## Context
+
 <!--
 Describe the situation that motivates this decision.
 
@@ -27,6 +28,7 @@ Include:
 -->
 
 ## Decision drivers
+
 <!-- The factors that matter most and will be used to evaluate options -->
 
 - <!-- e.g., offline-first correctness -->
@@ -35,6 +37,7 @@ Include:
 - <!-- e.g., time-to-ship / team constraints -->
 
 ## Considered options
+
 <!-- List realistic options that were actually considered -->
 
 1. **Option A** — <!-- short description -->
@@ -42,6 +45,7 @@ Include:
 3. **Option C** — <!-- short description -->
 
 ## Decision
+
 <!-- State the decision clearly and unambiguously -->
 
 We will <!-- decision statement -->.
@@ -64,12 +68,14 @@ We will <!-- decision statement -->.
   - Mitigation: <!-- mitigation -->
 
 ## Rationale
+
 <!--
 Explain why this decision was chosen over the alternatives.
 Focus on the decision drivers and the key trade-offs.
 -->
 
 ## Implementation notes
+
 <!--
 Only the minimum actionable guidance. Avoid detailed design docs here.
 
@@ -81,6 +87,7 @@ Include (as applicable):
 -->
 
 ## Alternatives (details)
+
 <!-- Optional: expand on pros/cons, why rejected, or conditions under which they'd win -->
 
 ### Option A
@@ -98,6 +105,7 @@ Include (as applicable):
   - <!-- -->
 
 ## Links
+
 <!-- Cross-references and supporting material -->
 
 - Related Use Case(s): <!-- link(s) -->
@@ -109,4 +117,3 @@ Include (as applicable):
 
 - YYYY-MM-DD — Proposed
 - YYYY-MM-DD — Accepted
-

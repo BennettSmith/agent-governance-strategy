@@ -88,7 +88,7 @@ Common flow patterns:
   - use case boundary types
   - persistence representations
   - external API representations  
-  occurs outside the domain layer.
+    occurs outside the domain layer.
 - The architecture enforces **one-way dependency direction**:
   - domain → nothing
   - application → domain
@@ -130,4 +130,3 @@ Rules:
 - Use cases form the stable boundary of the system
 - Dependency direction always points inward
 - Legacy or shortcut implementations are temporary and isolated
-

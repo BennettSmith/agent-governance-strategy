@@ -1,3 +1,6 @@
 .DS_Store
 tools/gov/coverage.out
 tools/gov/coverage.txt
+
+# Node (markdown tooling)
+node_modules/

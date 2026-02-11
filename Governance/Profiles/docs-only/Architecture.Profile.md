@@ -30,4 +30,3 @@ The synchronization mechanism updates only managed blocks and preserves local ad
 ## Configuration
 
 Targets configure governance via `.governance/config.yaml` (schema versioned). The CLI supports running from any working directory by selecting the nearest config when `--config` is omitted.
-

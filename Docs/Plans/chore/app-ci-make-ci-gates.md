@@ -53,4 +53,3 @@ Ensure GitHub runs `make ci` for every PR update and requires it to pass before 
 ## Notes / open questions
 
 - None.
-

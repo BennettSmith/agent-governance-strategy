@@ -68,4 +68,3 @@ See `Docs/Refactoring/Legacy-Refactoring-Playbook.md` for the approved patterns 
 - `Architecture.md` overrides `Constitution.md` on matters of system shape.
 - `Constitution.md` guides behavior when other documents are silent.
 - In case of ambiguity, stop work and ask for human direction.
-

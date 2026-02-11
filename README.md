@@ -1,9 +1,51 @@
 # agent-governance-strategy
 
+## What this repo is (and isn’t)
+
 This repository is a **governance source + toolchain**. It is not a product/runtime system.
+
+We built it to help teams adopt a consistent governance baseline across many repos, while still allowing each repo to keep project-owned notes and adaptations.
+
+- **Goals**
+  - Provide a single, reviewable source of truth for governance content.
+  - Apply governance to target repos deterministically (CI-friendly).
+  - Preserve repo-owned customization via “Local Addenda (project-owned)”.
+- **Non-goals**
+  - Automatically define stack-specific `fmt/lint/ci/test` targets for every consuming repo.
+  - Surprise coupling: governance is applied/verified explicitly by the target repo.
+
+## Mental model
+
+- **Governance content** lives in `Governance/` (core fragments, profiles, templates, playbooks).
+- **`agent-gov`** (in `tools/gov/`) is the CLI that applies that content to a target repo using `.governance/config.yaml`.
+- Target repos receive documents with:
+  - **Managed blocks**: deterministic, tool-owned sections updated in-place.
+  - **Local addenda**: project-owned sections preserved across syncs.
 
 - **Governance sources** live in `Governance/` (core fragments, profiles, templates, playbooks).
 - The CLI tool **`agent-gov`** lives in `tools/gov/` and is used to **init / sync / verify** governance docs in a target repo using **managed blocks**.
+
+## Governance as code (principles vs enforcement)
+
+Governance is treated like a shared dependency:
+
+- it is **versioned** and **reviewed** like code
+- target repos should **pin** both the tool and the governance content to known-good versions
+- the most important rules should be **machine-checkable** where possible (CI-friendly verification + repo-owned quality gates)
+
+Core governance documents focus on **required outcomes**. Tool-specific operational steps live in playbooks.
+
+Key decision records in this repo:
+
+- `Docs/Decisions/ADR-0004-Governance-Content-SemVer-Policy.md` (governance content SemVer policy and breaking-change criteria)
+
+Operational playbooks in this repo:
+
+- `Docs/Playbooks/Governance-Upgrades.md`
+- `Docs/Playbooks/Governance-Exceptions.md`
+- `Docs/Playbooks/Target-Repo-Quality-Gates.md`
+- `Docs/Playbooks/GitHub-PR-Workflow.md`
+- `Docs/Playbooks/GitLab-MR-Workflow.md`
 
 ## What `agent-gov` does
 
@@ -20,6 +62,15 @@ Commands:
 - `build`: assemble a governance bundle into an output folder (for inspection/artifacts)
 
 ## Recommended usage (apply governance to another repo)
+
+### Pinning (tool vs governance content)
+
+There are two independent things to pin:
+
+- **Tool pin**: the `agent-gov` binary version (tagged as `agent-gov/vX.Y.Z`).
+- **Governance content pin**: the governance bundle a target repo consumes via `.governance/config.yaml` `source.ref` (tagged as `gov/vX.Y.Z`, covering core + all profiles).
+
+Both pins should generally use an immutable tag (preferred) or a commit SHA for repeatability. Avoid moving refs like `HEAD` unless you explicitly want “latest on every run”.
 
 ### 1) Use a pinned `agent-gov` binary (recommended for teams)
 
@@ -48,13 +99,13 @@ Provide the governance source inputs via environment variables (team-safe defaul
 - `AGENT_GOV_PROFILE`
 
 ```bash
-AGENT_GOV_TAG="agent-gov/v1.1.0" AGENT_GOV_GITLAB_REPO="bsmith.quanata/agent-governance-strategy" AGENT_GOV_SOURCE_REPO="git@gitlab.com:bsmith.quanata/agent-governance-strategy.git" AGENT_GOV_SOURCE_REF="gov/v2026.02.10" AGENT_GOV_PROFILE="docs-only" bash -c 'set -euo pipefail; bin="tools/bin/agent-gov"; dir="$(dirname "$bin")"; mkdir -p "${dir}"; os="$(uname -s | tr "[:upper:]" "[:lower:]")"; arch="$(uname -m)"; [ "$arch" = "x86_64" ] && arch="amd64"; [ "$arch" = "aarch64" ] && arch="arm64"; asset="agent-gov_${os}_${arch}"; echo "downloading ${asset} from ${AGENT_GOV_GITLAB_REPO}@${AGENT_GOV_TAG}"; glab release download "${AGENT_GOV_TAG}" -R "${AGENT_GOV_GITLAB_REPO}" --asset-name "${asset}" -D "${dir}"; mv -f "${dir}/${asset}" "${bin}"; chmod +x "${bin}"; "$bin" bootstrap --config .governance/config.yaml --non-interactive; "$bin" --version'
+AGENT_GOV_TAG="agent-gov/v1.1.0" AGENT_GOV_GITLAB_REPO="bsmith.quanata/agent-governance-strategy" AGENT_GOV_SOURCE_REPO="git@gitlab.com:bsmith.quanata/agent-governance-strategy.git" AGENT_GOV_SOURCE_REF="gov/v1.2.3" AGENT_GOV_PROFILE="docs-only" bash -c 'set -euo pipefail; bin="tools/bin/agent-gov"; dir="$(dirname "$bin")"; mkdir -p "${dir}"; os="$(uname -s | tr "[:upper:]" "[:lower:]")"; arch="$(uname -m)"; [ "$arch" = "x86_64" ] && arch="amd64"; [ "$arch" = "aarch64" ] && arch="arm64"; asset="agent-gov_${os}_${arch}"; echo "downloading ${asset} from ${AGENT_GOV_GITLAB_REPO}@${AGENT_GOV_TAG}"; glab release download "${AGENT_GOV_TAG}" -R "${AGENT_GOV_GITLAB_REPO}" --asset-name "${asset}" -D "${dir}"; mv -f "${dir}/${asset}" "${bin}"; chmod +x "${bin}"; "$bin" bootstrap --config .governance/config.yaml --non-interactive; "$bin" --version'
 ```
 
 Notes:
 
 - Requires GitLab CLI (`glab`) and authentication (recommended: `glab auth login`). This works cleanly for private repos.
-After downloading:
+  After downloading:
 
 - Add `tools/bin/agent-gov` to `.gitignore`
 - Run `tools/bin/agent-gov init --config .governance/config.yaml`
@@ -67,7 +118,7 @@ In the target repo, you can generate `.governance/config.yaml` using the CLI:
 tools/bin/agent-gov bootstrap \
   --config .governance/config.yaml \
   --source-repo "git@github.com:<org>/agent-governance-strategy.git" \
-  --source-ref "gov/v2026.02.09" \
+  --source-ref "gov/v1.2.3" \
   --profile "docs-only" \
   --non-interactive
 ```
@@ -79,7 +130,7 @@ Helpful discovery commands:
 ```bash
 tools/bin/agent-gov bootstrap \
   --source-repo "git@github.com:<org>/agent-governance-strategy.git" \
-  --source-ref "gov/v2026.02.09" \
+  --source-ref "gov/v1.2.3" \
   --profile "docs-only" \
   --list-profiles
 ```
@@ -90,7 +141,7 @@ tools/bin/agent-gov bootstrap \
 tools/bin/agent-gov bootstrap \
   --config .governance/config.yaml \
   --source-repo "git@github.com:<org>/agent-governance-strategy.git" \
-  --source-ref "gov/v2026.02.09" \
+  --source-ref "gov/v1.2.3" \
   --profile "docs-only" \
   --non-interactive \
   --run-init
@@ -107,7 +158,7 @@ source:
 
   # Strongly recommended: pin to an immutable tag or commit SHA for repeatability.
   # Avoid moving refs like HEAD unless you explicitly want “latest on every run”.
-  ref: "gov/v2026.02.09"
+  ref: "gov/v1.2.3"
 
   # Choose a profile ID from this repo under `Governance/Profiles/`.
   profile: "docs-only"
@@ -194,7 +245,19 @@ Once included, you get standard targets:
 - `make gov-init`
 - `make gov-sync`
 - `make gov-verify`
+- `make gov-ci` (CI-safe; verify only)
 - `make gov-build`
+
+#### Recommended “golden commands” in target repos
+
+Target repos should own their “golden commands” (typically `make fmt`, `make lint`, `make ci`). Governance should integrate explicitly rather than “attaching itself” to `ci`.
+
+Recommended pattern:
+
+- Keep governance verification CI-safe (no sync / no working tree writes).
+- Wire governance verification into your repo’s `ci` target explicitly, for example:
+  - `ci: gov-ci` (recommended when the include provides `gov-ci`)
+  - or `ci: gov-verify` (direct wiring)
 
 GitLab note (private projects): downloads must be authenticated. A team-safe approach is a **deploy token** with `read_package_registry` stored as masked CI/CD variables in the consuming repo. This repo’s GitLab release flow publishes binaries to the **Generic Package Registry** under package name:
 
@@ -276,9 +339,13 @@ This repo uses `make` targets to run checks:
 - `make preflight`
 - `make ci` (format, tests, coverage gate, and a CLI smoke test)
 
+Markdown tooling requirements:
+
+- Node **22.x** + npm (see `.nvmrc`)
+- Install deterministically with `npm ci`
+
 For repo working agreements and quality gates, see:
 
 - `Non-Negotiables.md`
 - `Architecture.md`
 - `Constitution.md`
-

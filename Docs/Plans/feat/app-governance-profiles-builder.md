@@ -64,4 +64,3 @@ Refactor this repo into a **governance builder** that generates profile-specific
 - Governance source-of-truth lives under `Governance/` with core fragments, templates, and profiles.
 - v1 profiles exist under `Governance/Profiles/` including `backend-go-hex` and `mobile-clean-ios` (and `mobile-clean` as a shared base).
 - `agent-gov` CLI exists under `tools/gov/` and supports `init`, `sync`, `verify`, and `build`.
-

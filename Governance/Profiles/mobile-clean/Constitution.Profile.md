@@ -36,4 +36,3 @@ Domain rules and invariants live inside use cases or their owned entities.
 ### 6. Offline‑first by default
 
 Use cases must function without network connectivity unless explicitly documented.
-

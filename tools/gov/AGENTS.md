@@ -6,7 +6,7 @@ This folder is an **embedded target repo** (the `agent-gov` CLI). When working u
 2. `Architecture.md`
 3. `Constitution.md`
 
-### Precedence (conflicts)
+## Precedence (conflicts)
 
 - `Non-Negotiables.md` overrides all other documents
 - `Architecture.md` overrides `Constitution.md` on matters of system shape
@@ -16,4 +16,3 @@ This folder is an **embedded target repo** (the `agent-gov` CLI). When working u
 ## Notes
 
 - These embedded key-three docs are generated/synced via `tools/gov/.governance/config.yaml`.
-

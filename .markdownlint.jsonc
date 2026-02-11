@@ -1,8 +1,12 @@
 {
-    // Disable line-length checks entirely.
-    "MD013": false,
-    "MD041": {
-      "front_matter_title": "^\\s*(title|name)\\s*[:=]"
-    }
-  }
-  
+  // Disable line-length checks entirely.
+  "MD013": false,
+
+  // Many docs in this repo (plans, ADRs, managed-block outputs) begin with YAML
+  // front matter or other non-heading content. Requiring an H1 first line adds
+  // noise without improving readability here.
+  "MD041": false,
+
+  // Some templates intentionally include inline HTML placeholders.
+  "MD033": false
+}

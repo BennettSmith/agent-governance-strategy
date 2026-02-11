@@ -72,5 +72,4 @@ This change introduces a `docs-only` governance profile so this repository’s r
 
 ## Notes / open questions
 
-- We merged `feat/app-governance-profiles-builder` into `main` before starting this work, so we are not using preflight as a gate for *starting* this plan; we are implementing preflight to prevent future mistakes.
-
+- We merged `feat/app-governance-profiles-builder` into `main` before starting this work, so we are not using preflight as a gate for _starting_ this plan; we are implementing preflight to prevent future mistakes.

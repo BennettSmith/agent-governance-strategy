@@ -22,7 +22,7 @@ bounded context’s domain.
 
 - Bounded context: `<BoundedContextName>`
 - Domain language: terms used here must align to this bounded context’s ubiquitous
-language.
+  language.
 
 ## Primary actor
 
@@ -219,4 +219,3 @@ List scenarios that fully specify observable behavior. Avoid implementation deta
   - When `<trigger>`
   - Then `<boundary failure shape>`
   - And `<compensation/rollback or queued retry behavior>`
-

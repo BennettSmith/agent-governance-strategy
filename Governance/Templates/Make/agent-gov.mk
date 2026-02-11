@@ -53,7 +53,7 @@ GITLAB_PKG_TOKEN ?=
 # Generic Package Registry versions are a single path segment, so we use just `vX.Y.Z`.
 AGENT_GOV_VERSION ?= $(notdir $(AGENT_GOV_TAG))
 
-.PHONY: agent-gov gov-init gov-sync gov-verify gov-build
+.PHONY: agent-gov gov-init gov-sync gov-verify gov-ci gov-build
 
 agent-gov:
 	@mkdir -p $$(dirname "$(AGENT_GOV_BIN)")
@@ -102,6 +102,10 @@ gov-verify: agent-gov
 	else \
 	  $(AGENT_GOV_BIN) verify; \
 	fi
+
+# CI-safe: verification only (no sync / no working tree writes)
+gov-ci: gov-verify
+	@true
 
 gov-build: agent-gov
 	@if [ -n "$(GOV_CONFIG)" ]; then \
