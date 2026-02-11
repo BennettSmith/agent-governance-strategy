@@ -150,7 +150,9 @@ Initial split notes for `Target-Repo-Quality-Gates.md` (to execute in later chec
   - Notes:
     - Updated root `README.md` to link to emitted playbooks under `Docs/Playbooks/` and added a note pointing contributors to `Governance/**/Playbooks/` sources.
     - Updated `Governance/README.md` profile list to include `mobile-clean` and the new `mobile-clean-android` profile.
-- [ ] Checkpoint 7 — Run quality gates (`make ci`) and ensure no docs/link regressions
+- [x] Checkpoint 7 — Run quality gates (`make ci`) and ensure no docs/link regressions
+  - Notes:
+    - `make ci` (pass)
 - [ ] Final checkpoint — PR wrap-up (final approval gate)
 
 ## Completion checklist
