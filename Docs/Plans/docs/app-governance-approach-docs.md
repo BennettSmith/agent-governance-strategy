@@ -93,7 +93,7 @@ Improve and clarify the documentation for the multi-repo governance approach in 
 
 - [x] Checkpoint 1 — Add/shape the new README opening section (what/why/goals/non-goals) and a short mental model
 - [x] Checkpoint 2 — Clarify README pinning/versioning story and introduce “golden commands” guidance for target repos
-- [ ] Checkpoint 3 — Add playbook: `Docs/Playbooks/Governance-Upgrades.md`
+- [x] Checkpoint 3 — Add playbook: `Docs/Playbooks/Governance-Upgrades.md`
 - [ ] Checkpoint 4 — Add playbook: `Docs/Playbooks/Governance-Exceptions.md`
 - [ ] Checkpoint 5 — Add playbook: `Docs/Playbooks/Target-Repo-Quality-Gates.md` (tool-enforced architecture/quality checks; SwiftLint example)
 - [ ] Checkpoint 6 — Add decision record (MADR) for governance content SemVer tagging policy (`gov/vX.Y.Z`)
