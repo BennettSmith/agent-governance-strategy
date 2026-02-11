@@ -54,4 +54,3 @@ Clean up stale documentation in this governance builder repository’s `Docs/` f
 - Stale example docs were moved under `Docs/Archive/` (keeping them for reference while removing them from the “live” docs surface).
 - Profile playbooks exist under `Governance/Profiles/*/Playbooks/`, including per-profile `Legacy-Refactoring-Playbook.md`.
 - The stable path `Docs/Refactoring/Legacy-Refactoring-Playbook.md` exists in the repo.
-

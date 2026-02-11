@@ -11,21 +11,17 @@ This playbook provides operational steps for updating and verifying a pull reque
 ## Update PR description (markdown)
 
 1. Prepare a markdown description in a file (recommended):
-
    - `pr.md` (or similar)
 
 2. Update the PR body.
 
 - If you know the PR number:
-
   - `gh pr edit <number> --body-file pr.md`
 
 - If you want to target “the PR for the current branch”:
-
   - `gh pr edit --body-file pr.md`
 
 ## Verify it was applied
 
 - Print the PR body and confirm it matches the expected markdown:
-
   - `gh pr view --json body -q .body`

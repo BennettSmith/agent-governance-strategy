@@ -43,4 +43,3 @@ Rule of thumb: `cmd/` should mostly be wiring; `internal/` is where logic and te
 - Support `--config PATH` overrides.
 - If `--config` is omitted, search upward from the current working directory for the nearest config so the tool can be run from subdirectories.
 - When running repo-mutating operations, use the config location to determine the effective repo root (don’t assume CWD is the repo root).
-

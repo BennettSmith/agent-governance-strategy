@@ -9,4 +9,3 @@
 ## Documentation (backend-go-hex)
 
 - Architectural decisions affecting system shape or long-term constraints must be captured as MADRs/ADRs.
-

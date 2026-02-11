@@ -64,4 +64,3 @@ For adapters:
 ## Notes
 
 - SwiftPM is the default packaging mechanism for iOS in this profile.\n+- If your app uses a different module system, keep the same boundaries and dependency direction; document the mapping in a local addendum.
-

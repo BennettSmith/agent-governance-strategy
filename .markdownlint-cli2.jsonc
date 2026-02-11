@@ -1,0 +1,12 @@
+{
+  "globs": [
+    "**/*.md",
+    "!node_modules/**",
+    "!**/node_modules/**",
+    "!.cache/**",
+    "!**/.cache/**",
+    "!.git/**",
+    "!**/.git/**"
+  ]
+}
+

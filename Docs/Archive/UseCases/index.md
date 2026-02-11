@@ -24,15 +24,14 @@ not in this catalog (with a linked spec), it is not considered defined behavior.
 
 ## Catalog
 
-| ID | Title | Bounded context | Status | Slices | Spec |
-|---|---|---|---|---|---|
-| `UC-IDENTITY-0001` | Sign up with email and name | `Identity` | draft | Authentication, Onboarding | [`UC-IDENTITY-0001-SignUpWithEmailAndName.md`](./UC-IDENTITY-0001-SignUpWithEmailAndName.md) |
-| `UC-IDENTITY-0002` | Initiate sign-in with email | `Identity` | draft | Authentication | [`UC-IDENTITY-0002-InitiateSignInWithEmail.md`](./UC-IDENTITY-0002-InitiateSignInWithEmail.md) |
-| `UC-IDENTITY-0003` | Sign out | `Identity` | draft | Authentication | [`UC-IDENTITY-0003-SignOut.md`](./UC-IDENTITY-0003-SignOut.md) |
+| ID                 | Title                       | Bounded context | Status | Slices                     | Spec                                                                                           |
+| ------------------ | --------------------------- | --------------- | ------ | -------------------------- | ---------------------------------------------------------------------------------------------- |
+| `UC-IDENTITY-0001` | Sign up with email and name | `Identity`      | draft  | Authentication, Onboarding | [`UC-IDENTITY-0001-SignUpWithEmailAndName.md`](./UC-IDENTITY-0001-SignUpWithEmailAndName.md)   |
+| `UC-IDENTITY-0002` | Initiate sign-in with email | `Identity`      | draft  | Authentication             | [`UC-IDENTITY-0002-InitiateSignInWithEmail.md`](./UC-IDENTITY-0002-InitiateSignInWithEmail.md) |
+| `UC-IDENTITY-0003` | Sign out                    | `Identity`      | draft  | Authentication             | [`UC-IDENTITY-0003-SignOut.md`](./UC-IDENTITY-0003-SignOut.md)                                 |
 
 ## Canonical use-case spec template
 
 All use cases must be documented using the canonical spec template:
 
 - [`UseCase.Template.md`](./UseCase.Template.md)
-

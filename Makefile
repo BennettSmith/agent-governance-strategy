@@ -1,6 +1,6 @@
 .DEFAULT_GOAL := help
 
-.PHONY: help ci fmt test coverage gov-smoke preflight gov-preflight gov-preflight-gocli
+.PHONY: help ci fmt fmt-check lint test coverage gov-smoke preflight gov-preflight gov-preflight-gocli go-fmt go-fmt-check md-fmt md-fmt-check md-lint
 
 GOV_MIN_COVERAGE ?= 85
 # Many Go environments set `GOFLAGS=-mod=vendor` globally to enforce vendoring.
@@ -9,7 +9,37 @@ GOV_MIN_COVERAGE ?= 85
 TOOLS_GOV_GOFLAGS ?= -mod=mod
 
 help: ## Show available make targets
-	@awk 'BEGIN {FS = ":.*##"} /^[a-zA-Z0-9_.-]+:.*##/ {printf "  %-16s %s\n", $$1, $$2}' $(MAKEFILE_LIST)
+	@awk 'BEGIN { \
+	  FS = ":.*##"; \
+	  golden_count = split("fmt fmt-check lint test ci", golden, " "); \
+	} \
+	/^[a-zA-Z0-9_.-]+:.*##/ { \
+	  desc[$$1] = $$2; \
+	  all[++all_count] = $$1; \
+	} \
+	function print_target(t,   d) { \
+	  d = (t in desc) ? desc[t] : ""; \
+	  printf "  %-16s %s\n", t, d; \
+	} \
+	END { \
+	  print "Golden targets (repo-owned contract):"; \
+	  for (i = 1; i <= golden_count; i++) { \
+	    seen[golden[i]] = 1; \
+	    print_target(golden[i]); \
+	  } \
+	  print ""; \
+	  print "Governance targets:"; \
+	  for (i = 1; i <= all_count; i++) { \
+	    t = all[i]; \
+	    if (t ~ /^gov-/) { seen[t] = 1; print_target(t); } \
+	  } \
+	  print ""; \
+	  print "Other targets:"; \
+	  for (i = 1; i <= all_count; i++) { \
+	    t = all[i]; \
+	    if (!(t in seen)) { print_target(t); } \
+	  } \
+	}' $(MAKEFILE_LIST)
 
 preflight: gov-preflight ## Sanity check branch + baseline
 
@@ -25,11 +55,41 @@ gov-preflight-gocli: ## Run agent-gov preflight (embedded tools/gov scope)
 	  --require "go.mod" \
 	  --require "cmd/agent-gov/main.go"
 
-ci: fmt test coverage gov-smoke ## Run all CI checks
+ci: fmt-check lint test coverage gov-smoke ## Run all CI checks
 
-fmt: ## Format Go sources
+fmt: go-fmt md-fmt ## Format sources
+
+go-fmt: ## Format Go sources
 	@echo "Formatting Go sources"
 	@cd tools/gov && gofmt -w $$(git ls-files '*.go')
+
+fmt-check: go-fmt-check md-fmt-check ## Check formatting (no writes)
+
+go-fmt-check: ## Check Go formatting (no writes)
+	@echo "Checking Go formatting"
+	@cd tools/gov && test -z "$$(gofmt -l $$(git ls-files '*.go'))"
+
+lint: md-lint ## Lint (markdown + repo checks)
+	@true
+
+# Stamp file so we don't run `npm ci` repeatedly.
+# Rebuild only when `package-lock.json` changes (or `node_modules/` is missing).
+node_modules/.package-lock.json: package-lock.json package.json
+	@echo "Installing markdown tooling (npm ci)"
+	@npm ci
+	@cp -f package-lock.json node_modules/.package-lock.json
+
+md-fmt: node_modules/.package-lock.json ## Format markdown (writes files)
+	@echo "Formatting markdown (prettier)"
+	@./node_modules/.bin/prettier --write "**/*.md"
+
+md-fmt-check: node_modules/.package-lock.json ## Check markdown formatting (no writes)
+	@echo "Checking markdown formatting (prettier --check)"
+	@./node_modules/.bin/prettier --check "**/*.md"
+
+md-lint: node_modules/.package-lock.json ## Lint markdown
+	@echo "Linting markdown (markdownlint-cli2)"
+	@./node_modules/.bin/markdownlint-cli2
 
 test: ## Run Go tests
 	@echo "Running Go tests"

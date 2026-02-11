@@ -65,4 +65,3 @@ Add GitLab CI support that mirrors the existing GitHub Actions behavior: run `ma
 
 - MR: `https://gitlab.com/bsmith.quanata/agent-governance-strategy/-/merge_requests/1`
 - Verified `CI_JOB_TOKEN` can upload to the GitLab Generic Package Registry on GitLab.com shared runners (uploads returned `201 Created`).
-

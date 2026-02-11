@@ -58,4 +58,3 @@ If you cannot name your rollback plan for the current step, the step is too larg
 ## Notes for target repositories
 
 Target repositories should follow the playbook emitted by their chosen governance profile (e.g. mobile Clean Architecture or Go hexagonal). This docs-only playbook exists to keep the builder repo and its toolchain changes safe.
-

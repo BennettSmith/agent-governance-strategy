@@ -91,4 +91,3 @@ Rollback: keep old path working; delay contract.
 - `Docs/Playbooks/Hexagonal-Ports-And-Adapters.md`
 - `Docs/Playbooks/Go-CLI-Structure.md` (for CLI apps)
 - `Docs/Playbooks/Go-Packaging.md`
-

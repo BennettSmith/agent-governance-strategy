@@ -46,4 +46,3 @@ Reduce missed “plan completion” updates by making plan completion an explici
 ## Notes / open questions
 
 - None.
-

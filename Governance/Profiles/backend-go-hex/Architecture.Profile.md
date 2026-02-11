@@ -24,4 +24,3 @@ This profile follows hexagonal architecture (ports and adapters). The applicatio
 
 - Prefer tests at port boundaries (application services / handlers calling ports).
 - Keep adapters thin; test the mapping and error handling at adapter boundaries.
-

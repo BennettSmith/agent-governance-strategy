@@ -43,4 +43,3 @@ Ensure `make ci` succeeds even when a developer machine has `GOFLAGS=-mod=vendor
 ## Notes / open questions
 
 - None.
-

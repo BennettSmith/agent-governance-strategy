@@ -50,7 +50,7 @@ Add a root `README.md` that explains how to use this repository as a governance 
 ## Completion checklist
 
 - [x] Set frontmatter `status: completed`
-- [x] Check off completed checkpoint(s) above and add PR/commit references as needed (PR: https://github.com/BennettSmith/agent-governance-strategy/pull/6)
+- [x] Check off completed checkpoint(s) above and add PR/commit references as needed (PR: [`#6`](https://github.com/BennettSmith/agent-governance-strategy/pull/6))
 - [x] Check off all quality gates below (or document any exceptions)
 
 ## Quality gates / test plan

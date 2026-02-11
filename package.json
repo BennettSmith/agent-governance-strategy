@@ -1,0 +1,14 @@
+{
+  "name": "agent-governance-strategy",
+  "private": true,
+  "devDependencies": {
+    "markdownlint-cli2": "^0.20.0",
+    "prettier": "^3.8.1"
+  },
+  "scripts": {
+    "md:fmt": "prettier --write \"**/*.md\"",
+    "md:fmt:check": "prettier --check \"**/*.md\"",
+    "md:lint": "markdownlint-cli2",
+    "md:lint:fix": "markdownlint-cli2 --fix"
+  }
+}

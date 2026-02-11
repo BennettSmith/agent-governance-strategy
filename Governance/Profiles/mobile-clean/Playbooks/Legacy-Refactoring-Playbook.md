@@ -168,4 +168,3 @@ Preferred rollback strategy order:
 - Seam: create a new bounded-context package and move only the use case boundary first.
 - Refactor: move domain logic behind the use case boundary in small slices.
 - Next: isolate remaining legacy calls behind adapters and strangle them out.
-
