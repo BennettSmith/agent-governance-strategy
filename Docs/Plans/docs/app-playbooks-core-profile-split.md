@@ -114,9 +114,20 @@ Initial split notes for `Target-Repo-Quality-Gates.md` (to execute in later chec
       - `Governance/Profiles/mobile-clean-ios/Playbooks/Quality-Gates-iOS-Architecture-Enforcement.md`
       - `Governance/Profiles/mobile-clean-android/Playbooks/Quality-Gates-Kotlin-Architecture-Enforcement.md` (new profile)
     - Core playbook now links to the emitted target paths for those profile playbooks (to be wired in `profile.yaml` in Checkpoint 4).
-- [ ] Checkpoint 4 — Update `profile.yaml` manifests to emit correct playbooks into target repos
+- [x] Checkpoint 4 — Update `profile.yaml` manifests to emit correct playbooks into target repos
   - Verify the emitted target paths and naming are consistent across profiles
   - Ensure `Docs/Playbooks/README.md` and `Docs/Playbooks/Local/README.md` are emitted (so folders are created)
+  - Notes:
+    - Added core playbooks to all profiles:
+      - `Docs/Playbooks/README.md`
+      - `Docs/Playbooks/Local/README.md`
+      - `Docs/Playbooks/Governance-Upgrades.md`
+      - `Docs/Playbooks/Governance-Exceptions.md`
+      - `Docs/Playbooks/Target-Repo-Quality-Gates.md`
+    - Wired profile-specific quality gate example playbooks:
+      - `backend-go-hex` → `Docs/Playbooks/Quality-Gates-Go-Architecture-Enforcement.md`
+      - `mobile-clean-ios` → `Docs/Playbooks/Quality-Gates-iOS-Architecture-Enforcement.md`
+      - `mobile-clean-android` → `Docs/Playbooks/Quality-Gates-Kotlin-Architecture-Enforcement.md`
 - [ ] Checkpoint 5 — Dogfood both agent-gov usages in this repo (sync + verify)
   - Root scope (docs-only profile):
     - Run `agent-gov sync` and `agent-gov verify` against the root `.governance/config.yaml` (or the repo’s established wrapper/targets).
