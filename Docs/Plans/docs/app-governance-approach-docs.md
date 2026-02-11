@@ -97,7 +97,7 @@ Improve and clarify the documentation for the multi-repo governance approach in 
 - [x] Checkpoint 4 — Add playbook: `Docs/Playbooks/Governance-Exceptions.md`
 - [x] Checkpoint 5 — Add playbook: `Docs/Playbooks/Target-Repo-Quality-Gates.md` (tool-enforced architecture/quality checks; SwiftLint example)
 - [x] Checkpoint 6 — Add decision record (MADR) for governance content SemVer tagging policy (`gov/vX.Y.Z`)
-- [ ] Checkpoint 7 — Extract/adopt best ideas from scratch notes (`multi-repo-governance-strategy.md`) into tracked docs; then delete the scratch file (must remain untracked)
+- [x] Checkpoint 7 — Extract/adopt best ideas from scratch notes (`multi-repo-governance-strategy.md`) into tracked docs; then delete the scratch file (must remain untracked)
 - [ ] Checkpoint 8 — Implement golden commands for this repo (add markdown fmt/lint; wire into `make ci`)
   - Add `gov-ci` to `Governance/Templates/Make/agent-gov.mk` and update README to recommend `ci: gov-ci` in consuming repos
 - [ ] Checkpoint 9 — Consistency + cross-links pass (README ↔ playbooks ↔ governing docs)

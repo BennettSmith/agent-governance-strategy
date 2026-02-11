@@ -25,6 +25,24 @@ We built it to help teams adopt a consistent governance baseline across many rep
 - **Governance sources** live in `Governance/` (core fragments, profiles, templates, playbooks).
 - The CLI tool **`agent-gov`** lives in `tools/gov/` and is used to **init / sync / verify** governance docs in a target repo using **managed blocks**.
 
+## Governance as code (principles vs enforcement)
+
+Governance is treated like a shared dependency:
+
+- it is **versioned** and **reviewed** like code
+- target repos should **pin** both the tool and the governance content to known-good versions
+- the most important rules should be **machine-checkable** where possible (CI-friendly verification + repo-owned quality gates)
+
+Core governance documents focus on **required outcomes**. Tool-specific operational steps live in playbooks.
+
+Operational playbooks in this repo:
+
+- `Docs/Playbooks/Governance-Upgrades.md`
+- `Docs/Playbooks/Governance-Exceptions.md`
+- `Docs/Playbooks/Target-Repo-Quality-Gates.md`
+- `Docs/Playbooks/GitHub-PR-Workflow.md`
+- `Docs/Playbooks/GitLab-MR-Workflow.md`
+
 ## What `agent-gov` does
 
 `agent-gov` generates and maintains governance documents in a target repo using:
