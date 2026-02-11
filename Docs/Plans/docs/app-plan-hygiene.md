@@ -51,4 +51,3 @@ Bring `Docs/Plans/**` back in sync with the actual repository state by marking p
 ## Notes / open questions
 
 - None.
-

@@ -2,7 +2,7 @@
 
 - Tests must be written before production code.
 - Code coverage must remain above 85%.
-- Generated code (openapi) is not tested. 
+- Generated code (openapi) is not tested.
 - Generated code (openapi) is excluded from code coverage requirement.
 - `make ci` must pass with no failures.
 - Quality gates must pass for a task to be considered complete.

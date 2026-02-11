@@ -70,4 +70,3 @@ Examples:
 
 - If a change affects system shape or long-term constraints, capture a decision record in `Docs/Decisions/`.
 - If adding/changing governance behavior in this repo, prefer updating the appropriate `Governance/` source (fragments, profiles, templates, playbooks) and capture decisions in `Docs/Decisions/` when they affect long-term constraints.
-

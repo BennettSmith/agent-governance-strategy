@@ -102,4 +102,3 @@ Breaking changes include (non-exhaustive):
 ## Change log
 
 - 2026-02-11 — Accepted
-

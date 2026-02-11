@@ -74,4 +74,3 @@ Governance content uses SemVer tags (`gov/vX.Y.Z`). Treat a governance content c
 
 - bumping `source.ref`, and
 - re-running `agent-gov sync`
-

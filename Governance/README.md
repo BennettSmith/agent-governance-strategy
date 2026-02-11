@@ -20,6 +20,5 @@ This folder is the **authoritative source** for governance content that will be 
 
 ## Notes
 
-- Target repos receive *generated* governance docs (single files with managed blocks + local addenda). This folder is **not** copied verbatim into targets.
+- Target repos receive _generated_ governance docs (single files with managed blocks + local addenda). This folder is **not** copied verbatim into targets.
 - Platform/tooling specifics should generally live as **playbooks** under the relevant profile, not in universal core fragments.
-

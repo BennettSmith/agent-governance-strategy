@@ -277,4 +277,3 @@ Architecture tests can:
   - a migration plan
   - a clear failure message
   - an owner responsible for keeping it healthy
-

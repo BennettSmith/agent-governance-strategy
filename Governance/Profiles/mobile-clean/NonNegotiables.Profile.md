@@ -36,4 +36,3 @@
 
 - Every use case has a markdown spec.
 - A single authoritative use‑case catalog must exist.
-

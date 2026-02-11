@@ -168,4 +168,3 @@ Provide identity lifecycle and authentication-state management for an end user a
 ## Change Log
 
 - 2026-02-05 — Initial version
-

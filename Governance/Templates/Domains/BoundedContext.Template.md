@@ -1,6 +1,7 @@
 # <Context Name> — Bounded Context
 
 ## Purpose
+
 <!-- Concise description of why this bounded context exists and the business capability it owns -->
 
 ---
@@ -8,14 +9,17 @@
 ## Scope
 
 ### In Scope
+
 <!-- Responsibilities and concepts this bounded context owns -->
 
 ### Out of Scope
+
 <!-- Explicitly list responsibilities and concepts this bounded context does NOT own -->
 
 ---
 
 ## Ubiquitous Language
+
 <!-- Shared terms with precise meanings used consistently within this context -->
 
 - **Term** — Definition
@@ -26,6 +30,7 @@
 ## Domain Model (High Level)
 
 ### Entities
+
 <!-- Domain objects with identity and lifecycle -->
 
 - **Entity Name**
@@ -34,6 +39,7 @@
   - Lifecycle Notes: <!-- Optional -->
 
 ### Value Types
+
 <!-- Immutable domain concepts defined by value -->
 
 - **Value Type Name**
@@ -41,6 +47,7 @@
   - Constraints: <!-- Invariants enforced by this value -->
 
 ### Aggregates
+
 <!-- Consistency boundaries -->
 
 - **Aggregate Root**
@@ -50,6 +57,7 @@
     - <!-- Declarative invariant -->
 
 ### Domain Events (Optional)
+
 <!-- Only include if meaningful reactions or auditing are required -->
 
 - **Event Name**
@@ -59,6 +67,7 @@
 ---
 
 ## Invariants
+
 <!-- Rules that must always hold true within this bounded context -->
 
 - <!-- Invariant statement -->
@@ -67,6 +76,7 @@
 ---
 
 ## Boundary Rules
+
 <!-- How this bounded context interacts with the rest of the system -->
 
 - Domain models are internal to this bounded context.
@@ -77,6 +87,7 @@
 ---
 
 ## Mapping Notes
+
 <!-- High-level guidance only; no implementation details -->
 
 - Use case boundary types are mapped to/from domain models in the application layer.
@@ -86,6 +97,7 @@
 ---
 
 ## Offline-First Considerations
+
 <!-- Constraints imposed by offline-first behavior -->
 
 - Domain state must be representable and enforceable locally.
@@ -95,6 +107,7 @@
 ---
 
 ## Open Questions
+
 <!-- Ambiguities or decisions that must be resolved -->
 
 - <!-- Question -->
@@ -103,6 +116,7 @@
 ---
 
 ## Related Use Cases
+
 <!-- Use cases that operate within this bounded context -->
 
 - <!-- Use Case Name -->
@@ -111,8 +125,8 @@
 ---
 
 ## Change Log
+
 <!-- Track intentional evolution of the bounded context -->
 
 - YYYY-MM-DD — Initial version
 - YYYY-MM-DD — <!-- Description of change -->
-

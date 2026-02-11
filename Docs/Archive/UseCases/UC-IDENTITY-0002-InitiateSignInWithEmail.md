@@ -22,7 +22,7 @@ bounded context’s domain.
 
 - Bounded context: `Identity`
 - Domain language: terms used here must align to this bounded context’s ubiquitous
-language.
+  language.
 
 ## Primary actor
 
@@ -180,4 +180,3 @@ Offline-first is the default. Explicitly specify behavior in each connectivity s
 - Given email delivery fails via the email port
   - When sign-in initiation is triggered
   - Then `SignInRejectedError(EmailDeliveryUnavailable)`
-

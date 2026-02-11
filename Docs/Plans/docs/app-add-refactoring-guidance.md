@@ -4,6 +4,7 @@ status: completed
 ---
 
 # Summary
+
 This change adds explicit guidance for refactoring legacy code in an orderly, reversible, small-step way, without weakening the target architecture constraints.
 
 It introduces a refactoring playbook and tightens the governing documents to clearly separate refactors from behavior changes.
@@ -54,4 +55,3 @@ It introduces a refactoring playbook and tightens the governing documents to cle
 - Enforceable refactoring constraints exist in `Non-Negotiables.md` under `Legacy & refactoring (core)`.
 - Refactoring protocol guidance exists in `Constitution.md` under `Legacy refactoring protocol (core)`.
 - Playbook exists at `Docs/Refactoring/Legacy-Refactoring-Playbook.md` and is emitted as a managed document via profile playbooks (stable path).
-

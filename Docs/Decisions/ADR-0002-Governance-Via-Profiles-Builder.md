@@ -94,4 +94,3 @@ The builder approach preserves developer ergonomics by generating platform/profi
 ## Change log
 
 - 2026-02-06 — Proposed
-

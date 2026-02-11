@@ -101,7 +101,7 @@ AGENT_GOV_TAG="agent-gov/v1.1.0" AGENT_GOV_GITLAB_REPO="bsmith.quanata/agent-gov
 Notes:
 
 - Requires GitLab CLI (`glab`) and authentication (recommended: `glab auth login`). This works cleanly for private repos.
-After downloading:
+  After downloading:
 
 - Add `tools/bin/agent-gov` to `.gitignore`
 - Run `tools/bin/agent-gov init --config .governance/config.yaml`
@@ -241,6 +241,7 @@ Once included, you get standard targets:
 - `make gov-init`
 - `make gov-sync`
 - `make gov-verify`
+- `make gov-ci` (CI-safe; verify only)
 - `make gov-build`
 
 #### Recommended “golden commands” in target repos
@@ -334,9 +335,13 @@ This repo uses `make` targets to run checks:
 - `make preflight`
 - `make ci` (format, tests, coverage gate, and a CLI smoke test)
 
+Markdown tooling requirements:
+
+- Node **22.x** + npm (see `.nvmrc`)
+- Install deterministically with `npm ci`
+
 For repo working agreements and quality gates, see:
 
 - `Non-Negotiables.md`
 - `Architecture.md`
 - `Constitution.md`
-

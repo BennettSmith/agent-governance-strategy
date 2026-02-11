@@ -10,4 +10,3 @@
 - Inbound adapters (HTTP/gRPC/consumers) must depend on application ports, not on domain internals.
 - Outbound adapters (DB, queues, external APIs) must be invoked via outbound ports/interfaces.
 - Business rules live in domain/application code, not in handlers/controllers/framework glue.
-

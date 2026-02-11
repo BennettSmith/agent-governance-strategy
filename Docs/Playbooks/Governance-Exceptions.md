@@ -54,4 +54,3 @@ If you reference an exception in Local Addenda, treat it as a pointer only (e.g.
 3. Add any compensating checks (mitigations) to reduce risk.
 4. Ensure the repo remains green on its quality gates (typically `make ci`) and that governance verification is still run (even if it allows an exception by design).
 5. Track the review/expiry date and remove the exception promptly once exit criteria are met.
-
