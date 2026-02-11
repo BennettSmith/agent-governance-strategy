@@ -57,6 +57,122 @@ documents:
 	}
 }
 
+func TestRun_Bootstrap_NonInteractive_EnvDefaultsSatisfyRequiredFlags(t *testing.T) {
+	tmp := t.TempDir()
+	srcRepo := filepath.Join(tmp, "govsrc")
+	target := filepath.Join(tmp, "target")
+
+	mustRun(t, tmp, "git", "init", srcRepo)
+	mustRun(t, srcRepo, "git", "config", "user.email", "test@example.com")
+	mustRun(t, srcRepo, "git", "config", "user.name", "Test")
+
+	writeFile(t, filepath.Join(srcRepo, "Governance", "Profiles", "docs-only", "profile.yaml"), strings.TrimSpace(`
+schemaVersion: 1
+id: docs-only
+documents: []
+`)+"\n")
+	mustRun(t, srcRepo, "git", "add", ".")
+	mustRun(t, srcRepo, "git", "commit", "-m", "gov")
+	mustRun(t, srcRepo, "git", "tag", "gov/v0.0.1")
+
+	if err := os.MkdirAll(target, 0o755); err != nil {
+		t.Fatalf("mkdir: %v", err)
+	}
+	cfgPath := filepath.Join(target, ".governance", "config.yaml")
+
+	t.Setenv("AGENT_GOV_SOURCE_REPO", srcRepo)
+	t.Setenv("AGENT_GOV_SOURCE_REF", "gov/v0.0.1")
+	t.Setenv("AGENT_GOV_PROFILE", "docs-only")
+	t.Setenv("AGENT_GOV_DOCS_ROOT", "docs")
+
+	var outBuf, errBuf bytes.Buffer
+	code := Run([]string{
+		"agent-gov", "bootstrap",
+		"--config", cfgPath,
+		"--non-interactive",
+	}, &outBuf, &errBuf)
+	if code != 0 {
+		t.Fatalf("bootstrap code=%d stderr=%s", code, errBuf.String())
+	}
+	b, err := os.ReadFile(cfgPath)
+	if err != nil {
+		t.Fatalf("read config: %v", err)
+	}
+	got := string(b)
+	if !strings.Contains(got, "repo: "+srcRepo) {
+		t.Fatalf("expected repo from env, got:\n%s", got)
+	}
+	if !strings.Contains(got, "ref: gov/v0.0.1") {
+		t.Fatalf("expected ref from env, got:\n%s", got)
+	}
+	if !strings.Contains(got, "profile: docs-only") {
+		t.Fatalf("expected profile from env, got:\n%s", got)
+	}
+	if !strings.Contains(got, "docsRoot: docs") {
+		t.Fatalf("expected docsRoot from env, got:\n%s", got)
+	}
+}
+
+func TestRun_Bootstrap_NonInteractive_FlagsOverrideEnv(t *testing.T) {
+	tmp := t.TempDir()
+	srcRepo := filepath.Join(tmp, "govsrc")
+	target := filepath.Join(tmp, "target")
+
+	mustRun(t, tmp, "git", "init", srcRepo)
+	mustRun(t, srcRepo, "git", "config", "user.email", "test@example.com")
+	mustRun(t, srcRepo, "git", "config", "user.name", "Test")
+
+	writeFile(t, filepath.Join(srcRepo, "Governance", "Profiles", "docs-only", "profile.yaml"), strings.TrimSpace(`
+schemaVersion: 1
+id: docs-only
+documents: []
+`)+"\n")
+	mustRun(t, srcRepo, "git", "add", ".")
+	mustRun(t, srcRepo, "git", "commit", "-m", "gov")
+	mustRun(t, srcRepo, "git", "tag", "gov/v0.0.1")
+
+	if err := os.MkdirAll(target, 0o755); err != nil {
+		t.Fatalf("mkdir: %v", err)
+	}
+	cfgPath := filepath.Join(target, ".governance", "config.yaml")
+
+	t.Setenv("AGENT_GOV_SOURCE_REPO", "SHOULD_NOT_USE")
+	t.Setenv("AGENT_GOV_SOURCE_REF", "SHOULD_NOT_USE")
+	t.Setenv("AGENT_GOV_PROFILE", "SHOULD_NOT_USE")
+	t.Setenv("AGENT_GOV_DOCS_ROOT", "envdocs")
+
+	var outBuf, errBuf bytes.Buffer
+	code := Run([]string{
+		"agent-gov", "bootstrap",
+		"--config", cfgPath,
+		"--source-repo", srcRepo,
+		"--source-ref", "gov/v0.0.1",
+		"--profile", "docs-only",
+		"--docs-root", ".",
+		"--non-interactive",
+	}, &outBuf, &errBuf)
+	if code != 0 {
+		t.Fatalf("bootstrap code=%d stderr=%s", code, errBuf.String())
+	}
+	b, err := os.ReadFile(cfgPath)
+	if err != nil {
+		t.Fatalf("read config: %v", err)
+	}
+	got := string(b)
+	if !strings.Contains(got, "repo: "+srcRepo) {
+		t.Fatalf("expected repo from flag, got:\n%s", got)
+	}
+	if !strings.Contains(got, "ref: gov/v0.0.1") {
+		t.Fatalf("expected ref from flag, got:\n%s", got)
+	}
+	if !strings.Contains(got, "profile: docs-only") {
+		t.Fatalf("expected profile from flag, got:\n%s", got)
+	}
+	if !strings.Contains(got, "docsRoot: .") {
+		t.Fatalf("expected docsRoot from flag, got:\n%s", got)
+	}
+}
+
 func TestRun_Bootstrap_ListProfiles_PrintsIDs(t *testing.T) {
 	tmp := t.TempDir()
 	srcRepo := filepath.Join(tmp, "govsrc")
@@ -353,6 +469,26 @@ func TestPromptBootstrapValues_ReadsMissingFields(t *testing.T) {
 	}
 }
 
+func TestPromptBootstrapValues_EmptyRefDefaultsToHEAD(t *testing.T) {
+	in := bytes.NewBufferString("repo-path\n\n")
+	var outBuf, errBuf bytes.Buffer
+
+	repo := ""
+	ref := ""
+	profile := "docs-only"
+	dRoot := ""
+
+	if err := promptBootstrapValues(in, &outBuf, &errBuf, t.TempDir(), &repo, &ref, &profile, &dRoot); err != nil {
+		t.Fatalf("prompt err: %v", err)
+	}
+	if ref != "HEAD" {
+		t.Fatalf("expected HEAD default, got %q", ref)
+	}
+	if !strings.Contains(outBuf.String(), "[HEAD]") {
+		t.Fatalf("expected prompt to show [HEAD] default, got:\n%s", outBuf.String())
+	}
+}
+
 func TestPromptBootstrapValues_SelectsProfileFromList(t *testing.T) {
 	tmp := t.TempDir()
 	srcRepo := filepath.Join(tmp, "govsrc")
@@ -423,6 +559,22 @@ func TestWriteConfigFile_RespectsForce(t *testing.T) {
 	}
 	if string(b) != "b: 2\n" {
 		t.Fatalf("expected overwritten content, got %q", string(b))
+	}
+}
+
+func TestPrintBootstrapSummary_PrintsAllFields(t *testing.T) {
+	var b bytes.Buffer
+	printBootstrapSummary(&b, ".governance/config.yaml", "repo", "ref", "profile", ".")
+	got := b.String()
+	if !strings.Contains(got, "bootstrap: using") {
+		t.Fatalf("expected prefix, got %q", got)
+	}
+	if !strings.Contains(got, "config=") ||
+		!strings.Contains(got, "sourceRepo=") ||
+		!strings.Contains(got, "sourceRef=") ||
+		!strings.Contains(got, "profile=") ||
+		!strings.Contains(got, "docsRoot=") {
+		t.Fatalf("expected fields, got %q", got)
 	}
 }
 

@@ -40,10 +40,15 @@ The target repo then provides a small wrapper (Makefile/script) that:
 
 #### Copy/paste bootstrap (GitLab Releases)
 
-This one-liner downloads the pinned tool into `tools/bin/agent-gov`:
+This one-liner downloads the pinned tool into `tools/bin/agent-gov` and runs `bootstrap` to generate `.governance/config.yaml`.
+Provide the governance source inputs via environment variables (team-safe defaults):
+
+- `AGENT_GOV_SOURCE_REPO`
+- `AGENT_GOV_SOURCE_REF`
+- `AGENT_GOV_PROFILE`
 
 ```bash
-AGENT_GOV_TAG="agent-gov/v1.1.0" AGENT_GOV_GITLAB_REPO="bsmith.quanata/agent-governance-strategy" bash -c 'set -euo pipefail; bin="tools/bin/agent-gov"; dir="$(dirname "$bin")"; mkdir -p "${dir}"; os="$(uname -s | tr "[:upper:]" "[:lower:]")"; arch="$(uname -m)"; [ "$arch" = "x86_64" ] && arch="amd64"; [ "$arch" = "aarch64" ] && arch="arm64"; asset="agent-gov_${os}_${arch}"; echo "downloading ${asset} from ${AGENT_GOV_GITLAB_REPO}@${AGENT_GOV_TAG}"; glab release download "${AGENT_GOV_TAG}" -R "${AGENT_GOV_GITLAB_REPO}" --asset-name "${asset}" -D "${dir}"; mv -f "${dir}/${asset}" "${bin}"; chmod +x "${bin}"; "${bin}" --version'
+AGENT_GOV_TAG="agent-gov/v1.1.0" AGENT_GOV_GITLAB_REPO="bsmith.quanata/agent-governance-strategy" AGENT_GOV_SOURCE_REPO="git@gitlab.com:bsmith.quanata/agent-governance-strategy.git" AGENT_GOV_SOURCE_REF="gov/v2026.02.10" AGENT_GOV_PROFILE="docs-only" bash -c 'set -euo pipefail; bin="tools/bin/agent-gov"; dir="$(dirname "$bin")"; mkdir -p "${dir}"; os="$(uname -s | tr "[:upper:]" "[:lower:]")"; arch="$(uname -m)"; [ "$arch" = "x86_64" ] && arch="amd64"; [ "$arch" = "aarch64" ] && arch="arm64"; asset="agent-gov_${os}_${arch}"; echo "downloading ${asset} from ${AGENT_GOV_GITLAB_REPO}@${AGENT_GOV_TAG}"; glab release download "${AGENT_GOV_TAG}" -R "${AGENT_GOV_GITLAB_REPO}" --asset-name "${asset}" -D "${dir}"; mv -f "${dir}/${asset}" "${bin}"; chmod +x "${bin}"; "$bin" bootstrap --config .governance/config.yaml --non-interactive; "$bin" --version'
 ```
 
 Notes:
@@ -52,7 +57,7 @@ Notes:
 After downloading:
 
 - Add `tools/bin/agent-gov` to `.gitignore`
-- Create `.governance/config.yaml` (see below), then run `tools/bin/agent-gov init --config .governance/config.yaml`
+- Run `tools/bin/agent-gov init --config .governance/config.yaml`
 
 ### 2) Add `.governance/config.yaml` to the target repo (team-safe default)
 
