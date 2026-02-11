@@ -128,13 +128,23 @@ Initial split notes for `Target-Repo-Quality-Gates.md` (to execute in later chec
       - `backend-go-hex` → `Docs/Playbooks/Quality-Gates-Go-Architecture-Enforcement.md`
       - `mobile-clean-ios` → `Docs/Playbooks/Quality-Gates-iOS-Architecture-Enforcement.md`
       - `mobile-clean-android` → `Docs/Playbooks/Quality-Gates-Kotlin-Architecture-Enforcement.md`
-- [ ] Checkpoint 5 — Dogfood both agent-gov usages in this repo (sync + verify)
+- [x] Checkpoint 5 — Dogfood both agent-gov usages in this repo (sync + verify)
   - Root scope (docs-only profile):
     - Run `agent-gov sync` and `agent-gov verify` against the root `.governance/config.yaml` (or the repo’s established wrapper/targets).
     - Confirm emitted playbooks/docs update as expected and there is no duplication/drift.
   - Embedded scope (`tools/gov`, backend-go-hex profile):
     - Run `agent-gov sync` and `agent-gov verify` against `tools/gov/.governance/config.yaml`.
     - Confirm embedded generated docs/playbooks update as expected.
+  - Notes:
+    - Root scope:
+      - `agent-gov sync --config .governance/config.yaml`
+      - `agent-gov verify --config .governance/config.yaml`
+      - `agent-gov init --config .governance/config.yaml` (creates newly-added playbooks/readmes)
+    - Embedded scope (`tools/gov`):
+      - `agent-gov sync --config tools/gov/.governance/config.yaml`
+      - `agent-gov verify --config tools/gov/.governance/config.yaml`
+      - `agent-gov init --config tools/gov/.governance/config.yaml` (creates newly-added playbooks/readmes)
+    - Result: both `verify` runs were ok; root and embedded generated docs/playbooks updated (managed blocks + formatting).
 - [ ] Checkpoint 6 — Consistency pass (README ↔ ADRs ↔ playbooks)
   - Ensure the “happy path” for a target repo adopter is clear
 - [ ] Checkpoint 7 — Run quality gates (`make ci`) and ensure no docs/link regressions
