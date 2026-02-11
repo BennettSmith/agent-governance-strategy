@@ -40,7 +40,7 @@ coverage: ## Enforce minimum CLI test coverage
 	@cd tools/gov && rm -f coverage.out coverage.txt
 	@cd tools/gov && GOFLAGS="$(TOOLS_GOV_GOFLAGS)" go test ./... -coverprofile=coverage.out >/dev/null
 	@cd tools/gov && GOFLAGS="$(TOOLS_GOV_GOFLAGS)" go tool cover -func=coverage.out | tee coverage.txt >/dev/null
-	@cd tools/gov && awk '/^total:/ {gsub(/%/,"",$$3); pct=$$3} END { if (pct+0 < $(GOV_MIN_COVERAGE)) { printf "coverage %.1f%% is below %d%%\\n", pct, $(GOV_MIN_COVERAGE); exit 1 } else { printf "coverage %.1f%%\\n", pct; } }' coverage.txt
+	@cd tools/gov && awk '/^total:/ {gsub(/%/,"",$$3); pct=$$3} END { if (pct+0 < $(GOV_MIN_COVERAGE)) { printf "coverage %.1f%% is below %d%%\n", pct, $(GOV_MIN_COVERAGE); exit 1 } else { printf "coverage %.1f%%\n", pct; } }' coverage.txt
 
 gov-smoke: ## Smoke test agent-gov init/verify
 	@echo "Smoke test agent-gov init/verify"

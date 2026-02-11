@@ -41,6 +41,14 @@ type profileInfo struct {
 	Description string
 }
 
+const (
+	envSourceRepo = "AGENT_GOV_SOURCE_REPO"
+	envSourceRef  = "AGENT_GOV_SOURCE_REF"
+	envProfile    = "AGENT_GOV_PROFILE"
+	envDocsRoot   = "AGENT_GOV_DOCS_ROOT"
+	envCacheDir   = "AGENT_GOV_CACHE_DIR"
+)
+
 func runBootstrap(subArgs []string, stdout, stderr io.Writer) int {
 	fs := flag.NewFlagSet("bootstrap", flag.ContinueOnError)
 	fs.SetOutput(stderr)
@@ -49,7 +57,8 @@ func runBootstrap(subArgs []string, stdout, stderr io.Writer) int {
 	sourceRepo := fs.String("source-repo", "", "governance source repo URL/path (required in --non-interactive)")
 	sourceRef := fs.String("source-ref", "", "governance source ref/tag/SHA (required in --non-interactive)")
 	profileID := fs.String("profile", "", "governance profile id (required in --non-interactive)")
-	docsRoot := fs.String("docs-root", ".", "docs root inside target repo")
+	// Keep empty so env var defaults can apply; we set "." later if still empty.
+	docsRoot := fs.String("docs-root", "", "docs root inside target repo")
 	cacheDirFlag := fs.String("cache-dir", "", "cache dir for source fetch (optional)")
 
 	managedBlockPrefix := fs.String("managed-block-prefix", "GOV", "managed block marker prefix")
@@ -66,7 +75,34 @@ func runBootstrap(subArgs []string, stdout, stderr io.Writer) int {
 		return 2
 	}
 
+	// Apply env-var defaults (flag values win).
+	if strings.TrimSpace(*sourceRepo) == "" {
+		if v := strings.TrimSpace(os.Getenv(envSourceRepo)); v != "" {
+			*sourceRepo = v
+		}
+	}
+	if strings.TrimSpace(*sourceRef) == "" {
+		if v := strings.TrimSpace(os.Getenv(envSourceRef)); v != "" {
+			*sourceRef = v
+		}
+	}
+	if strings.TrimSpace(*profileID) == "" {
+		if v := strings.TrimSpace(os.Getenv(envProfile)); v != "" {
+			*profileID = v
+		}
+	}
+	if strings.TrimSpace(*docsRoot) == "" {
+		if v := strings.TrimSpace(os.Getenv(envDocsRoot)); v != "" {
+			*docsRoot = v
+		}
+	}
+
 	fetchCacheDir := strings.TrimSpace(*cacheDirFlag)
+	if fetchCacheDir == "" {
+		if v := strings.TrimSpace(os.Getenv(envCacheDir)); v != "" {
+			fetchCacheDir = v
+		}
+	}
 	if fetchCacheDir == "" {
 		cd, err := defaultCacheDir()
 		if err != nil {
@@ -82,6 +118,14 @@ func runBootstrap(subArgs []string, stdout, stderr io.Writer) int {
 			fmt.Fprintf(stderr, "bootstrap failed: %v\n", err)
 			return 1
 		}
+	}
+
+	if strings.TrimSpace(*docsRoot) == "" {
+		*docsRoot = "."
+	}
+
+	if interactive {
+		printBootstrapSummary(stderr, *configPath, *sourceRepo, *sourceRef, *profileID, *docsRoot)
 	}
 
 	// In non-interactive mode (and as a general safety net), require the essentials.
@@ -262,7 +306,7 @@ func promptBootstrapValues(stdin io.Reader, stdout, stderr io.Writer, cacheDir s
 	}
 
 	if strings.TrimSpace(*sourceRef) == "" {
-		fmt.Fprint(stdout, "source ref (tag/sha, default HEAD): ")
+		fmt.Fprint(stdout, "source ref (tag/sha) [HEAD]: ")
 		v, _ := r.ReadString('\n')
 		v = strings.TrimSpace(v)
 		if v == "" {
@@ -311,4 +355,16 @@ func promptBootstrapValues(stdin io.Reader, stdout, stderr io.Writer, cacheDir s
 		*docsRoot = "."
 	}
 	return nil
+}
+
+func printBootstrapSummary(w io.Writer, configPath, sourceRepo, sourceRef, profileID, docsRoot string) {
+	configPath = strings.TrimSpace(configPath)
+	sourceRepo = strings.TrimSpace(sourceRepo)
+	sourceRef = strings.TrimSpace(sourceRef)
+	profileID = strings.TrimSpace(profileID)
+	docsRoot = strings.TrimSpace(docsRoot)
+
+	// Print to stderr (interactive-only) to avoid breaking script stdout parsing.
+	fmt.Fprintf(w, "bootstrap: using config=%q sourceRepo=%q sourceRef=%q profile=%q docsRoot=%q\n",
+		configPath, sourceRepo, sourceRef, profileID, docsRoot)
 }
