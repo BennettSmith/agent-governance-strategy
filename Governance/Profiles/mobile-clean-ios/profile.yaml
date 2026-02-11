@@ -7,4 +7,6 @@ description: Mobile app governance for iOS (Clean Architecture), with iOS-specif
 playbooks:
   - source: ./Playbooks/iOS-Packaging.md
     output: Docs/Playbooks/iOS-Packaging.md
+  - source: ./Playbooks/Quality-Gates-iOS-Architecture-Enforcement.md
+    output: Docs/Playbooks/Quality-Gates-iOS-Architecture-Enforcement.md
 
