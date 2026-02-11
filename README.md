@@ -1,6 +1,26 @@
 # agent-governance-strategy
 
+## What this repo is (and isn’t)
+
 This repository is a **governance source + toolchain**. It is not a product/runtime system.
+
+We built it to help teams adopt a consistent governance baseline across many repos, while still allowing each repo to keep project-owned notes and adaptations.
+
+- **Goals**
+  - Provide a single, reviewable source of truth for governance content.
+  - Apply governance to target repos deterministically (CI-friendly).
+  - Preserve repo-owned customization via “Local Addenda (project-owned)”.
+- **Non-goals**
+  - Automatically define stack-specific `fmt/lint/ci/test` targets for every consuming repo.
+  - Surprise coupling: governance is applied/verified explicitly by the target repo.
+
+## Mental model
+
+- **Governance content** lives in `Governance/` (core fragments, profiles, templates, playbooks).
+- **`agent-gov`** (in `tools/gov/`) is the CLI that applies that content to a target repo using `.governance/config.yaml`.
+- Target repos receive documents with:
+  - **Managed blocks**: deterministic, tool-owned sections updated in-place.
+  - **Local addenda**: project-owned sections preserved across syncs.
 
 - **Governance sources** live in `Governance/` (core fragments, profiles, templates, playbooks).
 - The CLI tool **`agent-gov`** lives in `tools/gov/` and is used to **init / sync / verify** governance docs in a target repo using **managed blocks**.
