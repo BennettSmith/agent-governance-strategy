@@ -53,7 +53,7 @@ As a starting point, `make ci` often includes:
 
 Keep `make fmt` available for developers (may write), but keep `make ci` write-free.
 
-## Architecture enforcement (examples)
+## Architecture enforcement
 
 Architecture enforcement should be:
 
@@ -61,208 +61,17 @@ Architecture enforcement should be:
 - **mechanical** (enforced by a tool, not by review memory)
 - **scoped** (enforce at boundaries you can describe and test)
 
-### SwiftLint-style architecture enforcement examples (iOS)
+### Profile example playbooks
 
-SwiftLint can enforce architecture rules using custom rules and file path scoping. The examples below show common patterns; tailor them to your project layout.
+Core governance keeps this playbook tool-neutral. Platform- and stack-specific examples are emitted by profiles as additional playbooks.
 
-#### Example 1: forbid importing a UI framework in a “Domain” layer
+If your profile emits them, see:
 
-Goal: keep domain logic independent from UI frameworks.
+- iOS (SwiftLint examples): `Docs/Playbooks/Quality-Gates-iOS-Architecture-Enforcement.md`
+- Go (golangci-lint / depguard examples): `Docs/Playbooks/Quality-Gates-Go-Architecture-Enforcement.md`
+- Kotlin/JVM (Detekt / ArchUnit examples): `Docs/Playbooks/Quality-Gates-Kotlin-Architecture-Enforcement.md`
 
-Conceptual rule:
-
-- Files under `App/Domain/**` must not `import SwiftUI` or `import UIKit`.
-
-Example configuration sketch:
-
-```yaml
-custom_rules:
-  no_swiftui_in_domain:
-    name: "No SwiftUI in Domain"
-    included: "App/Domain"
-    regex: "^\\s*import\\s+SwiftUI\\b"
-    message: "Domain must not depend on SwiftUI. Move UI-facing code to the UI layer."
-    severity: error
-
-  no_uikit_in_domain:
-    name: "No UIKit in Domain"
-    included: "App/Domain"
-    regex: "^\\s*import\\s+UIKit\\b"
-    message: "Domain must not depend on UIKit. Move UI-facing code to the UI layer."
-    severity: error
-```
-
-Notes:
-
-- Keep rules **path-scoped** (`included`) to avoid false positives in other layers.
-- Prefer clear messages that tell developers where to move the code.
-
-#### Example 2: enforce “no cross-feature imports” (feature isolation)
-
-Goal: prevent a feature module/layer from importing another feature directly.
-
-Conceptual rule:
-
-- `App/Features/<FeatureA>/**` must not import types from `FeatureB`.
-
-A coarse but effective approach uses import pattern matching:
-
-```yaml
-custom_rules:
-  no_feature_to_feature_imports:
-    name: "No cross-feature imports"
-    included: "App/Features"
-    regex: "^\\s*import\\s+AppFeature(?!Common)\\w+\\b"
-    message: "Features must not import other features directly. Depend on shared interfaces or a common module."
-    severity: error
-```
-
-Notes:
-
-- Regex-based rules are blunt instruments; keep them **simple** and supported by conventions (naming, folder layout).
-- For stronger guarantees, prefer build-system/module boundaries (e.g., SPM packages, Xcode targets) and allow SwiftLint rules to serve as an early, fast signal.
-
-#### Example 3: forbid `Foundation` in a “pure” layer (extreme purity)
-
-Some teams define a layer that should not depend on `Foundation` for testability/portability.
-
-```yaml
-custom_rules:
-  no_foundation_in_pure_layer:
-    name: "No Foundation in Pure layer"
-    included: "App/Pure"
-    regex: "^\\s*import\\s+Foundation\\b"
-    message: "Pure layer must not depend on Foundation."
-    severity: warning
-```
-
-Use warnings sparingly; if the rule matters, prefer errors and provide a migration plan.
-
-### Go tooling architecture enforcement examples
-
-Go projects often enforce architecture through a mix of:
-
-- **module boundaries** (separate packages/modules for hard isolation),
-- **import restrictions** (preventing forbidden dependencies between layers), and
-- **compile-time/test-time checks** that run in `make lint` / `make ci`.
-
-#### Example 1: forbid importing an infrastructure adapter from a core package (imports rule)
-
-Goal: keep core logic independent from infrastructure concerns.
-
-Conceptual rule:
-
-- Packages under `internal/core/**` must not import packages under `internal/adapters/**`.
-
-One practical approach is to enforce this with `golangci-lint` using `depguard` in your `.golangci.yml`:
-
-```yaml
-linters:
-  enable:
-    - depguard
-
-linters-settings:
-  depguard:
-    rules:
-      core-no-adapters:
-        files:
-          - "internal/core/**/*.go"
-        deny:
-          - pkg: "your.module/internal/adapters"
-            desc: "core must not depend on adapters; depend on ports/interfaces instead"
-```
-
-Notes:
-
-- Prefer scoping by **file glob** so the rule is precise and fast.
-- Use a deny list that matches your module import paths.
-
-#### Example 2: forbid `net/http` usage in the domain layer (purity boundary)
-
-Goal: prevent accidental coupling to transport concerns.
-
-Conceptual rule:
-
-- Packages under `internal/domain/**` must not import `net/http`.
-
-Example (also `depguard`):
-
-```yaml
-linters-settings:
-  depguard:
-    rules:
-      domain-no-http:
-        files:
-          - "internal/domain/**/*.go"
-        deny:
-          - pkg: "net/http"
-            desc: "domain must not depend on net/http; keep transport concerns at the edge"
-```
-
-#### Example 3: enforce “no TODOs” or “no fmt.Printf” in production code (optional)
-
-These rules are not architecture boundaries, but they are common “quality gates” that can be enforced mechanically. If you use them, keep them scoped and actionable.
-
-Examples (via `golangci-lint` linters such as `forbidigo`, `godox`, etc.) are viable, but prefer rules that don’t create noise.
-
-### Kotlin tooling architecture enforcement examples
-
-Kotlin/JVM projects often combine:
-
-- **Gradle module boundaries** (strong isolation),
-- **static analysis** (Detekt / Ktlint), and
-- **architecture tests** (e.g., ArchUnit) for rules that are hard to express as simple lint.
-
-#### Example 1: forbid Android/UI imports in a domain module (Detekt forbidden imports)
-
-Goal: keep domain code free of Android/UI dependencies.
-
-Conceptual rule:
-
-- In `:domain`, forbid `android.*`, `androidx.*`, and UI frameworks.
-
-Detekt’s `ForbiddenImport` can enforce this via your `detekt.yml`:
-
-```yaml
-style:
-  ForbiddenImport:
-    active: true
-    imports:
-      - "android.*"
-      - "androidx.*"
-      - "kotlinx.coroutines.flow.FlowPreview" # example of intentionally forbidden API
-```
-
-Notes:
-
-- Combine with **module boundaries** so the rule is defense-in-depth rather than your only guardrail.
-- Prefer patterns that are stable and low-noise.
-
-#### Example 2: enforce “no cross-feature imports” with modules
-
-Goal: ensure features don’t depend on each other directly.
-
-Conceptual rule:
-
-- `:featureA` must not depend on `:featureB`; both may depend on `:core` or `:shared`.
-
-The most reliable enforcement is at the build system level:
-
-- declare dependencies explicitly in Gradle
-- avoid “catch-all” modules that every feature depends on
-- keep `api` usage narrow; prefer `implementation`
-
-You can add a lightweight check in CI that fails if forbidden project dependencies are present (some teams implement this as a small Gradle task).
-
-#### Example 3: architecture tests for package/layer rules (ArchUnit)
-
-For rules like “UI may depend on domain, but domain may not depend on UI” when packages are large and imports are indirect, architecture tests are often clearer and less brittle than regex rules.
-
-Architecture tests can:
-
-- run as part of `test` (and therefore `ci`)
-- produce clear failure messages
-- scale as the codebase grows
+If your stack is not covered by an existing profile, treat that as a signal to add a profile-specific playbook rather than placing stack-specific examples in core.
 
 ### Reliability guidance for architecture rules
 

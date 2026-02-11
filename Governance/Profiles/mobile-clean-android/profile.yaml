@@ -1,0 +1,10 @@
+schemaVersion: 1
+id: mobile-clean-android
+extends:
+  - ../mobile-clean/profile.yaml
+description: Mobile app governance for Android (Clean Architecture), with Android/JVM-specific playbooks.
+
+playbooks:
+  - source: ./Playbooks/Quality-Gates-Kotlin-Architecture-Enforcement.md
+    output: Docs/Playbooks/Quality-Gates-Kotlin-Architecture-Enforcement.md
+

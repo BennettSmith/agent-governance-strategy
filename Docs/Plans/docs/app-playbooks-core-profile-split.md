@@ -106,8 +106,14 @@ Initial split notes for `Target-Repo-Quality-Gates.md` (to execute in later chec
       - `Docs/Playbooks/Governance-Exceptions.md` → `Governance/Core/Playbooks/Governance-Exceptions.md`
       - `Docs/Playbooks/Target-Repo-Quality-Gates.md` → `Governance/Core/Playbooks/Target-Repo-Quality-Gates.md`
     - Updated `README.md` playbook links to point at the new governance source paths (while noting the emitted target paths).
-- [ ] Checkpoint 3 — Move profile-specific playbooks into `Governance/Profiles/<id>/Playbooks/`
+- [x] Checkpoint 3 — Move profile-specific playbooks into `Governance/Profiles/<id>/Playbooks/`
   - Confirm ownership boundaries and avoid cross-profile drift
+  - Notes:
+    - Split platform-specific “architecture enforcement examples” out of core `Target-Repo-Quality-Gates.md` into profile playbooks:
+      - `Governance/Profiles/backend-go-hex/Playbooks/Quality-Gates-Go-Architecture-Enforcement.md`
+      - `Governance/Profiles/mobile-clean-ios/Playbooks/Quality-Gates-iOS-Architecture-Enforcement.md`
+      - `Governance/Profiles/mobile-clean-android/Playbooks/Quality-Gates-Kotlin-Architecture-Enforcement.md` (new profile)
+    - Core playbook now links to the emitted target paths for those profile playbooks (to be wired in `profile.yaml` in Checkpoint 4).
 - [ ] Checkpoint 4 — Update `profile.yaml` manifests to emit correct playbooks into target repos
   - Verify the emitted target paths and naming are consistent across profiles
   - Ensure `Docs/Playbooks/README.md` and `Docs/Playbooks/Local/README.md` are emitted (so folders are created)
