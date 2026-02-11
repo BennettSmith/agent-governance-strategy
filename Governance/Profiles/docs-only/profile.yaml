@@ -33,4 +33,14 @@ playbooks:
     output: Docs/Playbooks/GitLab-MR-Workflow.md
   - source: ../../Core/Playbooks/GitHub-PR-Workflow.md
     output: Docs/Playbooks/GitHub-PR-Workflow.md
+  - source: ../../Core/Playbooks/Docs-Playbooks-README.md
+    output: Docs/Playbooks/README.md
+  - source: ../../Core/Playbooks/Docs-Playbooks-Local-README.md
+    output: Docs/Playbooks/Local/README.md
+  - source: ../../Core/Playbooks/Governance-Upgrades.md
+    output: Docs/Playbooks/Governance-Upgrades.md
+  - source: ../../Core/Playbooks/Governance-Exceptions.md
+    output: Docs/Playbooks/Governance-Exceptions.md
+  - source: ../../Core/Playbooks/Target-Repo-Quality-Gates.md
+    output: Docs/Playbooks/Target-Repo-Quality-Gates.md
 

@@ -15,7 +15,9 @@ This folder is the **authoritative source** for governance content that will be 
 ## v1 profiles
 
 - `docs-only` (builder-repo governance; no product/runtime architecture assumptions)
-- `mobile-clean-ios`
+- `mobile-clean` (base profile; platform-neutral, extended by variants)
+- `mobile-clean-ios` (extends `mobile-clean`)
+- `mobile-clean-android` (extends `mobile-clean`)
 - `backend-go-hex`
 
 ## Notes
