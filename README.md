@@ -41,11 +41,18 @@ Key decision records in this repo:
 
 Operational playbooks in this repo:
 
-- `Governance/Core/Playbooks/Governance-Upgrades.md` (emitted to target repos at `Docs/Playbooks/Governance-Upgrades.md`)
-- `Governance/Core/Playbooks/Governance-Exceptions.md` (emitted to target repos at `Docs/Playbooks/Governance-Exceptions.md`)
-- `Governance/Core/Playbooks/Target-Repo-Quality-Gates.md` (emitted to target repos at `Docs/Playbooks/Target-Repo-Quality-Gates.md`)
+- `Docs/Playbooks/README.md`
+- `Docs/Playbooks/Local/README.md`
+- `Docs/Playbooks/Governance-Upgrades.md`
+- `Docs/Playbooks/Governance-Exceptions.md`
+- `Docs/Playbooks/Target-Repo-Quality-Gates.md`
 - `Docs/Playbooks/GitHub-PR-Workflow.md`
 - `Docs/Playbooks/GitLab-MR-Workflow.md`
+
+Notes:
+
+- Governance-owned playbooks are emitted into target repos under `Docs/Playbooks/`.
+- The source-of-truth for governance-owned playbooks lives under `Governance/Core/Playbooks/` and `Governance/Profiles/**/Playbooks/` and is wired by `Governance/Profiles/**/profile.yaml`.
 
 ## What `agent-gov` does
 

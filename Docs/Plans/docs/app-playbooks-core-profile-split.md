@@ -145,8 +145,11 @@ Initial split notes for `Target-Repo-Quality-Gates.md` (to execute in later chec
       - `agent-gov verify --config tools/gov/.governance/config.yaml`
       - `agent-gov init --config tools/gov/.governance/config.yaml` (creates newly-added playbooks/readmes)
     - Result: both `verify` runs were ok; root and embedded generated docs/playbooks updated (managed blocks + formatting).
-- [ ] Checkpoint 6 — Consistency pass (README ↔ ADRs ↔ playbooks)
+- [x] Checkpoint 6 — Consistency pass (README ↔ ADRs ↔ playbooks)
   - Ensure the “happy path” for a target repo adopter is clear
+  - Notes:
+    - Updated root `README.md` to link to emitted playbooks under `Docs/Playbooks/` and added a note pointing contributors to `Governance/**/Playbooks/` sources.
+    - Updated `Governance/README.md` profile list to include `mobile-clean` and the new `mobile-clean-android` profile.
 - [ ] Checkpoint 7 — Run quality gates (`make ci`) and ensure no docs/link regressions
 - [ ] Final checkpoint — PR wrap-up (final approval gate)
 
