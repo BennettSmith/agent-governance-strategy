@@ -35,6 +35,10 @@ Governance is treated like a shared dependency:
 
 Core governance documents focus on **required outcomes**. Tool-specific operational steps live in playbooks.
 
+Key decision records in this repo:
+
+- `Docs/Decisions/ADR-0004-Governance-Content-SemVer-Policy.md` (governance content SemVer policy and breaking-change criteria)
+
 Operational playbooks in this repo:
 
 - `Docs/Playbooks/Governance-Upgrades.md`

@@ -6,6 +6,10 @@ Core policy (already decided in this repo): **exceptions live in MADRs** under `
 
 Important: the **exception MADR is created in the target repo** (the repo taking on the exception), not in this governance repo. This governance repo defines the policy and provides the playbook/template; each target repo records its own exception decisions locally.
 
+Related:
+
+- Governance content versioning policy: `Docs/Decisions/ADR-0004-Governance-Content-SemVer-Policy.md`
+
 ## What counts as an exception
 
 An exception is any intentional deviation from centrally defined governance expectations that would otherwise be enforced or treated as required in the target repo. Examples:

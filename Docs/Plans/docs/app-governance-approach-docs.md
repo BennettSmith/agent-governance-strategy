@@ -100,7 +100,7 @@ Improve and clarify the documentation for the multi-repo governance approach in 
 - [x] Checkpoint 7 — Extract/adopt best ideas from scratch notes (`multi-repo-governance-strategy.md`) into tracked docs; then delete the scratch file (must remain untracked)
 - [x] Checkpoint 8 — Implement golden commands for this repo (add markdown fmt/lint; wire into `make ci`)
   - Add `gov-ci` to `Governance/Templates/Make/agent-gov.mk` and update README to recommend `ci: gov-ci` in consuming repos
-- [ ] Checkpoint 9 — Consistency + cross-links pass (README ↔ playbooks ↔ governing docs)
+- [x] Checkpoint 9 — Consistency + cross-links pass (README ↔ playbooks ↔ governing docs)
 - [ ] Checkpoint 10 — Run quality gates and ensure docs render cleanly (links, headings, no contradictory guidance)
 - [ ] Final checkpoint — PR wrap-up (final approval gate)
 

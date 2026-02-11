@@ -4,6 +4,11 @@ This playbook describes how teams should implement **repeatable, tool-enforced q
 
 Governance provides shared expectations (and verification of managed blocks). Target repos still need **repo-owned** enforcement for product code quality, architecture boundaries, and delivery checks.
 
+Related playbooks:
+
+- `Docs/Playbooks/Governance-Upgrades.md`
+- `Docs/Playbooks/Governance-Exceptions.md`
+
 ## Principles
 
 - **Make it repeatable**: the same command should behave the same on every machine and in CI.
