@@ -15,6 +15,14 @@ import (
 
 const defaultConfigPath = ".governance/config.yaml"
 
+// Build metadata. These are intended to be set at build time via:
+// -ldflags "-X agent-governance-strategy/tools/gov/internal/cli.Version=... -X ...Commit=... -X ...Date=..."
+var (
+	Version = "dev"
+	Commit  = ""
+	Date    = ""
+)
+
 func Run(args []string, stdout, stderr io.Writer) int {
 	if len(args) < 2 {
 		printUsage(stderr)
@@ -23,6 +31,9 @@ func Run(args []string, stdout, stderr io.Writer) int {
 
 	cmd := args[1]
 	switch cmd {
+	case "version", "-v", "--version":
+		printVersion(stdout)
+		return 0
 	case "help", "-h", "--help":
 		printUsage(stdout)
 		return 0
@@ -297,6 +308,7 @@ func printUsage(w io.Writer) {
 	fmt.Fprintln(w, "agent-gov <command> [--config PATH] [options]")
 	fmt.Fprintln(w)
 	fmt.Fprintln(w, "Commands:")
+	fmt.Fprintln(w, "  version  Print the agent-gov version")
 	fmt.Fprintln(w, "  preflight Run branch/baseline sanity checks")
 	fmt.Fprintln(w, "  bootstrap Create .governance/config.yaml (optionally run init)")
 	fmt.Fprintln(w, "  init     Initialize governance docs in this repo")
@@ -309,4 +321,17 @@ func printUsage(w io.Writer) {
 	fmt.Fprintln(w)
 	fmt.Fprintln(w, "Build options:")
 	fmt.Fprintln(w, "  --out DIR       Output directory (required)")
+}
+
+func printVersion(w io.Writer) {
+	v := strings.TrimSpace(Version)
+	if v == "" {
+		v = "dev"
+	}
+	c := strings.TrimSpace(Commit)
+	if c != "" {
+		fmt.Fprintf(w, "%s (%s)\n", v, c)
+		return
+	}
+	fmt.Fprintln(w, v)
 }
