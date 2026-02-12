@@ -39,6 +39,8 @@ playbooks:
     output: Docs/Playbooks/GitLab-MR-Workflow.md
   - source: ../../Core/Playbooks/GitHub-PR-Workflow.md
     output: Docs/Playbooks/GitHub-PR-Workflow.md
+  - source: ../../Core/Playbooks/Agent-Checkpoint-Workflow.md
+    output: Docs/Playbooks/Agent-Checkpoint-Workflow.md
   - source: ../../Core/Playbooks/Docs-Playbooks-README.md
     output: Docs/Playbooks/README.md
   - source: ../../Core/Playbooks/Docs-Playbooks-Local-README.md
