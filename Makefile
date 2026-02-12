@@ -61,13 +61,13 @@ fmt: go-fmt md-fmt ## Format sources
 
 go-fmt: ## Format Go sources
 	@echo "Formatting Go sources"
-	@cd tools/gov && gofmt -w $$(git ls-files '*.go')
+	@cd tools/gov && gofmt -w $$(git ls-files '*.go' ':!vendor/**')
 
 fmt-check: go-fmt-check md-fmt-check ## Check formatting (no writes)
 
 go-fmt-check: ## Check Go formatting (no writes)
 	@echo "Checking Go formatting"
-	@cd tools/gov && test -z "$$(gofmt -l $$(git ls-files '*.go'))"
+	@cd tools/gov && test -z "$$(gofmt -l $$(git ls-files '*.go' ':!vendor/**'))"
 
 lint: md-lint ## Lint (markdown + repo checks)
 	@true

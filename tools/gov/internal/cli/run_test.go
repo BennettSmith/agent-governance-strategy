@@ -53,6 +53,28 @@ func TestRun_DashH_PrintsUsage(t *testing.T) {
 	}
 }
 
+func TestRun_VersionCommand_PrintsVersion(t *testing.T) {
+	var out, errOut bytes.Buffer
+	code := Run([]string{"agent-gov", "version"}, &out, &errOut)
+	if code != 0 {
+		t.Fatalf("expected 0, got %d stderr=%s", code, errOut.String())
+	}
+	if strings.TrimSpace(out.String()) == "" {
+		t.Fatalf("expected version output in stdout, got empty")
+	}
+}
+
+func TestRun_DashDashVersion_PrintsVersion(t *testing.T) {
+	var out, errOut bytes.Buffer
+	code := Run([]string{"agent-gov", "--version"}, &out, &errOut)
+	if code != 0 {
+		t.Fatalf("expected 0, got %d stderr=%s", code, errOut.String())
+	}
+	if strings.TrimSpace(out.String()) == "" {
+		t.Fatalf("expected version output in stdout, got empty")
+	}
+}
+
 func TestRun_Build_EndToEnd_FromLocalTaggedGovernanceRepo(t *testing.T) {
 	// This is an end-to-end CLI test that exercises:
 	// config parsing, local repo path resolution, source fetch, profile loading, and build output.

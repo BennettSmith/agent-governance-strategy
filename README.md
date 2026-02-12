@@ -25,6 +25,28 @@ We built it to help teams adopt a consistent governance baseline across many rep
 - **Governance sources** live in `Governance/` (core fragments, profiles, templates, playbooks).
 - The CLI tool **`agent-gov`** lives in `tools/gov/` and is used to **init / sync / verify** governance docs in a target repo using **managed blocks**.
 
+## Quick start (target repo)
+
+Fastest path to adopt `agent-gov` in a target repo:
+
+1. Download a **pinned** `agent-gov` binary into your repo (example path: `tools/bin/agent-gov`) and add it to `.gitignore`.
+2. Create `.governance/config.yaml` (generate it with `bootstrap`).
+3. Run `init` once to write docs, then use `verify` in CI (and `sync` only when you intentionally upgrade pins).
+
+Minimal command sequence:
+
+```bash
+tools/bin/agent-gov --version
+tools/bin/agent-gov bootstrap --config .governance/config.yaml --non-interactive
+tools/bin/agent-gov init --config .governance/config.yaml
+tools/bin/agent-gov verify --config .governance/config.yaml
+```
+
+Notes:
+
+- If you omit `--config`, `agent-gov` auto-discovers the nearest `.governance/config.yaml` by walking upward from the current working directory.
+- For shared team workflows, prefer committing a **remote** `source.repo` URL (not a machine-local path).
+
 ## Governance as code (principles vs enforcement)
 
 Governance is treated like a shared dependency:
@@ -63,6 +85,10 @@ Notes:
 
 Commands:
 
+- `version` (or `--version` / `-v`): print the `agent-gov` tool version
+- `help` (or `--help` / `-h`): print usage
+- `preflight`: run branch/baseline sanity checks (builder repo workflow)
+- `bootstrap`: create `.governance/config.yaml` (optionally run `init`)
 - `init`: create governance docs with managed blocks + local addenda
 - `sync`: update managed blocks in-place
 - `verify`: check that managed blocks match expected content (CI-friendly)

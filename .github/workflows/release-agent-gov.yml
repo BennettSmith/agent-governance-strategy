@@ -78,7 +78,9 @@ jobs:
           set -eu
           mkdir -p dist
           asset="agent-gov_${GOOS}_${GOARCH}"
-          go build -trimpath -ldflags "-s -w" -o "dist/${asset}" ./cmd/agent-gov
+          commit="$(git rev-parse --short=12 HEAD)"
+          build_date="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          go build -trimpath -ldflags "-s -w -X agent-governance-strategy/tools/gov/internal/cli.Version=${{ github.ref_name }} -X agent-governance-strategy/tools/gov/internal/cli.Commit=${commit} -X agent-governance-strategy/tools/gov/internal/cli.Date=${build_date}" -o "dist/${asset}" ./cmd/agent-gov
 
       - name: Upload release asset
         uses: softprops/action-gh-release@v2
