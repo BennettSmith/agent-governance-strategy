@@ -168,8 +168,10 @@ build_and_upload:
       (
         cd tools/gov
         mkdir -p dist
+        commit="$(git rev-parse --short=12 HEAD)"
+        build_date="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
         GOFLAGS="-mod=mod" GOOS="${GOOS}" GOARCH="${GOARCH}" CGO_ENABLED=0 \
-          go build -trimpath -ldflags "-s -w" -o "dist/${asset}" ./cmd/agent-gov
+          go build -trimpath -ldflags "-s -w -X agent-governance-strategy/tools/gov/internal/cli.Version=${CI_COMMIT_TAG} -X agent-governance-strategy/tools/gov/internal/cli.Commit=${commit} -X agent-governance-strategy/tools/gov/internal/cli.Date=${build_date}" -o "dist/${asset}" ./cmd/agent-gov
       )
 
       upload_url="${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${PKG_NAME}/${PKG_VERSION}/${asset}"
