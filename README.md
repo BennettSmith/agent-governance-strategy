@@ -25,6 +25,16 @@ We built it to help teams adopt a consistent governance baseline across many rep
 - **Governance sources** live in `Governance/` (core fragments, profiles, templates, playbooks).
 - The CLI tool **`agent-gov`** lives in `tools/gov/` and is used to **init / sync / verify** governance docs in a target repo using **managed blocks**.
 
+## Latest versions
+
+- **Governance content**: `gov/v1.0.0`
+- **Tool (`agent-gov`)**: `agent-gov/v1.2.0`
+
+Notes:
+
+- Tool and content are pinned independently.
+- Prefer immutable tags (or a commit SHA) for repeatable sync/verify runs.
+
 ## Quick start (target repo)
 
 Fastest path to adopt `agent-gov` in a target repo:
@@ -111,7 +121,7 @@ To avoid “every repo has a different tool snapshot”, we recommend shipping `
 
 Recommended tag format for the tool:
 
-- `agent-gov/v0.1.0` (SemVer)
+- `agent-gov/v1.2.0` (SemVer)
 
 In a target repo, store the downloaded binary at a repo-local path (and gitignore it), for example:
 
@@ -132,7 +142,7 @@ Provide the governance source inputs via environment variables (team-safe defaul
 - `AGENT_GOV_PROFILE`
 
 ```bash
-AGENT_GOV_TAG="agent-gov/v1.1.0" AGENT_GOV_GITLAB_REPO="bsmith.quanata/agent-governance-strategy" AGENT_GOV_SOURCE_REPO="git@gitlab.com:bsmith.quanata/agent-governance-strategy.git" AGENT_GOV_SOURCE_REF="gov/v1.2.3" AGENT_GOV_PROFILE="docs-only" bash -c 'set -euo pipefail; bin="tools/bin/agent-gov"; dir="$(dirname "$bin")"; mkdir -p "${dir}"; os="$(uname -s | tr "[:upper:]" "[:lower:]")"; arch="$(uname -m)"; [ "$arch" = "x86_64" ] && arch="amd64"; [ "$arch" = "aarch64" ] && arch="arm64"; asset="agent-gov_${os}_${arch}"; echo "downloading ${asset} from ${AGENT_GOV_GITLAB_REPO}@${AGENT_GOV_TAG}"; glab release download "${AGENT_GOV_TAG}" -R "${AGENT_GOV_GITLAB_REPO}" --asset-name "${asset}" -D "${dir}"; mv -f "${dir}/${asset}" "${bin}"; chmod +x "${bin}"; "$bin" bootstrap --config .governance/config.yaml --non-interactive; "$bin" --version'
+AGENT_GOV_TAG="agent-gov/v1.2.0" AGENT_GOV_GITLAB_REPO="bsmith.quanata/agent-governance-strategy" AGENT_GOV_SOURCE_REPO="git@gitlab.com:bsmith.quanata/agent-governance-strategy.git" AGENT_GOV_SOURCE_REF="gov/v1.0.0" AGENT_GOV_PROFILE="docs-only" bash -c 'set -euo pipefail; bin="tools/bin/agent-gov"; dir="$(dirname "$bin")"; mkdir -p "${dir}"; os="$(uname -s | tr "[:upper:]" "[:lower:]")"; arch="$(uname -m)"; [ "$arch" = "x86_64" ] && arch="amd64"; [ "$arch" = "aarch64" ] && arch="arm64"; asset="agent-gov_${os}_${arch}"; echo "downloading ${asset} from ${AGENT_GOV_GITLAB_REPO}@${AGENT_GOV_TAG}"; glab release download "${AGENT_GOV_TAG}" -R "${AGENT_GOV_GITLAB_REPO}" --asset-name "${asset}" -D "${dir}"; mv -f "${dir}/${asset}" "${bin}"; chmod +x "${bin}"; "$bin" bootstrap --config .governance/config.yaml --non-interactive; "$bin" --version'
 ```
 
 Notes:
@@ -151,7 +161,7 @@ In the target repo, you can generate `.governance/config.yaml` using the CLI:
 tools/bin/agent-gov bootstrap \
   --config .governance/config.yaml \
   --source-repo "git@github.com:<org>/agent-governance-strategy.git" \
-  --source-ref "gov/v1.2.3" \
+  --source-ref "gov/v1.0.0" \
   --profile "docs-only" \
   --non-interactive
 ```
@@ -163,7 +173,7 @@ Helpful discovery commands:
 ```bash
 tools/bin/agent-gov bootstrap \
   --source-repo "git@github.com:<org>/agent-governance-strategy.git" \
-  --source-ref "gov/v1.2.3" \
+  --source-ref "gov/v1.0.0" \
   --profile "docs-only" \
   --list-profiles
 ```
@@ -174,7 +184,7 @@ tools/bin/agent-gov bootstrap \
 tools/bin/agent-gov bootstrap \
   --config .governance/config.yaml \
   --source-repo "git@github.com:<org>/agent-governance-strategy.git" \
-  --source-ref "gov/v1.2.3" \
+  --source-ref "gov/v1.0.0" \
   --profile "docs-only" \
   --non-interactive \
   --run-init
@@ -191,7 +201,7 @@ source:
 
   # Strongly recommended: pin to an immutable tag or commit SHA for repeatability.
   # Avoid moving refs like HEAD unless you explicitly want “latest on every run”.
-  ref: "gov/v1.2.3"
+  ref: "gov/v1.0.0"
 
   # Choose a profile ID from this repo under `Governance/Profiles/`.
   profile: "docs-only"
@@ -249,8 +259,8 @@ In a target repo, your top-level `Makefile` can be as small as:
 # Optional include (present after you run `agent-gov init/sync`, or if you vendor it yourself).
 -include tools/make/agent-gov.mk
 
-# Pin the tool tag (SemVer tag in this repo, e.g. agent-gov/v0.1.0)
-AGENT_GOV_TAG ?= agent-gov/v0.1.0
+# Pin the tool tag (SemVer tag in this repo, e.g. agent-gov/v1.2.0)
+AGENT_GOV_TAG ?= agent-gov/v1.2.0
 
 # Where to place the downloaded binary
 AGENT_GOV_BIN ?= tools/bin/agent-gov

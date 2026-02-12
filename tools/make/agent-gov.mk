@@ -5,8 +5,8 @@
 #   # Prefer a single source of truth for governance operations:
 #   -include tools/make/agent-gov.mk
 #
-#   # Pin the tool tag (SemVer tag in this repo, e.g. agent-gov/v0.4.0)
-#   AGENT_GOV_TAG ?= agent-gov/v0.4.0
+#   # Pin the tool tag (SemVer tag in this repo, e.g. agent-gov/v1.2.0)
+#   AGENT_GOV_TAG ?= agent-gov/v1.2.0
 #
 #   # Where to place the downloaded binary
 #   AGENT_GOV_BIN ?= tools/bin/agent-gov
@@ -35,7 +35,7 @@
 ifndef AGENT_GOV_MK_INCLUDED
 AGENT_GOV_MK_INCLUDED := 1
 
-AGENT_GOV_TAG ?= agent-gov/v0.4.0
+AGENT_GOV_TAG ?= agent-gov/v1.2.0
 AGENT_GOV_BIN ?= tools/bin/agent-gov
 GOV_CONFIG ?= .governance/config.yaml
 
