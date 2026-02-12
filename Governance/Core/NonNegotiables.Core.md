@@ -23,7 +23,10 @@
 
 - Agents must follow the architecture for the target profile.
 - All changes must be made in feature branches.
-- Agents must execute work as small, reviewable checkpoints aligned to the branch plan; agents must request explicit human approval at each checkpoint before creating a checkpoint commit.
+- Agents must execute work as small, reviewable checkpoints aligned to the branch plan.
+- After completing a checkpoint, agents must stop and request explicit human approval before proceeding past that checkpoint, regardless of whether a checkpoint commit is created.
+- Agents must not begin work scoped to checkpoint N+1 until checkpoint N has been explicitly approved.
+- Checkpoint approvals must use: `APPROVAL REQUEST (checkpoint X): Please approve proceeding past checkpoint X.`
 - Agents must request human acceptance before checkpoint commits.
 - Agents must not mark plan tasks complete without approval.
 - Agents must keep the branch plan up to date throughout execution; after each approved checkpoint, agents must immediately update the plan to reflect progress (e.g., check off the checkpoint and record relevant commit/PR references) before proceeding.
